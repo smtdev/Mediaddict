@@ -4,6 +4,11 @@ apply plugin: 'com.google.gms.google-services' // Firebase
 android {
     compileSdkVersion 29
 
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -11,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId "me.sergiomartin.tvshowmovietracker"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -25,26 +30,30 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation group: 'info.movito', name: 'themoviedbapi', version:'1.10'
 
-    // Add Firebase SDK Core
+    // Add the Firebase SDK Core dependency
     implementation 'com.google.firebase:firebase-core:17.5.1'
     // Add the Firebase BoM
     implementation platform('com.google.firebase:firebase-bom:25.12.0')
     // Add the dependency for the Firebase SDK for Google Analytics
     implementation 'com.google.firebase:firebase-analytics:17.6.0'
-    // Add Firestore dependency
+    // Add the Firebase Cloud Firestore dependency
     implementation 'com.google.firebase:firebase-firestore:21.7.1'
-    // Add Firebase-auth dependency
+    // Add the Firebase-auth dependency
     implementation 'com.google.firebase:firebase-auth:19.4.0'
 
     // Add the dependencies for any other desired Firebase products

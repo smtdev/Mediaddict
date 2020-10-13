@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TV_Show_&amp;_Movie_Tracker.iml" filepath="$PROJECT_DIR$/.idea/modules/TV_Show_&amp;_Movie_Tracker.iml" group="TV_Show_&amp;_Movie_Tracker" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="TV Show &amp; Movie Tracker/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TV_Show_&amp;_Movie_Tracker.iml" filepath="$PROJECT_DIR$/.idea/modules/TV_Show_&amp;_Movie_Tracker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/TV_Show_&amp;_Movie_Tracker.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/TV_Show_&amp;_Movie_Tracker.app.iml" />
     </modules>
   </component>
 </project>
