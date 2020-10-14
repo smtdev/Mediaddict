@@ -100,4 +100,8 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="main_hint_userName">Nombre</string>
+    <string name="main_hint_email">Email</string>
+    <string name="main_hint_provider">Proveedor</string>
+    <string name="main_menu_signOut">cerrar_sesion</string>
 </resources>
