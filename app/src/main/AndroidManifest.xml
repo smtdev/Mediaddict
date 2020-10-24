@@ -11,8 +11,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity3" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".mainModule.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="MAIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <!--<activity android:name=".OldMainActivity" />-->
+        <activity android:name=".loginModule.view.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
