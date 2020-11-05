@@ -51,7 +51,7 @@ public class User {
     }
 
     public String getPhotoUrl() {
-        return photoUrl;
+        return photoUrl != null ? photoUrl : uri != null ? uri.toString() : "";
     }
 
     public void setPhotoUrl(String photoUrl) {

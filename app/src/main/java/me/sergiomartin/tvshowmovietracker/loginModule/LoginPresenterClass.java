@@ -55,6 +55,14 @@ public class LoginPresenterClass implements LoginPresenter {
         EventBus.getDefault().unregister(this);
     }
 
+    /**
+     * Functionalidad del Presenter donde se controlará si el login ha sido
+     * satisfactorio o no, enviando a la View el resultado y lo que tiene que
+     * hacer en consecuencia.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void result(int requestCode, int resultCode, Intent data) {
         if(resultCode == Activity.RESULT_OK) {

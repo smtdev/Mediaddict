@@ -1,66 +1,28 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="TextViewBase">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">@dimen/main_padding_tv</item>
-        <item name="layout_constraintStart_toStartOf">parent</item>
-        <item name="layout_constraintEnd_toEndOf">parent</item>
+    <style name="SearchViewStyle" parent="Theme.MaterialComponents.Light">
+        <item name="android:editTextColor">@color/colorAccent</item>
     </style>
 
-    <!-- FirebaseUI -->
-    <style name="BlueTheme" parent="FirebaseUI">
-        <item name="colorPrimary">@color/blue_500</item>
-        <item name="colorPrimaryDark">@color/blue_700</item>
-        <item name="colorAccent">@color/green_a700</item>
-        <item name="colorControlNormal">@color/blue_500</item>
-        <item name="colorControlActivated">@color/lime_a700</item>
-        <item name="colorControlHighlight">@color/blue_a200</item>
-        <item name="android:windowBackground">@color/blue_50</item>
+    <style name="LightTheme" parent="AppTheme">
+        <item name="textColor">#000000</item>
+        <item name="metaTextColor">#606060</item>
+        <item name="bgColor">#ffffff</item>
     </style>
 
-    <!-- DialogFragment -->
-    <style name="DialogFragmentTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <!--buttons color-->
-        <item name="colorAccent">@color/colorAccent</item>
-        <!--dialog background-->
-        <!--<item name="android:windowBackground">@drawable/background_dialog</item>-->
+    <style name="DarkTheme" parent="AppTheme">
+        <item name="textColor">#ffffff</item>
+        <item name="metaTextColor">#aeaeae</item>
+        <item name="bgColor">#000000</item>
     </style>
 
-    <style name="DialogFragmentTheme.FullScreen">
-        <!--dialog background-->
-        <!--<item name="android:windowBackground">@drawable/background_dialog_full_screen</item>-->
-    </style>
-
-    <!-- TextView -->
-    <style name="TextViewItemUser">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:maxLines">1</item>
-    </style>
-    <style name="TextViewItemUser.Small">
-        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
-    </style>
-    <style name="TextViewItemUser.Medium">
-        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
-    </style>
-    <style name="TextViewItemUser.Large">
-        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
-    </style>
 </resources>

@@ -2,7 +2,6 @@ package me.sergiomartin.tvshowmovietracker.loginModule.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -15,13 +14,14 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 
 import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.sergiomartin.tvshowmovietracker.R;
 import me.sergiomartin.tvshowmovietracker.loginModule.LoginPresenter;
 import me.sergiomartin.tvshowmovietracker.loginModule.LoginPresenterClass;
-import me.sergiomartin.tvshowmovietracker.mainModule.MainActivity;
+import me.sergiomartin.tvshowmovietracker.MainActivity;
 
 public class LoginActivity extends AppCompatActivity implements LoginView {
 
@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_preloading_login);
         ButterKnife.bind(this);
 
         mPresenter = new LoginPresenterClass(this);
@@ -62,6 +62,10 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         mPresenter.onDestroy();
     }
 
+    /**
+     * Al hacer clic en cualquier tipo de modo de login, se recibirá un OnActivityResult.
+     * Con este método, enviamos al presenter la validación del intento para su procesado
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -94,18 +98,18 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @Override
     public void openUILogin() {
-        Log.i("LOGUEADO", "Entrando en método openUILogin");
-
-        AuthUI.IdpConfig googleIdp = new AuthUI.IdpConfig.GoogleBuilder().build();
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                new AuthUI.IdpConfig.GoogleBuilder().build()
+        );
 
         startActivityForResult(AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setIsSmartLockEnabled(false)
                 .setTosAndPrivacyPolicyUrls("https://mockupToS.example",
                         "https://mockupPrivacyPolicy.example")
-                .setAvailableProviders(Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build(),
-                        googleIdp))
-                .setTheme(R.style.BlueTheme)
+                .setAvailableProviders(providers)
+                .setTheme(R.style.AppTheme)
                 .setLogo(R.mipmap.ic_launcher)
                 .build(), RC_SIGN_IN);
     }

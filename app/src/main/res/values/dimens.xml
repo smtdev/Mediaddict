@@ -40,4 +40,6 @@
     <dimen name="profile_size_img">192dp</dimen>
 
     <dimen name="request_max_height">180dp</dimen>
+    <dimen name="list_item_spacing">16dp</dimen>
+    <dimen name="list_item_spacing_half">8dp</dimen>
 </resources>

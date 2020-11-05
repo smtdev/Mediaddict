@@ -39,7 +39,7 @@
 
     <string name="login_error_user_exist">Usuario nuevo, registrando&#8230;></string>
     <string name="login_message_loading">Iniciando sesión&#8230;</string>
-    <string name="login_message_starting">Preparando todo&#8230;</string>
+    <string name="login_message_starting">Cargando UI&#8230;</string>
     <string name="login_message_error">Imposible iniciar sesión, intente más tarde.</string>
     <string name="login_message_success">Bienvenido %s</string>
 
@@ -67,4 +67,39 @@
     <string name="profile_message_userUpdated">Usuario actualizado correctamente.</string>
     <string name="profile_message_imageUploading">Cambiando imagen de perfil, espere&#8230;</string>
     <string name="profile_message_imageUpdated">Imagen de perfil actualizada correctamente.</string>
+
+    <string name="action_movie_title">Mis películas</string>
+    <string name="action_tvshow_title">Mis series</string>
+    <string name="action_history_title">Historial</string>
+
+    <string name="movie_genre_text">Genres</string>
+    <string name="movie_rating_text">0.0</string>
+    <string name="movie_title_text">Movie title</string>
+    <string name="movie_releasedate_text">2018</string>
+    <string name="error_message_loading_movies">Por favor, comprueba tu conexión a internet</string>
+
+    <string name="toolbar_menu_search_button">Buscar</string>
+    <string name="toolbar_menu_filter_button">Filtrar</string>
+    <string name="toolbar_menu_search_category_popular">Más populares</string>
+    <string name="toolbar_menu_search_category_toprated">Mejor puntuadas</string>
+    <string name="toolbar_menu_search_category_upcoming">Próximos estrenos</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_profile">Perfil</string>
+    <string name="action_center_button">Botón central</string>
+    <string name="movie_details_textview_summary">Sinopsis</string>
+    <string name="movie_details_textview_trailers">Trailers</string>
+    <string name="movie_details_textview_reviews">Reviews</string>
+    <string name="action_home_title">Home</string>
+    <string name="slide_item_title_text">Slide title</string>
+    <string name="searchview_text">Buscar…</string>
+    <string name="home_popular_movies_textview">Películas más populares</string>
+    <string name="grid_movie_title_textView">Movie</string>
+    <string name="toolbar_menu_search_switch_view">Modificar vista</string>
+    <string name="error_message_loading_genres">Ha habido un error al obtener la información del género de la película</string>
+    <string name="error_message_loading_movie_info">Ha habido un error al obtener la información de la película</string>
+    <string name="home_popular_movies_header_text">Popular</string>
+    <string name="movie_details_review_textview">Comentarios</string>
+    <string name="movie_details_trailers_textview">Trailers</string>
+    <string name="movie_details_summary_textview">Sinopsis</string>
 </resources>

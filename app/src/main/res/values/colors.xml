@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/blue_500</color>
-    <color name="colorPrimaryDark">@color/blue_700</color>
-    <color name="colorAccent">@color/green_a700</color>
+    <color name="colorPrimary">#151c25</color>
+    <color name="colorPrimaryDark">#151c25</color>
+    <color name="colorAccent">#f1b814</color>
+    <color name="text_light_blue">#566f9a</color>
     <color name="colorBackground">@color/gray_200</color>
     <color name="colorBackgroundDark">@color/blue_gray_100</color>
 

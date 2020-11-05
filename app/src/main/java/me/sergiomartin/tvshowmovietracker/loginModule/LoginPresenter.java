@@ -10,6 +10,13 @@ public interface LoginPresenter {
     void onPause();
     void onDestroy();
 
+    /**
+     * Enviar validación del método OnActivityResult al hacer login
+     * desde la interface del Presenter a su clase controladora, LoginPresenterClass.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     void result(int requestCode, int resultCode, Intent data);
 
     void getStatusAuth();

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/app_bar_home"
+        android:icon="@drawable/ic_home"
+        android:title="@string/action_home_title" />
+
+    <item
+        android:id="@+id/app_bar_tvshow"
+        android:icon="@drawable/ic_tvshow"
+        android:title="@string/action_tvshow_title" />
+
+    <item
+        android:id="@+id/app_bar_movie"
+        android:icon="@drawable/ic_movie_outline"
+        android:title="@string/action_movie_title" />
+
+    <item
+        android:id="@+id/app_bar_history"
+        android:icon="@drawable/ic_history"
+        android:title="@string/action_history_title" />
+
+    <item
+        android:id="@+id/app_bar_profile"
+        android:icon="@drawable/ic_account_circle"
+        android:title="@string/action_profile" />
+</menu>
+
