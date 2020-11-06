@@ -22,6 +22,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.sergiomartin.tvshowmovietracker.R;
+import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Genre;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnMoviesClickCallback;
@@ -34,7 +35,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
      * https://www.themoviedb.org/talk/53c11d4ec3a3684cf4006400
      * https://www.themoviedb.org/talk/5aeaaf56c3a3682ddf0010de?language=es
      */
-    private String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
     private static final int LIST_ITEM = 0;
     private static final int GRID_ITEM = 1;
 
@@ -198,7 +198,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
             }
             GlideApp.with(itemView.getContext())
-                    .load(IMAGE_BASE_URL + movie.getPosterPath())
+                    .load(Constants.IMAGE_BASE_URL_W500 + movie.getPosterPath())
                     .into(itemMoviePoster);
 
         }

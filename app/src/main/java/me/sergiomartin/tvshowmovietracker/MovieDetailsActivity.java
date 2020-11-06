@@ -6,11 +6,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.TextUtils;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.CompoundButton;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -22,14 +24,16 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.sergiomartin.tvshowmovietracker.common.model.dataAccess.TMDbRepositoryAPI;
+import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Genre;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Trailer;
@@ -40,11 +44,6 @@ import me.sergiomartin.tvshowmovietracker.moviesModule.module.GlideApp;
 
 public class MovieDetailsActivity extends AppCompatActivity {
 
-    public static String MOVIE_ID = "movie_id";
-    private static String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w780";
-    private static String YOUTUBE_VIDEO_URL = "https://www.youtube.com/watch?v=%s";
-    private static String YOUTUBE_THUMBNAIL_URL = "https://img.youtube.com/vi/%s/0.jpg";
-
     @BindView(R.id.iv_movie_details_backdrop)
     ImageView ivMovieDetailsBackdrop;
     @BindView(R.id.iv_movie_details_poster)
@@ -53,8 +52,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
     TextView tvMovieDetailsTitle;
     @BindView(R.id.tv_movie_details_release_date)
     TextView tvMovieDetailsReleaseDate;
-    @BindView(R.id.tv_movie_details_genre)
-    TextView tvMovieDetailsGenre;
     @BindView(R.id.tv_movie_details_rating)
     RatingBar tvMovieDetailsRating;
     @BindView(R.id.tv_movie_details_ratingNumber)
@@ -77,6 +74,14 @@ public class MovieDetailsActivity extends AppCompatActivity {
     View vMovieDetailsSecondDivider;
     @BindView(R.id.rv_movie_details_cast)
     RecyclerView rvMovieDetailsCast;
+    @BindView(R.id.cg_movie_details_genre)
+    ChipGroup cgMovieDetailsGenre;
+    @BindView(R.id.tv_movie_details_genres_title)
+    TextView tvMovieDetailsGenresTitle;
+    @BindView(R.id.tv_movie_details_cast_title)
+    TextView tvMovieDetailsCastTitle;
+    @BindView(R.id.hsv_movie_details_trailer_container)
+    HorizontalScrollView hsvMovieDetailsTrailerContainer;
 
     private TMDbRepositoryAPI mTMDbRepositoryAPI;
     private int movieId;
@@ -91,7 +96,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_details);
         ButterKnife.bind(this);
 
-        movieId = getIntent().getIntExtra(MOVIE_ID, movieId);
+        movieId = getIntent().getIntExtra(Constants.MOVIE_ID, movieId);
 
         mTMDbRepositoryAPI = TMDbRepositoryAPI.getInstance();
 
@@ -137,14 +142,14 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 tvMovieDetailsReleaseDate.setText(movie.getReleaseDate());
                 if (!isFinishing()) {
                     GlideApp.with(MovieDetailsActivity.this)
-                            .load(IMAGE_BASE_URL + movie.getBackdrop())
+                            .load(Constants.IMAGE_BASE_URL_w780 + movie.getBackdrop())
                             .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
                             .into(ivMovieDetailsBackdrop);
 
                     ivMovieDetailsBackdrop.setAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.anim.scale_animation));
 
                     GlideApp.with(MovieDetailsActivity.this)
-                            .load(IMAGE_BASE_URL + movie.getPosterPath())
+                            .load(Constants.IMAGE_BASE_URL_W500 + movie.getPosterPath())
                             .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
                             .into(ivMovieDetailsPoster);
                 }
@@ -157,7 +162,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                  * https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
                  */
                 Snackbar.make(constlyMovieDetails, R.string.error_message_loading_movie_info, Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.bottom_navigation)
+                        //.setAnchorView(R.id.bottom_navigation)
                         .show();
             }
 
@@ -168,12 +173,30 @@ public class MovieDetailsActivity extends AppCompatActivity {
         mTMDbRepositoryAPI.getGenres(new OnGetGenresCallback() {
             @Override
             public void onSuccess(List<Genre> genres) {
+                tvMovieDetailsGenresTitle.setVisibility(View.VISIBLE);
+                vMovieDetailsFirstDivider.setVisibility(View.VISIBLE);
+                cgMovieDetailsGenre.setVisibility(View.VISIBLE);
+
                 if (movie.getGenres() != null) {
-                    List<String> currentGenres = new ArrayList<>();
                     for (Genre genre : movie.getGenres()) {
-                        currentGenres.add(genre.getName());
+                        Chip mChip = (Chip) getLayoutInflater().inflate(R.layout.item_chip_category, null, false);
+                        mChip.setText(genre.getName());
+                        int paddingDp = (int) TypedValue.applyDimension(
+                                TypedValue.COMPLEX_UNIT_DIP, 10,
+                                getResources().getDisplayMetrics()
+                        );
+                        mChip.setPadding(paddingDp, 0, paddingDp, 0);
+                        mChip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            }
+                        });
+                        cgMovieDetailsGenre.addView(mChip);
                     }
-                    tvMovieDetailsGenre.setText(TextUtils.join(", ", currentGenres));
+                } else {
+                    tvMovieDetailsGenresTitle.setVisibility(View.GONE);
+                    vMovieDetailsFirstDivider.setVisibility(View.GONE);
+                    cgMovieDetailsGenre.setVisibility(View.GONE);
                 }
             }
 
@@ -183,8 +206,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
                  * https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
                  */
                 Snackbar.make(constlyMovieDetails, R.string.error_message_loading_genres, Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.bottom_navigation)
+                        //.setAnchorView(R.id.bottom_navigation)
                         .show();
+
+                tvMovieDetailsGenresTitle.setVisibility(View.GONE);
+                vMovieDetailsFirstDivider.setVisibility(View.GONE);
+                cgMovieDetailsGenre.setVisibility(View.GONE);
             }
         });
     }
@@ -195,7 +222,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
             public void onSuccess(List<Trailer> trailers) {
                 if (trailers.size() > 0) {
                     tvMovieDetailsTrailerTitle.setVisibility(View.VISIBLE);
-                    vMovieDetailsFirstDivider.setVisibility(View.VISIBLE);
+                    vMovieDetailsSecondDivider.setVisibility(View.VISIBLE);
+                    hsvMovieDetailsTrailerContainer.setVisibility(View.VISIBLE);
+
                     lyMovieDetailsTrailer.removeAllViews();
                     for (final Trailer trailer : trailers) {
                         View parent = getLayoutInflater().inflate(R.layout.movie_trailer, lyMovieDetailsTrailer, false);
@@ -204,24 +233,34 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         thumbnail.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                showTrailer(String.format(YOUTUBE_VIDEO_URL, trailer.getKey()));
+                                showTrailer(String.format(Constants.YOUTUBE_VIDEO_URL, trailer.getKey()));
                             }
                         });
                         GlideApp.with(MovieDetailsActivity.this)
-                                .load(String.format(YOUTUBE_THUMBNAIL_URL, trailer.getKey()))
+                                .load(String.format(Constants.YOUTUBE_THUMBNAIL_URL, trailer.getKey()))
                                 .apply(RequestOptions.placeholderOf(R.color.colorPrimary).centerCrop())
                                 .into(thumbnail);
                         lyMovieDetailsTrailer.addView(parent);
                     }
                 } else {
-                    onError();
+                    tvMovieDetailsTrailerTitle.setVisibility(View.GONE);
+                    vMovieDetailsSecondDivider.setVisibility(View.GONE);
+                    hsvMovieDetailsTrailerContainer.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onError() {
-                // Do nothing
+                /**
+                 * https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
+                 */
+                Snackbar.make(constlyMovieDetails, R.string.error_message_loading_trailers, Snackbar.LENGTH_LONG)
+                        //.setAnchorView(R.id.bottom_navigation)
+                        .show();
+
                 tvMovieDetailsTrailerTitle.setVisibility(View.GONE);
+                vMovieDetailsSecondDivider.setVisibility(View.GONE);
+                hsvMovieDetailsTrailerContainer.setVisibility(View.GONE);
             }
         });
     }
@@ -235,12 +274,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
-    }
-
-    private void showError() {
-        Snackbar.make(constlyMovieDetails, R.string.error_message_loading_movies, Snackbar.LENGTH_LONG)
-                .setAnchorView(R.id.bottom_navigation)
-                .show();
     }
 
 }

@@ -24,6 +24,7 @@ import java.util.List;
 import butterknife.BindView;
 import me.sergiomartin.tvshowmovietracker.R;
 import me.sergiomartin.tvshowmovietracker.common.model.dataAccess.TMDbRepositoryAPI;
+import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Genre;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnGetGenresCallback;
@@ -31,12 +32,6 @@ import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnGetMov
 import me.sergiomartin.tvshowmovietracker.moviesModule.module.GlideApp;
 
 public class FragmentMovieDetails extends Fragment {
-
-    public static String MOVIE_ID = "movie_id";
-
-    private static String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w780";
-    private static String YOUTUBE_VIDEO_URL = "http://www.youtube.com/watch?v=%s";
-    private static String YOUTUBE_THUMBNAIL_URL = "http://img.youtube.com/vi/%s/0.jpg";
 
     @BindView(R.id.movieDetailsBackdrop)
     ImageView movieDetailsBackdrop;
@@ -123,7 +118,7 @@ public class FragmentMovieDetails extends Fragment {
                 movieDetailsReleaseDate.setText(movie.getReleaseDate());
                 if (!requireActivity().isFinishing()) {
                     GlideApp.with(FragmentMovieDetails.this)
-                            .load(IMAGE_BASE_URL + movie.getBackdrop())
+                            .load(Constants.IMAGE_BASE_URL_w780 + movie.getBackdrop())
                             .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
                             .into(movieDetailsBackdrop);
                 }
@@ -154,7 +149,7 @@ public class FragmentMovieDetails extends Fragment {
 
             @Override
             public void onError() {
-                showError();
+                //showError();
                 Log.e("FragmentMovieDetails", "Ha habido un error al obtener la información del género de la película " + movieDetailsTitle.getText());
 
             }
@@ -165,13 +160,11 @@ public class FragmentMovieDetails extends Fragment {
         return true;
     }
 
-    private void showError() {
-        /**
-         * https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
-         */
+    /*private void showError() {
+
         Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.error_message_loading_movies, Snackbar.LENGTH_LONG)
                 .setAnchorView(R.id.bottom_navigation)
                 .show();
-    }
+    }*/
 
 }

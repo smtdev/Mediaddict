@@ -76,7 +76,6 @@
     <string name="movie_rating_text">0.0</string>
     <string name="movie_title_text">Movie title</string>
     <string name="movie_releasedate_text">2018</string>
-    <string name="error_message_loading_movies">Por favor, comprueba tu conexión a internet</string>
 
     <string name="toolbar_menu_search_button">Buscar</string>
     <string name="toolbar_menu_filter_button">Filtrar</string>
@@ -109,4 +108,10 @@
     <string name="movie_details_cast_title">Cast</string>
     <string name="picture_poster_content_description">Imagen del póster de la película</string>
     <string name="picture_cast_content_description">Imagen de casting de actores</string>
+    <string name="calendar_content_description">Imagen de calendario</string>
+    <string name="star_content_description">Imagen de estrella de puntuación</string>
+    <string name="movie_details_genres_textview">Género</string>
+    <string name="error_message_loading_trailers">Ha habido un error al obtener la información de los trailers</string>
+    <string name="error_network_message">Hay algún problema con tu conexión a internet</string>
+    <string name="error_message_loading_movies_panel">Ha habido un error al obtener la información de la lista de películas</string>
 </resources>

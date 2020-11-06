@@ -39,17 +39,63 @@ public class Movie {
     @Expose
     private String overview;
 
+    @SerializedName("revenue")
+    @Expose
+    private int revenue;
+
     @SerializedName("backdrop_path")
     @Expose
     private String backdrop;
 
+    @SerializedName("original_language")
+    @Expose
+    private String originalLanguage;
+
+    @SerializedName("original_title")
+    @Expose
+    private String originalTitle;
+
+    @SerializedName("popularity")
+    @Expose
+    private long popularity;
+
+    @SerializedName("status")
+    @Expose
+    private String status;
+
+    @SerializedName("tagline")
+    @Expose
+    private String tagline;
+
+    @SerializedName("homepage")
+    @Expose
+    private String homepage;
+
+    @SerializedName("budget")
+    @Expose
+    private int budget;
+
+    @SerializedName("imdb_id")
+    @Expose
+    private String imdbId;
+
     @SerializedName("production_companies")
     @Expose
-    private List<Company> productions;
+    private List<ProductionCompany> companies;
 
     @SerializedName("genres")
     @Expose
     private List<Genre> genres;
+
+    @SerializedName("production_countries")
+    @Expose
+    private List<ProductionCountry> countries;
+
+    @SerializedName("spoken_languages")
+    @Expose
+    private List<Languages> languages;
+
+
 
     public int getId() {
         return id;
@@ -131,11 +177,99 @@ public class Movie {
         this.genres = genres;
     }
 
-    public List<Company> getProductions() {
-        return productions;
+    public List<ProductionCompany> getCompanies() {
+        return companies;
     }
 
-    public void setProductions(List<Company> productions) {
-        this.productions = productions;
+    public void setCompanies(List<ProductionCompany> companies) {
+        this.companies = companies;
+    }
+
+    public List<ProductionCountry> getCountries() {
+        return countries;
+    }
+
+    public void setCountries(List<ProductionCountry> countries) {
+        this.countries = countries;
+    }
+
+    public int getRevenue() {
+        return revenue;
+    }
+
+    public void setRevenue(int revenue) {
+        this.revenue = revenue;
+    }
+
+    public String getOriginalLanguage() {
+        return originalLanguage;
+    }
+
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
+    }
+
+    public String getOriginalTitle() {
+        return originalTitle;
+    }
+
+    public void setOriginalTitle(String originalTitle) {
+        this.originalTitle = originalTitle;
+    }
+
+    public long getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(long popularity) {
+        this.popularity = popularity;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getTagline() {
+        return tagline;
+    }
+
+    public void setTagline(String tagline) {
+        this.tagline = tagline;
+    }
+
+    public String getHomepage() {
+        return homepage;
+    }
+
+    public void setHomepage(String homepage) {
+        this.homepage = homepage;
+    }
+
+    public int getBudget() {
+        return budget;
+    }
+
+    public void setBudget(int budget) {
+        this.budget = budget;
+    }
+
+    public String getImdbId() {
+        return imdbId;
+    }
+
+    public void setImdbId(String imdbId) {
+        this.imdbId = imdbId;
+    }
+
+    public List<Languages> getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(List<Languages> languages) {
+        this.languages = languages;
     }
 }

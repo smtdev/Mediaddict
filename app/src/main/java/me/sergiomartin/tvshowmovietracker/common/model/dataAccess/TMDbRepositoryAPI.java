@@ -5,6 +5,7 @@ import android.util.Log;
 import org.jetbrains.annotations.NotNull;
 
 import me.sergiomartin.tvshowmovietracker.BuildConfig;
+import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
 import me.sergiomartin.tvshowmovietracker.moviesModule.api.MovieApiInterface;
 import me.sergiomartin.tvshowmovietracker.moviesModule.api.GenresListResponse;
 import me.sergiomartin.tvshowmovietracker.moviesModule.api.MoviesListResponse;
@@ -21,11 +22,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class TMDbRepositoryAPI {
-    private static final String BASE_URL = "https://api.themoviedb.org/3/";
-    private static final String LANGUAGE = "es";
-    public static final String POPULAR = "popular";
-    public static final String TOP_RATED = "top_rated";
-    public static final String UPCOMING = "upcoming";
+
 
     private static TMDbRepositoryAPI repository;
 
@@ -38,7 +35,7 @@ public class TMDbRepositoryAPI {
     public static TMDbRepositoryAPI getInstance() {
         if (repository == null) {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(Constants.BASE_URL_TMDB)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
@@ -73,47 +70,25 @@ public class TMDbRepositoryAPI {
 
         };
 
-        /*api.getPopularMovies(BuildConfig.API_KEY, LANGUAGE, page)
-                .enqueue(new Callback<MoviesListResponse>() {
-                    @Override
-                    public void onResponse(@NotNull Call<MoviesListResponse> call, @NotNull Response<MoviesListResponse> response) {
-                        if (response.isSuccessful()) {
-                            MoviesListResponse moviesResponse = response.body();
-                            if (moviesResponse != null && moviesResponse.getMovies() != null) {
-                                callback.onSuccess(moviesResponse.getPage(), moviesResponse.getMovies());
-                            } else {
-                                callback.onError();
-                            }
-                        } else {
-                            callback.onError();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NotNull Call<MoviesListResponse> call, @NotNull Throwable t) {
-                        callback.onError();
-                    }
-        });*/
-
         switch (sortBy) {
-            case TOP_RATED:
-                api.getTopRatedMovies(BuildConfig.API_KEY, LANGUAGE, page)
+            case Constants.TOP_RATED:
+                api.getTopRatedMovies(BuildConfig.API_KEY, Constants.LANGUAGE, page)
                         .enqueue(call);
                 break;
-            case UPCOMING:
-                api.getUpcomingMovies(BuildConfig.API_KEY, LANGUAGE, page)
+            case Constants.UPCOMING:
+                api.getUpcomingMovies(BuildConfig.API_KEY, Constants.LANGUAGE, page)
                         .enqueue(call);
                 break;
-            case POPULAR:
+            case Constants.POPULAR:
             default:
-                api.getPopularMovies(BuildConfig.API_KEY, LANGUAGE, page)
+                api.getPopularMovies(BuildConfig.API_KEY, Constants.LANGUAGE, page)
                         .enqueue(call);
                 break;
         }
     }
 
     public void getMovie(int movieId, final OnGetMovieCallback callback) {
-        api.getMovie(movieId, BuildConfig.API_KEY, LANGUAGE)
+        api.getMovie(movieId, BuildConfig.API_KEY, Constants.LANGUAGE)
                 .enqueue(new Callback<Movie>() {
                     @Override
                     public void onResponse(@NotNull Call<Movie> call, @NotNull Response<Movie> response) {
@@ -137,7 +112,7 @@ public class TMDbRepositoryAPI {
     }
 
     public void getGenres(final OnGetGenresCallback callback) {
-        api.getGenres(BuildConfig.API_KEY, LANGUAGE)
+        api.getGenres(BuildConfig.API_KEY, Constants.LANGUAGE)
                 .enqueue(new Callback<GenresListResponse>() {
                     @Override
                     public void onResponse(@NotNull Call<GenresListResponse> call, @NotNull Response<GenresListResponse> response) {
@@ -161,7 +136,7 @@ public class TMDbRepositoryAPI {
     }
 
     public void getTrailers(int movieId, final OnGetTrailersCallback callback) {
-        api.getTrailers(movieId, BuildConfig.API_KEY, LANGUAGE)
+        api.getTrailers(movieId, BuildConfig.API_KEY, Constants.LANGUAGE)
                 .enqueue(new Callback<TrailerResponse>() {
                     @Override
                     public void onResponse(@NotNull Call<TrailerResponse> call, @NotNull Response<TrailerResponse> response) {

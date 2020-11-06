@@ -24,6 +24,8 @@ import butterknife.ButterKnife;
 import me.sergiomartin.tvshowmovietracker.MovieDetailsActivity;
 import me.sergiomartin.tvshowmovietracker.R;
 import me.sergiomartin.tvshowmovietracker.common.model.dataAccess.TMDbRepositoryAPI;
+import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
+import me.sergiomartin.tvshowmovietracker.common.utils.UtilSnackbar;
 import me.sergiomartin.tvshowmovietracker.moviesModule.adapter.MoviesAdapter;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Genre;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
@@ -40,7 +42,7 @@ public class FragmentMovieList extends Fragment {
     private TMDbRepositoryAPI mTMDbRepositoryAPI;
 
     private List<Genre> movieGenres;
-    private String sortBy = TMDbRepositoryAPI.POPULAR;
+    private String sortBy = Constants.POPULAR;
 
     /**
      * Determina si está cerca la siguiente página de la API.
@@ -155,7 +157,7 @@ public class FragmentMovieList extends Fragment {
         @Override
         public void onClick(Movie movie, ImageView movieImageView) {
             Intent intent = new Intent(FragmentMovieList.this.getContext(), MovieDetailsActivity.class);
-            intent.putExtra(MovieDetailsActivity.MOVIE_ID, movie.getId());
+            intent.putExtra(Constants.MOVIE_ID, movie.getId());
             FragmentMovieList.this.startActivity(intent);
         }
     };
@@ -216,12 +218,11 @@ public class FragmentMovieList extends Fragment {
 
 
     public void showError() {
-         /**
-         * https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
-         */
-        Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.error_message_loading_movies, Snackbar.LENGTH_LONG)
+         /*
+          * Context from: https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
+          */
+        Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.error_message_loading_movies_panel, Snackbar.LENGTH_LONG)
                 .setAnchorView(R.id.bottom_navigation)
                 .show();
     }
-
 }

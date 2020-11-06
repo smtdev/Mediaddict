@@ -1,33 +1,32 @@
 package me.sergiomartin.tvshowmovietracker;
 
-import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.sergiomartin.tvshowmovietracker.common.model.dataAccess.TMDbRepositoryAPI;
+import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
+import me.sergiomartin.tvshowmovietracker.moviesModule.adapter.MoviesAdapter;
 import me.sergiomartin.tvshowmovietracker.moviesModule.fragments.FragmentHomeList;
 import me.sergiomartin.tvshowmovietracker.moviesModule.fragments.FragmentMovieList;
 import me.sergiomartin.tvshowmovietracker.moviesModule.fragments.FragmentShowList;
-import me.sergiomartin.tvshowmovietracker.common.model.dataAccess.TMDbRepositoryAPI;
-import me.sergiomartin.tvshowmovietracker.moviesModule.adapter.MoviesAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,9 +34,11 @@ public class MainActivity extends AppCompatActivity {
     Toolbar mainToolbar;
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigationView;
+    @BindView(R.id.mainConstraintLayout)
+    ConstraintLayout mainConstraintLayout;
 
     private MoviesAdapter adapter;
-    private String sortBy = TMDbRepositoryAPI.POPULAR;
+    private String sortBy = Constants.POPULAR;
 
     /**
      * Determina si está cerca la siguiente página de la API.
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
 
-            switch (item.getItemId()){
+            switch (item.getItemId()) {
                 case R.id.app_bar_home:
                     openFragment(new FragmentHomeList());
                     return true;
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    void openFragment(Fragment fragment){
+    void openFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment);
         fragmentTransaction.addToBackStack(null);
@@ -174,15 +175,15 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (item.getItemId()) {
                     case R.id.popular:
-                        sortBy = TMDbRepositoryAPI.POPULAR;
+                        sortBy = Constants.POPULAR;
                         //getMovies(currentPage);
                         return true;
                     case R.id.top_rated:
-                        sortBy = TMDbRepositoryAPI.TOP_RATED;
+                        sortBy = Constants.TOP_RATED;
                         //getMovies(currentPage);
                         return true;
                     case R.id.upcoming:
-                        sortBy = TMDbRepositoryAPI.UPCOMING;
+                        sortBy = Constants.UPCOMING;
                         //getMovies(currentPage);
                         return true;
                     /**
@@ -204,5 +205,12 @@ public class MainActivity extends AppCompatActivity {
         sortMenu.inflate(R.menu.movies_sort_menu);
         sortMenu.show();
     }
+
+    /*private void showError() {
+        Snackbar.make(mainConstraintLayout, R.string.error_network_message, Snackbar.LENGTH_LONG)
+                .setAnchorView(R.id.bottom_navigation)
+                .show();
+    }*/
+
 
 }

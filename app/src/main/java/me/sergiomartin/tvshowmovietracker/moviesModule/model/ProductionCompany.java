@@ -3,7 +3,7 @@ package me.sergiomartin.tvshowmovietracker.moviesModule.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Company {
+public class ProductionCompany {
 
     @SerializedName("id")
     @Expose
