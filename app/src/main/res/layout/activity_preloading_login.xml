@@ -4,17 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".loginModule.view.LoginActivity">
 
     <TextView
-        android:id="@+id/tvMessage"
+        android:id="@+id/tv_preloading_login_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:drawablePadding="@dimen/common_padding_small"
         android:text="@string/login_message_starting"
-        android:textColor="@color/blue_500"
+        android:textColor="@color/colorAccent"
         android:textSize="@dimen/login_message_textSize"
         android:textStyle="bold"
-        android:drawablePadding="@dimen/common_padding_small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -23,19 +24,26 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_emoticon_tongue"
-        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/ic_movie_filter"
+        app:layout_constraintBottom_toTopOf="@id/tv_preloading_login_message"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tvMessage" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/pb_preloading_login"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/pb_stylish"
+        android:max="500"
+        android:progress="0"
         android:visibility="gone"
-        style="?android:attr/progressBarStyle"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_preloading_login_message"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tvMessage" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

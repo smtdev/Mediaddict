@@ -27,6 +27,10 @@ public class Movie {
     @Expose
     private float rating;
 
+    @SerializedName("vote_count")
+    @Expose
+    private float voteCount;
+
     @SerializedName("genre_ids")
     @Expose
     private List<Integer> genreIds;
@@ -85,6 +89,14 @@ public class Movie {
 
     public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    public float getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(float voteCount) {
+        this.voteCount = voteCount;
     }
 
     public List<Integer> getGenreIds() {

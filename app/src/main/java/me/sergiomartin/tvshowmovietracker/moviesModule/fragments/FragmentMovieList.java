@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -150,10 +151,13 @@ public class FragmentMovieList extends Fragment {
         });
     }
 
-    OnMoviesClickCallback callback = movie -> {
-        Intent intent = new Intent(getContext(), MovieDetailsActivity.class);
-        intent.putExtra(MovieDetailsActivity.MOVIE_ID, movie.getId());
-        startActivity(intent);
+    OnMoviesClickCallback callback = new OnMoviesClickCallback() {
+        @Override
+        public void onClick(Movie movie, ImageView movieImageView) {
+            Intent intent = new Intent(FragmentMovieList.this.getContext(), MovieDetailsActivity.class);
+            intent.putExtra(MovieDetailsActivity.MOVIE_ID, movie.getId());
+            FragmentMovieList.this.startActivity(intent);
+        }
     };
 
     /*private void setTitle() {

@@ -1,26 +1,23 @@
 package me.sergiomartin.tvshowmovietracker.moviesModule.fragments;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,9 +38,9 @@ import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnMovies
  */
 public class FragmentHomeList extends Fragment {
 
-    @BindView(R.id.home_slide_viewpager)
-    ViewPager homeSlideViewpager;
-    @BindView(R.id.home_indicator_tabLayout)
+    /*@BindView(R.id.home_slide_viewpager)
+    ViewPager homeSlideViewpager;*/
+    @BindView(R.id.home_list_indicator_tabLayout)
     TabLayout homeIndicatorTabLayout;
     @BindView(R.id.home_popular_movies_recyclerview)
     RecyclerView homePopularMoviesRecyclerview;
@@ -100,16 +97,16 @@ public class FragmentHomeList extends Fragment {
 
         SlidePagerAdapter slideAdapter = new SlidePagerAdapter(getContext(), slideList);
 
-        homeSlideViewpager = view.findViewById(R.id.home_slide_viewpager);
-        homeIndicatorTabLayout = view.findViewById(R.id.home_indicator_tabLayout);
+        //homeSlideViewpager = view.findViewById(R.id.home_slide_viewpager);
+        homeIndicatorTabLayout = view.findViewById(R.id.home_list_indicator_tabLayout);
 
-        homeSlideViewpager.setAdapter(slideAdapter);
+        //homeSlideViewpager.setAdapter(slideAdapter);
 
         // Configuración del timer del slide
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new SliderTimer(), 4000, 6000);
+        //Timer timer = new Timer();
+        //timer.scheduleAtFixedRate(new SliderTimer(), 4000, 6000);
 
-        homeIndicatorTabLayout.setupWithViewPager(homeSlideViewpager, true);
+        //homeIndicatorTabLayout.setupWithViewPager(homeSlideViewpager, true);
 
         homePopularMoviesRecyclerview = view.findViewById(R.id.home_popular_movies_recyclerview);
 
@@ -128,18 +125,6 @@ public class FragmentHomeList extends Fragment {
             LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
             homePopularMoviesRecyclerview.setLayoutManager(manager);
-
-            int totalItemCount = manager.getItemCount();
-            int visibleItemCount = manager.getChildCount();
-            int firstVisibleItem = manager.findFirstVisibleItemPosition();
-
-            Log.d("initRecyclerView", "TotalItemCount: " + totalItemCount + " VisibleItemCount: " + visibleItemCount + "firstVisibleItem: " + firstVisibleItem);
-            /*if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
-                if (!isFetchingMovies) {
-                    getMovies(currentPage + 1);
-                }
-            }*/
-
     }
 
     private void getMovies(int page) {
@@ -159,7 +144,6 @@ public class FragmentHomeList extends Fragment {
                 }
                 currentPage = page;
                 isFetchingMovies = false;
-
                 //setTitle();
             }
 
@@ -170,13 +154,21 @@ public class FragmentHomeList extends Fragment {
         });
     }
 
-    OnMoviesClickCallback callback = movie -> {
-        Intent intent = new Intent(getContext(), MovieDetailsActivity.class);
-        intent.putExtra(MovieDetailsActivity.MOVIE_ID, movie.getId());
-        startActivity(intent);
+    OnMoviesClickCallback callback = new OnMoviesClickCallback() {
+        @Override
+        public void onClick(Movie movie, ImageView moviePosterImageView) {
+            Intent intent = new Intent(FragmentHomeList.this.getContext(), MovieDetailsActivity.class);
+            intent.putExtra(MovieDetailsActivity.MOVIE_ID, movie.getId());
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+                    FragmentHomeList.this.getActivity(),
+                    moviePosterImageView,
+                    "fromHomeToMovieDetails"
+            );
+            FragmentHomeList.this.startActivity(intent, options.toBundle());
+        }
     };
 
-    class SliderTimer extends TimerTask {
+    /*class SliderTimer extends TimerTask {
         @Override
         public void run() {
             getActivity().runOnUiThread(new Runnable() {
@@ -190,7 +182,7 @@ public class FragmentHomeList extends Fragment {
                 }
             });
         }
-    }
+    }*/
 
     public void showError() {
         /**

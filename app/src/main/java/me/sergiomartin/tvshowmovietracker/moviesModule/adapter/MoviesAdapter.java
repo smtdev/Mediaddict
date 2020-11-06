@@ -1,5 +1,6 @@
 package me.sergiomartin.tvshowmovietracker.moviesModule.adapter;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -168,10 +169,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         @Nullable
         @BindView(R.id.item_movie_poster)
         ImageView itemMoviePoster;
-        /*@BindView(R.id.grid_movie_imageView)
-        ImageView gridMovieImageView;
-        @BindView(R.id.item_movie_title)
-        TextView gridMovieTitle;*/
 
         Movie movie;
 
@@ -182,7 +179,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    callback.onClick(movie);
+                    callback.onClick(movie, itemMoviePoster);
                 }
             });
 

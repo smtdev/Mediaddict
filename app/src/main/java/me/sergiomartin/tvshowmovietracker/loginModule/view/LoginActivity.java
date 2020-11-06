@@ -26,10 +26,10 @@ import me.sergiomartin.tvshowmovietracker.MainActivity;
 public class LoginActivity extends AppCompatActivity implements LoginView {
 
     public static final int RC_SIGN_IN = 21;
-    @BindView(R.id.tvMessage)
-    TextView tvMessage;
-    @BindView(R.id.progressBar)
-    ProgressBar progressBar;
+    @BindView(R.id.tv_preloading_login_message)
+    TextView tvPreloadingLoginMessage;
+    @BindView(R.id.pb_preloading_login)
+    ProgressBar pbPreloadingLogin;
 
     private LoginPresenter mPresenter;
 
@@ -78,12 +78,12 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @Override
     public void showProgress() {
-        progressBar.setVisibility(View.VISIBLE);
+        pbPreloadingLogin.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgress() {
-        progressBar.setVisibility(View.GONE);
+        pbPreloadingLogin.setVisibility(View.GONE);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @Override
     public void showMessageStarting() {
-        tvMessage.setText(R.string.login_message_loading);
+        tvPreloadingLoginMessage.setText(R.string.login_message_loading);
     }
 
     @Override

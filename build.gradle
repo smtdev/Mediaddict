@@ -21,6 +21,17 @@ allprojects {
         jcenter()
         maven { url "https://jitpack.io" }
     }
+
+    /*subprojects {
+        gradle.projectsEvaluated {
+            tasks.withType(JavaCompile) {
+                options.compilerArgs += [
+                        '-Xlint:unchecked', // Shows information about unchecked or unsafe operations.
+                        '-Xlint:deprecation', // Shows information about deprecated members.
+                ]
+            }
+        }
+    }*/
 }
 
 task clean(type: Delete) {
