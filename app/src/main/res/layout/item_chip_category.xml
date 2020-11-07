@@ -7,5 +7,5 @@
     android:paddingRight="8dp"
     style="@style/Widget.MaterialComponents.Chip.Choice"
     android:textAppearance="?android:attr/textAppearance"
-    android:textColor="@android:color/white"
+    android:textColor="@color/md_white"
     app:chipBackgroundColor="@color/text_light_blue" />

@@ -6,17 +6,17 @@ import com.google.gson.annotations.SerializedName;
 public class Languages {
     @SerializedName("iso_639_1")
     @Expose
-    private int langIsoStandard;
+    private String langIsoStandard;
 
     @SerializedName("name")
     @Expose
     private String name;
 
-    public int getLangIsoStandard() {
+    public String getLangIsoStandard() {
         return langIsoStandard;
     }
 
-    public void setLangIsoStandard(int langIsoStandard) {
+    public void setLangIsoStandard(String langIsoStandard) {
         this.langIsoStandard = langIsoStandard;
     }
 

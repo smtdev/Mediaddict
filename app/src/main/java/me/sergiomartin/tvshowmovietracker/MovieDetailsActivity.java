@@ -1,13 +1,16 @@
 package me.sergiomartin.tvshowmovietracker;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -18,21 +21,23 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.sergiomartin.tvshowmovietracker.common.model.dataAccess.TMDbRepositoryAPI;
+import me.sergiomartin.tvshowmovietracker.common.utils.CommonUtils;
 import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Genre;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
@@ -44,44 +49,41 @@ import me.sergiomartin.tvshowmovietracker.moviesModule.module.GlideApp;
 
 public class MovieDetailsActivity extends AppCompatActivity {
 
-    @BindView(R.id.iv_movie_details_backdrop)
-    ImageView ivMovieDetailsBackdrop;
-    @BindView(R.id.iv_movie_details_poster)
-    ImageView ivMovieDetailsPoster;
-    @BindView(R.id.tv_movie_details_title)
-    TextView tvMovieDetailsTitle;
-    @BindView(R.id.tv_movie_details_release_date)
-    TextView tvMovieDetailsReleaseDate;
-    @BindView(R.id.tv_movie_details_rating)
-    RatingBar tvMovieDetailsRating;
-    @BindView(R.id.tv_movie_details_ratingNumber)
-    TextView tvMovieDetailsRatingNumber;
-    @BindView(R.id.tv_movie_details_votes)
-    TextView tvMovieDetailsVotes;
-    @BindView(R.id.iv_votes_person)
-    ImageView ivVotesPerson;
-    @BindView(R.id.tv_movie_details_summary)
-    TextView tvMovieDetailsSummary;
-    @BindView(R.id.tv_movie_details_trailer_title)
-    TextView tvMovieDetailsTrailerTitle;
-    @BindView(R.id.constly_movie_details)
-    ConstraintLayout constlyMovieDetails;
-    @BindView(R.id.ly_movie_details_trailer)
-    LinearLayout lyMovieDetailsTrailer;
-    @BindView(R.id.v_movie_details_first_divider)
-    View vMovieDetailsFirstDivider;
-    @BindView(R.id.v_movie_details_second_divider)
-    View vMovieDetailsSecondDivider;
-    @BindView(R.id.rv_movie_details_cast)
-    RecyclerView rvMovieDetailsCast;
-    @BindView(R.id.cg_movie_details_genre)
-    ChipGroup cgMovieDetailsGenre;
-    @BindView(R.id.tv_movie_details_genres_title)
-    TextView tvMovieDetailsGenresTitle;
-    @BindView(R.id.tv_movie_details_cast_title)
-    TextView tvMovieDetailsCastTitle;
-    @BindView(R.id.hsv_movie_details_trailer_container)
-    HorizontalScrollView hsvMovieDetailsTrailerContainer;
+    @BindView(R.id.iv_movie_details_backdrop) ImageView ivMovieDetailsBackdrop;
+    @BindView(R.id.iv_movie_details_poster) ImageView ivMovieDetailsPoster;
+    @BindView(R.id.tv_movie_details_title) TextView tvMovieDetailsTitle;
+    @BindView(R.id.tv_movie_details_release_date) TextView tvMovieDetailsReleaseDate;
+    @BindView(R.id.tv_movie_details_rating) RatingBar tvMovieDetailsRating;
+    @BindView(R.id.tv_movie_details_ratingNumber) TextView tvMovieDetailsRatingNumber;
+    @BindView(R.id.tv_movie_details_votes) TextView tvMovieDetailsVotes;
+    @BindView(R.id.iv_votes_person) ImageView ivVotesPerson;
+    @BindView(R.id.tv_movie_details_summary) TextView tvMovieDetailsSummary;
+    @BindView(R.id.tv_movie_details_trailer_title) TextView tvMovieDetailsTrailerTitle;
+    @BindView(R.id.constly_movie_details) ConstraintLayout constlyMovieDetails;
+    @BindView(R.id.ly_movie_details_trailer) LinearLayout lyMovieDetailsTrailer;
+    @BindView(R.id.v_movie_details_first_divider) View vMovieDetailsFirstDivider;
+    @BindView(R.id.v_movie_details_second_divider) View vMovieDetailsSecondDivider;
+    @BindView(R.id.cg_movie_details_genre) ChipGroup cgMovieDetailsGenre;
+    @BindView(R.id.tv_movie_details_genres_title) TextView tvMovieDetailsGenresTitle;
+    @BindView(R.id.hsv_movie_details_trailer_container) HorizontalScrollView hsvMovieDetailsTrailerContainer;
+    @BindView(R.id.tv_movie_details_tagline) TextView tvMovieDetailsTagline;
+    @BindView(R.id.tv_movie_details_details_title) TextView tvMovieDetailsDetailsTitle;
+    @BindView(R.id.v_movie_details_third_divider) View vMovieDetailsThirdDivider;
+    @BindView(R.id.tv_movie_details_length) TextView tvMovieDetailsLength;
+    @BindView(R.id.tv_original_title_mdp) TextView tvOriginalTitleMdp;
+    @BindView(R.id.tv_original_title_info_mdp) TextView tvOriginalTitleInfoMdp;
+    @BindView(R.id.tv_original_lang_mdp) TextView tvOriginalLangMdp;
+    @BindView(R.id.tv_original_lang_info_mdp) TextView tvOriginalLangInfoMdp;
+    @BindView(R.id.tv_budget_mdp) TextView tvBudgetMdp;
+    @BindView(R.id.tv_budget_info_mdp) TextView tvBudgetInfoMdp;
+    @BindView(R.id.tv_revenue_mdp) TextView tvRevenueMdp;
+    @BindView(R.id.tv_revenue_info_mdp) TextView tvRevenueInfoMdp;
+    @BindView(R.id.tv_popularity_mdp) TextView tvPopularityMdp;
+    @BindView(R.id.tv_popularity_info_mdp) TextView tvPopularityInfoMdp;
+    @BindView(R.id.tv_status_mdp) TextView tvStatusMdp;
+    @BindView(R.id.tv_status_info_mdp) TextView tvStatusInfoMdp;
+    @BindView(R.id.tv_homepage_mdp) TextView tvHomepageMdp;
+    @BindView(R.id.tv_homepage_info_mdp) TextView tvHomepageInfoMdp;
 
     private TMDbRepositoryAPI mTMDbRepositoryAPI;
     private int movieId;
@@ -100,12 +102,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         mTMDbRepositoryAPI = TMDbRepositoryAPI.getInstance();
 
-        setupToolbar();
+        //setupToolbar();
 
         getMovie();
     }
 
-    private void setupToolbar() {
+    /*private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -113,14 +115,16 @@ public class MovieDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
-    }
+    }*/
 
     private void getMovie() {
         mTMDbRepositoryAPI.getMovie(movieId, new OnGetMovieCallback() {
+            @SuppressLint("DefaultLocale")
             @Override
             public void onSuccess(Movie movie) {
                 tvMovieDetailsTitle.setText(movie.getTitle());
-                //movieDetailsLabel.setVisibility(View.VISIBLE);
+                tvMovieDetailsLength.setText(CommonUtils.parseMinutesToHour((int) movie.getRuntime()));
+                //tvMovieDetailsLength.setText(String.format("%s %s", (int) movie.getRuntime(), "minutos"));
                 tvMovieDetailsSummary.setText(movie.getOverview());
                 tvMovieDetailsRating.setVisibility(View.VISIBLE);
                 tvMovieDetailsRating.setRating(movie.getRating() / 2);
@@ -135,11 +139,25 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 span.setSpan(new StyleSpan(Typeface.NORMAL), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 span.setSpan(new StyleSpan(Typeface.BOLD), 0, start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 tvMovieDetailsRatingNumber.setText(span);
-
                 tvMovieDetailsVotes.setText(String.format("%s", (int) movie.getVoteCount()));
                 getGenres(movie);
                 getTrailers(movie);
+
                 tvMovieDetailsReleaseDate.setText(movie.getReleaseDate());
+                tvMovieDetailsTagline.setText(movie.getTagline());
+
+                /**
+                 * Campos importados en el fragment incrustado con detalles adicionales
+                 */
+                tvOriginalTitleInfoMdp.setText(movie.getOriginalTitle());
+                Log.d("MovieDetailsActivity", String.valueOf(movie.getBudget()));
+                tvBudgetInfoMdp.setText((movie.getBudget().compareTo(BigDecimal.ZERO) > 0.0) ? String.format("%,.2f €", movie.getBudget()) : "-");
+                tvHomepageInfoMdp.setText(movie.getHomepage().equals("") ? "-" : movie.getHomepage());
+                tvOriginalLangInfoMdp.setText(movie.getOriginalLanguage().equals("") ? "-" : movie.getOriginalLanguage().toUpperCase());
+                tvPopularityInfoMdp.setText((movie.getPopularity().compareTo(BigDecimal.ZERO) > 0.0) ? String.format("%,.2f", movie.getPopularity()) : "-");
+                tvRevenueInfoMdp.setText((movie.getRevenue().compareTo(BigDecimal.ZERO) > 0.0) ? String.format("%,.2f €", movie.getRevenue()) : "-");
+                tvStatusInfoMdp.setText(movie.getStatus().equals("") ? "-" : movie.getStatus());
+
                 if (!isFinishing()) {
                     GlideApp.with(MovieDetailsActivity.this)
                             .load(Constants.IMAGE_BASE_URL_w780 + movie.getBackdrop())

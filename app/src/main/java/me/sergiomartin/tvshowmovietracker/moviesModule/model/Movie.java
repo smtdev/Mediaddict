@@ -1,5 +1,7 @@
 package me.sergiomartin.tvshowmovietracker.moviesModule.model;
 
+import java.math.BigDecimal;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -41,7 +43,7 @@ public class Movie {
 
     @SerializedName("revenue")
     @Expose
-    private int revenue;
+    private BigDecimal revenue;
 
     @SerializedName("backdrop_path")
     @Expose
@@ -57,7 +59,7 @@ public class Movie {
 
     @SerializedName("popularity")
     @Expose
-    private long popularity;
+    private BigDecimal popularity;
 
     @SerializedName("status")
     @Expose
@@ -73,7 +75,11 @@ public class Movie {
 
     @SerializedName("budget")
     @Expose
-    private int budget;
+    private BigDecimal budget;
+
+    @SerializedName("runtime")
+    @Expose
+    private double runtime;
 
     @SerializedName("imdb_id")
     @Expose
@@ -94,7 +100,6 @@ public class Movie {
     @SerializedName("spoken_languages")
     @Expose
     private List<Languages> languages;
-
 
 
     public int getId() {
@@ -193,11 +198,11 @@ public class Movie {
         this.countries = countries;
     }
 
-    public int getRevenue() {
+    public BigDecimal getRevenue() {
         return revenue;
     }
 
-    public void setRevenue(int revenue) {
+    public void setRevenue(BigDecimal revenue) {
         this.revenue = revenue;
     }
 
@@ -215,14 +220,6 @@ public class Movie {
 
     public void setOriginalTitle(String originalTitle) {
         this.originalTitle = originalTitle;
-    }
-
-    public long getPopularity() {
-        return popularity;
-    }
-
-    public void setPopularity(long popularity) {
-        this.popularity = popularity;
     }
 
     public String getStatus() {
@@ -249,14 +246,6 @@ public class Movie {
         this.homepage = homepage;
     }
 
-    public int getBudget() {
-        return budget;
-    }
-
-    public void setBudget(int budget) {
-        this.budget = budget;
-    }
-
     public String getImdbId() {
         return imdbId;
     }
@@ -271,5 +260,29 @@ public class Movie {
 
     public void setLanguages(List<Languages> languages) {
         this.languages = languages;
+    }
+
+    public BigDecimal getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(BigDecimal popularity) {
+        this.popularity = popularity;
+    }
+
+    public BigDecimal getBudget() {
+        return budget;
+    }
+
+    public void setBudget(BigDecimal budget) {
+        this.budget = budget;
+    }
+
+    public double getRuntime() {
+        return runtime;
+    }
+
+    public void setRuntime(double runtime) {
+        this.runtime = runtime;
     }
 }

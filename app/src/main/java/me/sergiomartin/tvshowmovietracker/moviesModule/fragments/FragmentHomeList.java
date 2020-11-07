@@ -150,6 +150,7 @@ public class FragmentHomeList extends Fragment {
 
             @Override
             public void onError() {
+
                 showError();
             }
         });
@@ -190,7 +191,7 @@ public class FragmentHomeList extends Fragment {
         /**
          * https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
          */
-        Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.error_message_loading_movies_panel, Snackbar.LENGTH_LONG)
+        Snackbar.make(getActivity().findViewById(android.R.id.content), "Error 1", Snackbar.LENGTH_LONG)
                 .setAnchorView(R.id.bottom_navigation)
                 .show();
     }

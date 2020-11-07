@@ -6,7 +6,7 @@ public class Constants {
     public static final String BASE_URL_TMDB = "https://api.themoviedb.org/3/";
 
     // Filtros
-    public static String MOVIE_ID = "movie_id";
+    public static final String MOVIE_ID = "movie_id";
 
     public static final String LANGUAGE = "es";
     public static final String POPULAR = "popular";

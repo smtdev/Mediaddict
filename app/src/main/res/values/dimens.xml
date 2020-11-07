@@ -43,6 +43,6 @@
     <dimen name="list_item_spacing">16dp</dimen>
     <dimen name="list_item_spacing_half">12dp</dimen>
     <dimen name="size_person_image">12dp</dimen>
-    <dimen name="size_calendar_image">14dp</dimen>
+    <dimen name="size_calendar_image">12dp</dimen>
     <dimen name="size_star_image">12dp</dimen>
 </resources>

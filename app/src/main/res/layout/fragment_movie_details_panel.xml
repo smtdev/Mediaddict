@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_movie_details_panel"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_movie_details_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:id="@+id/tv_original_title_mdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Título original"
+            android:textColor="@color/md_white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tv_original_title_info_mdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_original_title_info_mdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NombrePelícula"
+            android:textColor="@color/text_light_blue"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_original_lang_mdp"
+            app:layout_constraintStart_toStartOf="@+id/tv_original_title_mdp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_original_title_mdp" />
+
+        <TextView
+            android:id="@+id/tv_original_lang_mdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Idioma original"
+            android:textColor="@color/md_white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tv_original_lang_info_mdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_original_title_info_mdp" />
+
+        <TextView
+            android:id="@+id/tv_original_lang_info_mdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="en"
+            android:textColor="@color/text_light_blue"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_budget_mdp"
+            app:layout_constraintStart_toStartOf="@+id/tv_original_lang_mdp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_original_lang_mdp" />
+
+        <TextView
+            android:id="@+id/tv_budget_mdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Prespuesto"
+            android:textColor="@color/md_white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tv_budget_info_mdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_original_lang_info_mdp" />
+
+        <TextView
+            android:id="@+id/tv_budget_info_mdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100.000.000"
+            android:textColor="@color/text_light_blue"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_popularity_mdp"
+            app:layout_constraintStart_toStartOf="@+id/tv_budget_mdp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_budget_mdp" />
+
+        <TextView
+            android:id="@+id/tv_revenue_mdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="Beneficios"
+            android:textColor="@color/md_white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_budget_mdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.324"
+            app:layout_constraintStart_toEndOf="@+id/tv_budget_mdp"
+            app:layout_constraintTop_toTopOf="@+id/tv_budget_mdp"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/tv_revenue_info_mdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100.000.000"
+            android:textColor="@color/text_light_blue"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_status_mdp"
+            app:layout_constraintStart_toStartOf="@+id/tv_revenue_mdp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_revenue_mdp" />
+
+        <TextView
+            android:id="@+id/tv_popularity_mdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Popularidad"
+            android:textColor="@color/md_white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/tv_popularity_info_mdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_budget_info_mdp" />
+
+        <TextView
+            android:id="@+id/tv_popularity_info_mdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20000"
+            android:textColor="@color/text_light_blue"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_homepage_mdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_popularity_mdp" />
+
+        <TextView
+            android:id="@+id/tv_status_mdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Estado"
+            android:textColor="@color/md_white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/tv_status_info_mdp"
+            app:layout_constraintStart_toStartOf="@id/tv_revenue_info_mdp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_revenue_info_mdp" />
+
+        <TextView
+            android:id="@+id/tv_status_info_mdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Released"
+            android:textColor="@color/text_light_blue"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/tv_status_mdp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_status_mdp" />
+
+        <TextView
+            android:id="@+id/tv_homepage_mdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Página web"
+            android:textColor="@color/md_white"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/cl_movie_details_panel"
+            app:layout_constraintTop_toBottomOf="@+id/tv_popularity_info_mdp" />
+
+        <TextView
+            android:id="@+id/tv_homepage_info_mdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="https://example.com"
+            android:textColor="@color/text_light_blue"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/tv_homepage_mdp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_homepage_mdp" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

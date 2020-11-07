@@ -105,7 +105,7 @@
     <string name="backdrop_content_description">cabecera_de_detalle_de_pelicula</string>
     <string name="poster_content_description">Póster de la película</string>
     <string name="gradient_content_description">Gradiante para difuminar la cabecera de la película</string>
-    <string name="movie_details_cast_title">Cast</string>
+    <string name="movie_details_details_title">Detalles</string>
     <string name="picture_poster_content_description">Imagen del póster de la película</string>
     <string name="picture_cast_content_description">Imagen de casting de actores</string>
     <string name="calendar_content_description">Imagen de calendario</string>
@@ -114,4 +114,5 @@
     <string name="error_message_loading_trailers">Ha habido un error al obtener la información de los trailers</string>
     <string name="error_network_message">Hay algún problema con tu conexión a internet</string>
     <string name="error_message_loading_movies_panel">Ha habido un error al obtener la información de la lista de películas</string>
+    <string name="offline">Parece que no estás conectado a internet</string>
 </resources>

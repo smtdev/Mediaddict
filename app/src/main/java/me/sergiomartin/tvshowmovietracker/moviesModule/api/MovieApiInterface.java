@@ -16,7 +16,7 @@ public interface MovieApiInterface {
     );
 
     @GET("movie/{movie_id}/videos")
-    Call<TrailerResponse> getTrailers(
+    Call<TrailerListResponse> getTrailers(
             @Path("movie_id") int id,
             @Query("api_key") String apiKEy,
             @Query("language") String language
@@ -54,5 +54,10 @@ public interface MovieApiInterface {
             @Query("api_key") String apiKey,
             @Query("query") String query
 
+    );
+
+    @GET("configuration/languages")
+    Call<LanguagesResponse> getLanguages (
+            @Query("api_key") String apiKey
     );
 }

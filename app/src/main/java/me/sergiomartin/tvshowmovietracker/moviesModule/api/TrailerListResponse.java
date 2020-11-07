@@ -7,7 +7,7 @@ import java.util.List;
 
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Trailer;
 
-public class TrailerResponse {
+public class TrailerListResponse {
 
     @SerializedName("results")
     @Expose
