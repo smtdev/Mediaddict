@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         //mainToolbar.setNavigationIcon(R.drawable.ic_back);
         mainToolbar.setLogo(R.drawable.ic_launcher_menu);
 
+
         openFragment(new FragmentHomeList());
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
@@ -73,9 +74,9 @@ public class MainActivity extends AppCompatActivity {
                     openFragment(new FragmentHomeList());
                     return true;
 
-                case R.id.app_bar_tvshow:
+                /*case R.id.app_bar_tvshow:
                     openFragment(new FragmentShowList());
-                    return true;
+                    return true;*/
 
                 case R.id.app_bar_movie:
                     openFragment(new FragmentMovieList());
@@ -115,12 +116,12 @@ public class MainActivity extends AppCompatActivity {
             /**
              * Info sacada de: https://guides.codepath.com/android/Extended-ActionBar-Guide#adding-searchview-to-actionbar
              */
-            // Use a custom search icon for the SearchView in AppBar
+            // Modificando el icono de búsqueda del SearchView de la AppBar
             int searchImgId = androidx.appcompat.R.id.search_button;
             ImageView v = (ImageView) searchView.findViewById(searchImgId);
             v.setImageResource(R.drawable.ic_baseline_search_24);
 
-            // Customize searchview text and hint colors
+            // Cambiando el style al SearchView
             int searchEditId = androidx.appcompat.R.id.search_src_text;
             EditText et = (EditText) searchView.findViewById(searchEditId);
 
@@ -152,7 +153,11 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
+    /**
+     * Métodos para ordenar en base a un item de menú
+     * No utilizado actualmente
+     */
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.app_bar_filter:
@@ -168,9 +173,9 @@ public class MainActivity extends AppCompatActivity {
         sortMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                /*
-                 * Every time we sort, we need to go back to page 1
-                 */
+
+                // Every time we sort, we need to go back to page 1
+
                 currentPage = 1;
 
                 switch (item.getItemId()) {
@@ -186,10 +191,10 @@ public class MainActivity extends AppCompatActivity {
                         sortBy = Constants.UPCOMING;
                         //getMovies(currentPage);
                         return true;
-                    /**
-                     * Cambiar vista entre lista y póster
-                     * https://stackoverflow.com/questions/45456601/switch-between-layouts-on-list-to-grid-recyclerview
-                     */
+
+                     // Cambiar vista entre lista y póster
+                     // https://stackoverflow.com/questions/45456601/switch-between-layouts-on-list-to-grid-recyclerview
+
                     case R.id.switch_view:
                         supportInvalidateOptionsMenu();
                         boolean isSwitched = adapter.toggleItemViewType();
@@ -204,7 +209,8 @@ public class MainActivity extends AppCompatActivity {
 
         sortMenu.inflate(R.menu.movies_sort_menu);
         sortMenu.show();
-    }
+    }*/
+
 
     /*private void showError() {
         Snackbar.make(mainConstraintLayout, R.string.error_network_message, Snackbar.LENGTH_LONG)

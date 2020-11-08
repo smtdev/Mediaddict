@@ -46,4 +46,16 @@
         <item name="android:layout_height">10dp</item>
         <item name="android:background">@color/text_light_blue</item>
     </style>
+
+    <!-- Estilo para el click de los botones -->
+    <style name="SelectableItemTheme">
+        <item name="colorControlHighlight">@color/md_white</item>
+    </style>
+
+
+    <style name="SelectableItemBackground">
+        <item name="android:theme">@style/SelectableItemTheme</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
 </resources>

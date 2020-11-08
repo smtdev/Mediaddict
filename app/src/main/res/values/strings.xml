@@ -116,4 +116,9 @@
     <string name="error_network_message">Hay algún problema con tu conexión a internet</string>
     <string name="error_message_loading_movies_panel">Ha habido un error al obtener la información de la lista de películas</string>
     <string name="offline">Parece que no estás conectado a internet</string>
+    <string name="home_toprated_movies_header_text">Mejor valoradas</string>
+    <string name="home_toprated_movies_textview">Películas mejor valoradas</string>
+    <string name="home_upcoming_movies_header_text">Próximamente</string>
+    <string name="home_upcoming_movies_textview">Los próximos estrenos</string>
+    <string name="home_movies_viewall_button">Ver todas</string>
 </resources>

@@ -16,13 +16,15 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatRatingBar;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.text.TextUtilsCompat;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.chip.Chip;
@@ -38,102 +40,79 @@ import butterknife.ButterKnife;
 import me.sergiomartin.tvshowmovietracker.common.model.dataAccess.TMDbRepositoryAPI;
 import me.sergiomartin.tvshowmovietracker.common.utils.CommonUtils;
 import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
-import me.sergiomartin.tvshowmovietracker.moviesModule.api.LanguagesResponse;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Genre;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Language;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.ProductionCompany;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Trailer;
-import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnGetGenresCallback;
-import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnGetLanguagesCallback;
-import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnGetMovieCallback;
-import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnGetTrailersCallback;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetGenresCallback;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetLanguagesCallback;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetMovieCallback;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetTrailersCallback;
 import me.sergiomartin.tvshowmovietracker.moviesModule.module.GlideApp;
 
 public class MovieDetailsActivity extends AppCompatActivity {
-
     @BindView(R.id.iv_movie_details_backdrop)
-    ImageView ivMovieDetailsBackdrop;
+    AppCompatImageView ivMovieDetailsBackdrop;
     @BindView(R.id.iv_movie_details_poster)
-    ImageView ivMovieDetailsPoster;
+    AppCompatImageView ivMovieDetailsPoster;
     @BindView(R.id.tv_movie_details_title)
-    TextView tvMovieDetailsTitle;
+    AppCompatTextView tvMovieDetailsTitle;
+    @BindView(R.id.tv_movie_details_tagline)
+    AppCompatTextView tvMovieDetailsTagline;
     @BindView(R.id.tv_movie_details_release_date)
-    TextView tvMovieDetailsReleaseDate;
-    @BindView(R.id.tv_movie_details_rating)
-    RatingBar tvMovieDetailsRating;
+    AppCompatTextView tvMovieDetailsReleaseDate;
+    @BindView(R.id.tv_movie_details_length)
+    AppCompatTextView tvMovieDetailsLength;
     @BindView(R.id.tv_movie_details_ratingNumber)
-    TextView tvMovieDetailsRatingNumber;
+    AppCompatTextView tvMovieDetailsRatingNumber;
     @BindView(R.id.tv_movie_details_votes)
-    TextView tvMovieDetailsVotes;
-    @BindView(R.id.iv_votes_person)
-    ImageView ivVotesPerson;
+    AppCompatTextView tvMovieDetailsVotes;
+    @BindView(R.id.tv_movie_details_rating)
+    AppCompatRatingBar tvMovieDetailsRating;
     @BindView(R.id.tv_movie_details_summary)
-    TextView tvMovieDetailsSummary;
-    @BindView(R.id.tv_movie_details_trailer_title)
-    TextView tvMovieDetailsTrailerTitle;
-    @BindView(R.id.constly_movie_details)
-    ConstraintLayout constlyMovieDetails;
-    @BindView(R.id.ly_movie_details_trailer)
-    LinearLayout lyMovieDetailsTrailer;
+    AppCompatTextView tvMovieDetailsSummary;
+    @BindView(R.id.tv_movie_details_genres_title)
+    AppCompatTextView tvMovieDetailsGenresTitle;
     @BindView(R.id.v_movie_details_first_divider)
     View vMovieDetailsFirstDivider;
-    @BindView(R.id.v_movie_details_second_divider)
-    View vMovieDetailsSecondDivider;
     @BindView(R.id.cg_movie_details_genre)
     ChipGroup cgMovieDetailsGenre;
-    @BindView(R.id.tv_movie_details_genres_title)
-    TextView tvMovieDetailsGenresTitle;
+    @BindView(R.id.tv_movie_details_trailer_title)
+    AppCompatTextView tvMovieDetailsTrailerTitle;
+    @BindView(R.id.v_movie_details_second_divider)
+    View vMovieDetailsSecondDivider;
+    @BindView(R.id.ly_movie_details_trailer)
+    LinearLayoutCompat lyMovieDetailsTrailer;
     @BindView(R.id.hsv_movie_details_trailer_container)
     HorizontalScrollView hsvMovieDetailsTrailerContainer;
-    @BindView(R.id.tv_movie_details_tagline)
-    TextView tvMovieDetailsTagline;
-    @BindView(R.id.tv_movie_details_details_title)
-    TextView tvMovieDetailsDetailsTitle;
     @BindView(R.id.v_movie_details_third_divider)
     View vMovieDetailsThirdDivider;
-    @BindView(R.id.tv_movie_details_length)
-    TextView tvMovieDetailsLength;
-    @BindView(R.id.tv_original_title_mdp)
-    TextView tvOriginalTitleMdp;
     @BindView(R.id.tv_original_title_info_mdp)
     TextView tvOriginalTitleInfoMdp;
-    @BindView(R.id.tv_original_lang_mdp)
-    TextView tvOriginalLangMdp;
     @BindView(R.id.tv_original_lang_info_mdp)
     TextView tvOriginalLangInfoMdp;
-    @BindView(R.id.tv_budget_mdp)
-    TextView tvBudgetMdp;
     @BindView(R.id.tv_budget_info_mdp)
     TextView tvBudgetInfoMdp;
-    @BindView(R.id.tv_revenue_mdp)
-    TextView tvRevenueMdp;
     @BindView(R.id.tv_revenue_info_mdp)
     TextView tvRevenueInfoMdp;
-    @BindView(R.id.tv_popularity_mdp)
-    TextView tvPopularityMdp;
     @BindView(R.id.tv_popularity_info_mdp)
     TextView tvPopularityInfoMdp;
-    @BindView(R.id.tv_status_mdp)
-    TextView tvStatusMdp;
     @BindView(R.id.tv_status_info_mdp)
     TextView tvStatusInfoMdp;
-    @BindView(R.id.tv_homepage_mdp)
-    TextView tvHomepageMdp;
-    @BindView(R.id.tv_homepage_info_mdp)
-    TextView tvHomepageInfoMdp;
-    @BindView(R.id.tv_languages_mdp)
-    TextView tvLanguagesMdp;
     @BindView(R.id.tv_languages_info_mdp)
     TextView tvLanguagesInfoMdp;
-    @BindView(R.id.tv_prod_countries_mdp)
-    TextView tvProdCountriesMdp;
     @BindView(R.id.tv_prod_countries_info_mdp)
     TextView tvProdCountriesInfoMdp;
-    @BindView(R.id.tv_prod_companies_mdp)
-    TextView tvProdCompaniesMdp;
     @BindView(R.id.tv_prod_companies_info_mdp)
     TextView tvProdCompaniesInfoMdp;
+    @BindView(R.id.tv_homepage_info_mdp)
+    TextView tvHomepageInfoMdp;
+    @BindView(R.id.cl_movie_details_panel)
+    ConstraintLayout clMovieDetailsPanel;
+    @BindView(R.id.cl_main_layout)
+    CoordinatorLayout clMainLayout;
+
 
     private TMDbRepositoryAPI mTMDbRepositoryAPI;
     private int movieId;
@@ -158,7 +137,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     /*private void setupToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {
@@ -232,7 +211,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 /**
                  * https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
                  */
-                Snackbar.make(constlyMovieDetails, R.string.error_message_loading_movie_info, Snackbar.LENGTH_LONG)
+                Snackbar.make(clMainLayout, R.string.error_message_loading_movie_info, Snackbar.LENGTH_LONG)
                         //.setAnchorView(R.id.bottom_navigation)
                         .show();
             }
@@ -257,7 +236,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
                                 getResources().getDisplayMetrics()
                         );
                         mChip.setPadding(paddingDp, 0, paddingDp, 0);
-                        mChip.setOnCheckedChangeListener((compoundButton, b) -> {});
+                        mChip.setOnCheckedChangeListener((compoundButton, b) -> {
+                        });
                         cgMovieDetailsGenre.addView(mChip);
                     }
                 } else {
@@ -272,7 +252,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 /**
                  * https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
                  */
-                Snackbar.make(constlyMovieDetails, R.string.error_message_loading_genres, Snackbar.LENGTH_LONG)
+                Snackbar.make(clMainLayout, R.string.error_message_loading_genres, Snackbar.LENGTH_LONG)
                         //.setAnchorView(R.id.bottom_navigation)
                         .show();
 
@@ -316,7 +296,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 /**
                  * https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
                  */
-                Snackbar.make(constlyMovieDetails, R.string.error_message_loading_trailers, Snackbar.LENGTH_LONG)
+                Snackbar.make(clMainLayout, R.string.error_message_loading_trailers, Snackbar.LENGTH_LONG)
                         //.setAnchorView(R.id.bottom_navigation)
                         .show();
 
@@ -327,21 +307,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
         });
     }
 
-    /*
-        private String getGenres(@NotNull List<Integer> genreIds) {
-            List<String> movieGenres = new ArrayList<>();
-            for (Integer genreId : genreIds) {
-                for (Genre genre : genres) {
-                    if (genre.getId() == genreId) {
-                        movieGenres.add(genre.getName());
-                        break;
-                    }
-                }
-            }
-            // concatenar géneros
-            return TextUtils.join(", ", movieGenres);
-        }
-     */
     private void getLanguages(Movie movie) {
         mTMDbRepositoryAPI.getLanguages(new OnGetLanguagesCallback() {
             @Override
@@ -353,7 +318,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         Log.d("LanguagesFromDetail", lang.getLangIsoStandard() + " - " + lang.getEnglishName() + " - " + lang.getName());
                     }
                     for (Language responseLangs : languages) {
-                        for(Language movieLangs : movie.getLanguages()) {
+                        for (Language movieLangs : movie.getLanguages()) {
                             if (responseLangs.getLangIsoStandard().equals(movieLangs.getLangIsoStandard())) {
                                 definitiveMmovieLangs.add(movieLangs.getName());
                             }
@@ -361,14 +326,14 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     }
                     TextUtils.join(", ", definitiveMmovieLangs);
                     tvLanguagesInfoMdp.setText(definitiveMmovieLangs.toString()
-                            .replace("[","")
-                            .replace("]",""));
+                            .replace("[", "")
+                            .replace("]", ""));
                 }
             }
 
             @Override
             public void onError() {
-                Snackbar.make(constlyMovieDetails, R.string.error_message_loading_lang, Snackbar.LENGTH_LONG)
+                Snackbar.make(clMainLayout, R.string.error_message_loading_lang, Snackbar.LENGTH_LONG)
                         //.setAnchorView(R.id.bottom_navigation)
                         .show();
             }
@@ -385,8 +350,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
             TextUtils.join(", ", companies);
         }
         tvProdCompaniesInfoMdp.setText(companies.toString()
-                .replace("[","")
-                .replace("]",""));
+                .replace("[", "")
+                .replace("]", ""));
     }
 
     private void showTrailer(String url) {

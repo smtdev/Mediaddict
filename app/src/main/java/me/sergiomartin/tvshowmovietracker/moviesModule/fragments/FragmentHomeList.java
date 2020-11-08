@@ -1,5 +1,6 @@
 package me.sergiomartin.tvshowmovietracker.moviesModule.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,28 +10,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.sergiomartin.tvshowmovietracker.MovieDetailsActivity;
 import me.sergiomartin.tvshowmovietracker.R;
 import me.sergiomartin.tvshowmovietracker.common.model.dataAccess.TMDbRepositoryAPI;
 import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
 import me.sergiomartin.tvshowmovietracker.moviesModule.adapter.MoviesAdapter;
-import me.sergiomartin.tvshowmovietracker.moviesModule.adapter.SlidePagerAdapter;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
-import me.sergiomartin.tvshowmovietracker.moviesModule.model.Slide;
-import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnGetMoviesCallback;
-import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnMoviesClickCallback;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.action.OnMoviesClickCallback;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetMoviesCallback;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,27 +40,28 @@ import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnMovies
  */
 public class FragmentHomeList extends Fragment {
 
-    /*@BindView(R.id.home_slide_viewpager)
-    ViewPager homeSlideViewpager;*/
-    @BindView(R.id.home_list_indicator_tabLayout)
-    TabLayout homeIndicatorTabLayout;
-    @BindView(R.id.home_popular_movies_recyclerview)
-    RecyclerView homePopularMoviesRecyclerview;
+    //@BindView(R.id.home_list_indicator_tabLayout)
+    //TabLayout homeIndicatorTabLayout;
+    @BindView(R.id.rv_home_popular_movies_recyclerview)
+    RecyclerView rvHomePopularMoviesRecyclerview;
+    @BindView(R.id.rv_home_toprated_movies_recyclerview)
+    RecyclerView rvHomeTopratedMoviesRecyclerview;
+    @BindView(R.id.rv_home_upcoming_movies_recyclerview)
+    RecyclerView rvHomeUpcomingMoviesRecyclerview;
+    @BindView(R.id.btn_home_list_popular_viewall_textview)
+    AppCompatButton btnHomeListPopularViewallTextview;
+    @BindView(R.id.btn_home_list_toprated_viewall_textview)
+    AppCompatButton btnHomeListTopratedViewallTextview;
+    @BindView(R.id.btn_home_list_upcoming_viewall_textview)
+    AppCompatButton btnHomeListUpcomingViewallTextview;
 
     private MoviesAdapter adapter;
     private TMDbRepositoryAPI mTMDbRepositoryAPI;
 
-    private List<Slide> slideList;
     private List<Movie> movieList;
 
-    private String sortBy = Constants.POPULAR;
+    private String sortBy;
 
-    /**
-     * Determina si está cerca la siguiente página de la API.
-     * Se utiliza para evitar duplicidad y mostrar siempre
-     * las mismas películas al hacer scroll
-     */
-    private boolean isFetchingMovies;
     /**
      * Mediante esta variable indicamos en qué página inicializa
      * el listado extraido de la API. Cada vez que se haga scroll al 50%
@@ -80,6 +82,7 @@ public class FragmentHomeList extends Fragment {
         super.onCreate(savedInstanceState);
 
         mTMDbRepositoryAPI = TMDbRepositoryAPI.getInstance();
+
     }
 
     @Override
@@ -90,67 +93,55 @@ public class FragmentHomeList extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        // Prepare a list of slides
-        slideList = new ArrayList<>();
-        slideList.add(new Slide(R.drawable.strangerthings, "Stranger Things"));
-        slideList.add(new Slide(R.drawable.twd, "The Walking Dead"));
-        slideList.add(new Slide(R.drawable.serie1, "title"));
-
-        SlidePagerAdapter slideAdapter = new SlidePagerAdapter(getContext(), slideList);
-
-        //homeSlideViewpager = view.findViewById(R.id.home_slide_viewpager);
-        homeIndicatorTabLayout = view.findViewById(R.id.home_list_indicator_tabLayout);
-
-        //homeSlideViewpager.setAdapter(slideAdapter);
-
-        // Configuración del timer del slide
-        //Timer timer = new Timer();
-        //timer.scheduleAtFixedRate(new SliderTimer(), 4000, 6000);
-
-        //homeIndicatorTabLayout.setupWithViewPager(homeSlideViewpager, true);
-
-        homePopularMoviesRecyclerview = view.findViewById(R.id.home_popular_movies_recyclerview);
+        rvHomePopularMoviesRecyclerview = view.findViewById(R.id.rv_home_popular_movies_recyclerview);
+        rvHomeTopratedMoviesRecyclerview = view.findViewById(R.id.rv_home_toprated_movies_recyclerview);
+        rvHomeUpcomingMoviesRecyclerview = view.findViewById(R.id.rv_home_upcoming_movies_recyclerview);
 
         initRecyclerView();
-
-        getMovies(currentPage);
+        //getMovies(currentPage, sortBy);
 
         return view;
     }
 
-    private void initRecyclerView() {
-            // Configuración del RecyclerView
-            homePopularMoviesRecyclerview.setHasFixedSize(true);
-            homePopularMoviesRecyclerview.setAdapter(null);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-            LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-
-            homePopularMoviesRecyclerview.setLayoutManager(manager);
+        displaySortedMovieList(rvHomePopularMoviesRecyclerview);
+        displaySortedMovieList(rvHomeTopratedMoviesRecyclerview);
+        displaySortedMovieList(rvHomeUpcomingMoviesRecyclerview);
     }
 
-    private void getMovies(int page) {
-        isFetchingMovies = true;
+    private void initRecyclerView() {
+        // Configuración del RecyclerView
+        rvHomePopularMoviesRecyclerview.setHasFixedSize(true);
+        rvHomeTopratedMoviesRecyclerview.setHasFixedSize(true);
+        rvHomeUpcomingMoviesRecyclerview.setHasFixedSize(true);
+        //rvHomePopularMoviesRecyclerview.setAdapter(null);
+
+        LinearLayoutManager managerPopular = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager managerToprated = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager managerUpcoming = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        rvHomePopularMoviesRecyclerview.setLayoutManager(managerPopular);
+        rvHomeTopratedMoviesRecyclerview.setLayoutManager(managerToprated);
+        rvHomeUpcomingMoviesRecyclerview.setLayoutManager(managerUpcoming);
+    }
+
+    private void getHomeMovies(int page, String sortBy, RecyclerView rv) {
+        currentPage = 1;
         mTMDbRepositoryAPI.getMovies(page, sortBy, new OnGetMoviesCallback() {
             @Override
             public void onSuccess(int page, List<Movie> movies) {
                 Log.d("FragmentHome-getMovies", "Current Page = " + page);
-                if (adapter == null) {
-                    adapter = new MoviesAdapter(movies, callback);
-                    homePopularMoviesRecyclerview.setAdapter(adapter);
-                } else {
-                    if (page == 1) {
-                        adapter.clearMovies();
-                    }
-                    adapter.appendMovies(movies);
-                }
+                adapter = new MoviesAdapter(movies, callback);
+                rv.setAdapter(adapter);
+                adapter.appendMovies(movies);
                 currentPage = page;
-                isFetchingMovies = false;
-                //setTitle();
             }
 
             @Override
             public void onError() {
-
                 showError();
             }
         });
@@ -161,6 +152,8 @@ public class FragmentHomeList extends Fragment {
         public void onClick(Movie movie, ImageView moviePosterImageView) {
             Intent intent = new Intent(FragmentHomeList.this.getContext(), MovieDetailsActivity.class);
             intent.putExtra(Constants.MOVIE_ID, movie.getId());
+            // se puede utilizar para mostrar el título de la película en un toolbar, por ejemplo
+            //intent.putExtra("movieTitle", movie.getTitle());
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
                     FragmentHomeList.this.getActivity(),
                     moviePosterImageView,
@@ -168,24 +161,37 @@ public class FragmentHomeList extends Fragment {
             );
             FragmentHomeList.this.startActivity(intent, options.toBundle());
         }
-
     };
 
-    /*class SliderTimer extends TimerTask {
-        @Override
-        public void run() {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (homeSlideViewpager.getCurrentItem() < slideList.size() - 1) {
-                        homeSlideViewpager.setCurrentItem(homeSlideViewpager.getCurrentItem() + 1);
-                    } else {
-                        homeSlideViewpager.setCurrentItem(0);
-                    }
-                }
-            });
+
+    @SuppressLint("NonConstantResourceId")
+    // se añade ya que los resource ids no son finals desde Gradle 5.0 y hay que evitar usarlo en switchs
+    private void displaySortedMovieList(RecyclerView rv) {
+        currentPage = 1; // Volvemos al inicio cada vez que entremos en una de las listas
+
+        switch (rv.getId()) {
+            case R.id.rv_home_popular_movies_recyclerview:
+                sortBy = Constants.POPULAR;
+                break;
+            case R.id.rv_home_toprated_movies_recyclerview:
+                sortBy = Constants.TOP_RATED;
+                break;
+            case R.id.rv_home_upcoming_movies_recyclerview:
+                sortBy = Constants.UPCOMING;
+                break;
+            /**
+             * Cambiar vista entre lista y póster
+             * https://stackoverflow.com/questions/45456601/switch-between-layouts-on-list-to-grid-recyclerview
+             */
+            /*case R.id.switch_view:
+                //getActivity().invalidateOptionsMenu();
+                boolean isSwitched = adapter.toggleItemViewType();
+                //mRecyclerView.setLayoutManager(isSwitched ? new LinearLayoutManager(this) : new GridLayoutManager(this, 2));
+                adapter.notifyDataSetChanged();
+                return true;*/
         }
-    }*/
+        getHomeMovies(currentPage, sortBy, rv);
+    }
 
     public void showError() {
         /**
@@ -194,5 +200,35 @@ public class FragmentHomeList extends Fragment {
         Snackbar.make(getActivity().findViewById(android.R.id.content), "Error 1", Snackbar.LENGTH_LONG)
                 .setAnchorView(R.id.bottom_navigation)
                 .show();
+    }
+
+    @OnClick({R.id.btn_home_list_popular_viewall_textview, R.id.btn_home_list_toprated_viewall_textview, R.id.btn_home_list_upcoming_viewall_textview})
+    public void onClick(View view) {
+        String sortFilter = null;
+        // Enviar parámetros para que reciba la info el nuevo fragment
+        // https://stackoverflow.com/a/40949016/1552146
+        Bundle bundle = new Bundle();
+
+        FragmentMovieList movieList = new FragmentMovieList();
+        movieList.setArguments(bundle);
+        switch (view.getId()) {
+            case R.id.btn_home_list_popular_viewall_textview:
+                sortFilter = Constants.POPULAR;
+                break;
+            case R.id.btn_home_list_toprated_viewall_textview:
+                sortFilter = Constants.TOP_RATED;
+                break;
+            case R.id.btn_home_list_upcoming_viewall_textview:
+                sortFilter = Constants.UPCOMING;
+                break;
+        }
+        bundle.putString("movieFilter", sortFilter);
+
+        getActivity().getSupportFragmentManager().beginTransaction()
+                // ((ViewGroup)getView().getParent()).getId() -> es el id del fragment actual
+                .replace(((ViewGroup) getView().getParent()).getId(), movieList, "FragmentMovieListFiltered")
+                .addToBackStack(null)
+                .commit();
+
     }
 }

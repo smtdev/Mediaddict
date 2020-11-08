@@ -1,4 +1,4 @@
-package me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess;
+package me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get;
 
 import java.text.ParseException;
 

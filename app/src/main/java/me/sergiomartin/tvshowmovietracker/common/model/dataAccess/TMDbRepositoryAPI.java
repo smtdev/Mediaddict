@@ -1,27 +1,24 @@
 package me.sergiomartin.tvshowmovietracker.common.model.dataAccess;
 
-import android.os.Build;
 import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.text.ParseException;
 import java.util.List;
 
 import me.sergiomartin.tvshowmovietracker.BuildConfig;
 import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
-import me.sergiomartin.tvshowmovietracker.moviesModule.api.LanguagesResponse;
 import me.sergiomartin.tvshowmovietracker.moviesModule.api.MovieApiInterface;
 import me.sergiomartin.tvshowmovietracker.moviesModule.api.GenresListResponse;
 import me.sergiomartin.tvshowmovietracker.moviesModule.api.MoviesListResponse;
 import me.sergiomartin.tvshowmovietracker.moviesModule.api.TrailerListResponse;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Language;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
-import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnGetGenresCallback;
-import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnGetLanguagesCallback;
-import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnGetMovieCallback;
-import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnGetMoviesCallback;
-import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnGetTrailersCallback;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetGenresCallback;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetLanguagesCallback;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetMovieCallback;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetMoviesCallback;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetTrailersCallback;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

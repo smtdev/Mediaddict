@@ -7,10 +7,10 @@
         android:icon="@drawable/ic_home"
         android:title="@string/action_home_title" />
 
-    <item
+    <!--<item
         android:id="@+id/app_bar_tvshow"
         android:icon="@drawable/ic_tvshow"
-        android:title="@string/action_tvshow_title" />
+        android:title="@string/action_tvshow_title" />-->
 
     <item
         android:id="@+id/app_bar_movie"

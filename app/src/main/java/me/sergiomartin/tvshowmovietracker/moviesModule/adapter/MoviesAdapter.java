@@ -1,6 +1,5 @@
 package me.sergiomartin.tvshowmovietracker.moviesModule.adapter;
 
-import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,7 +24,7 @@ import me.sergiomartin.tvshowmovietracker.R;
 import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Genre;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
-import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnMoviesClickCallback;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.action.OnMoviesClickCallback;
 import me.sergiomartin.tvshowmovietracker.moviesModule.module.GlideApp;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> implements Filterable {
@@ -42,7 +41,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     private List<Movie> filteredMovies;
     private List<Genre> genres;
     private OnMoviesClickCallback callback;
-
     private boolean isSwitchView = true;
     private boolean isLinearLayout;
 
@@ -150,25 +148,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.item_movie_release_date)
-        @Nullable
-        TextView itemMovieReleaseDate;
-
-        @Nullable
-        @BindView(R.id.item_movie_title)
-        TextView itemMovieTitle;
-
-        @Nullable
-        @BindView(R.id.item_movie_genre)
-        TextView itemMovieGenre;
-
-        @Nullable
-        @BindView(R.id.item_movie_rating)
-        TextView itemMovieRating;
-
-        @Nullable
-        @BindView(R.id.item_movie_poster)
-        ImageView itemMoviePoster;
+        @Nullable @BindView(R.id.item_movie_release_date) TextView itemMovieReleaseDate;
+        @Nullable @BindView(R.id.item_movie_title) TextView itemMovieTitle;
+        @Nullable @BindView(R.id.item_movie_genre) TextView itemMovieGenre;
+        @Nullable @BindView(R.id.item_movie_rating) TextView itemMovieRating;
+        @Nullable @BindView(R.id.item_movie_poster) ImageView itemMoviePoster;
 
         Movie movie;
 
@@ -176,18 +160,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    callback.onClick(movie, itemMoviePoster);
-                }
+            itemView.setOnClickListener(v -> {
+                callback.onClick(movie, itemMoviePoster);
             });
-
         }
 
         public void bind(@NotNull Movie movie) {
             this.movie = movie;
-            Log.d("MoviesAdapter", "Dentro de bind: " + movie.getTitle());
+            Log.d("MoviesAdapterBind", "Dentro de bind: " + movie.getTitle());
             if (isLinearLayout) {
                 itemMovieReleaseDate.setText(movie.getReleaseDate().split("-")[0]);
                 itemMovieTitle.setText(movie.getTitle());

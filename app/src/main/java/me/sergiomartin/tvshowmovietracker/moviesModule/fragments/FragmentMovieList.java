@@ -25,13 +25,12 @@ import me.sergiomartin.tvshowmovietracker.MovieDetailsActivity;
 import me.sergiomartin.tvshowmovietracker.R;
 import me.sergiomartin.tvshowmovietracker.common.model.dataAccess.TMDbRepositoryAPI;
 import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
-import me.sergiomartin.tvshowmovietracker.common.utils.UtilSnackbar;
 import me.sergiomartin.tvshowmovietracker.moviesModule.adapter.MoviesAdapter;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Genre;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
-import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnGetGenresCallback;
-import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnGetMoviesCallback;
-import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnMoviesClickCallback;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetGenresCallback;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetMoviesCallback;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.action.OnMoviesClickCallback;
 
 public class FragmentMovieList extends Fragment {
 
@@ -78,6 +77,13 @@ public class FragmentMovieList extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_movie_list, container, false);
 
+        // Recoger parámetros enviados por el fragment anterior
+        Bundle bundle = this.getArguments();
+
+        if(bundle != null) {
+            sortBy = bundle.getString("movieFilter");
+        }
+
         ButterKnife.bind(this, view);
 
         moviesListRecyclerView = view.findViewById(R.id.fragment_movie_list_recyclerView);
@@ -85,13 +91,14 @@ public class FragmentMovieList extends Fragment {
 
         moviesListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        setupOnScrollListener();
-        getGenres();
+        initRecyclerViewAndScrolling(sortBy);
+
+        getGenres(sortBy);
         // Inflate the layout for this fragment
         return view;
     }
 
-    private void setupOnScrollListener() {
+    private void initRecyclerViewAndScrolling(String sortByFilter) {
         final LinearLayoutManager manager = new LinearLayoutManager(getContext());
         moviesListRecyclerView.setLayoutManager(manager);
         moviesListRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -103,19 +110,19 @@ public class FragmentMovieList extends Fragment {
 
                 if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
                     if (!isFetchingMovies) {
-                        getMovies(currentPage + 1);
+                        getMovies(currentPage + 1, sortByFilter);
                     }
                 }
             }
         });
     }
 
-    private void getGenres() {
+    private void getGenres(String sortByFilter) {
         mTMDbRepositoryAPI.getGenres(new OnGetGenresCallback() {
             @Override
             public void onSuccess(List<Genre> genres) {
                 movieGenres = genres;
-                getMovies(currentPage);
+                getMovies(currentPage, sortByFilter);
             }
 
             @Override
@@ -125,9 +132,9 @@ public class FragmentMovieList extends Fragment {
         });
     }
 
-    private void getMovies(int page) {
+    private void getMovies(int page, String sortByFilter) {
         isFetchingMovies = true;
-        mTMDbRepositoryAPI.getMovies(page, sortBy, new OnGetMoviesCallback() {
+        mTMDbRepositoryAPI.getMovies(page, sortByFilter, new OnGetMoviesCallback() {
             @Override
             public void onSuccess(int page, List<Movie> movies) {
                 Log.d("FragmentMovie-getMovies", "Current Page = " + page);

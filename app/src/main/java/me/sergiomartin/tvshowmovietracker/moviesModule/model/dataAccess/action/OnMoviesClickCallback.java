@@ -1,4 +1,4 @@
-package me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess;
+package me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.action;
 
 import android.widget.ImageView;
 

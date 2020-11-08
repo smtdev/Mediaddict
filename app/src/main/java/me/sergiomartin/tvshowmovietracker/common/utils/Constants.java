@@ -7,11 +7,12 @@ public class Constants {
 
     // Filtros
     public static final String MOVIE_ID = "movie_id";
-
-    public static final String LANGUAGE = "es";
     public static final String POPULAR = "popular";
     public static final String TOP_RATED = "top_rated";
     public static final String UPCOMING = "upcoming";
+    public static final String MOVIE_CURRENT_FILTER = "filter";
+    // Idioma por defecto
+    public static final String LANGUAGE = "es";
 
     // Imágenes
     public static final String IMAGE_BASE_URL_W500 = "https://image.tmdb.org/t/p/w500";
