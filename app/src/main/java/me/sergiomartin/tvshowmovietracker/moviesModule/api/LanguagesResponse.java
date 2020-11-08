@@ -1,42 +1,18 @@
 package me.sergiomartin.tvshowmovietracker.moviesModule.api;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import java.util.List;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.Language;
 
 public class LanguagesResponse {
-    @SerializedName("iso_639_1")
-    @Expose
-    private String isoStandard;
 
-    @SerializedName("english_name")
-    @Expose
-    private String englishName;
+    private List<Language> languages;
 
-    @SerializedName("name")
-    @Expose
-    private String name;
-
-    public String getIsoStandard() {
-        return isoStandard;
+    public List<Language> getLanguages() {
+        return languages;
     }
 
-    public void setIsoStandard(String isoStandard) {
-        this.isoStandard = isoStandard;
+    public void setGenres(List<Language> languages) {
+        this.languages = languages;
     }
 
-    public String getEnglishName() {
-        return englishName;
-    }
-
-    public void setEnglishName(String englishName) {
-        this.englishName = englishName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

@@ -1,10 +1,12 @@
 package me.sergiomartin.tvshowmovietracker.common.model.dataAccess;
 
+import android.os.Build;
 import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
+import java.util.List;
 
 import me.sergiomartin.tvshowmovietracker.BuildConfig;
 import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
@@ -13,6 +15,7 @@ import me.sergiomartin.tvshowmovietracker.moviesModule.api.MovieApiInterface;
 import me.sergiomartin.tvshowmovietracker.moviesModule.api.GenresListResponse;
 import me.sergiomartin.tvshowmovietracker.moviesModule.api.MoviesListResponse;
 import me.sergiomartin.tvshowmovietracker.moviesModule.api.TrailerListResponse;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.Language;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnGetGenresCallback;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.OnGetLanguagesCallback;
@@ -100,11 +103,7 @@ public class TMDbRepositoryAPI {
                         if (response.isSuccessful()) {
                             Movie movie = response.body();
                             if (movie != null) {
-                                try {
-                                    callback.onSuccess(movie);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
+                                callback.onSuccess(movie);
                             } else {
                                 callback.onError();
                             }
@@ -168,30 +167,33 @@ public class TMDbRepositoryAPI {
                     }
                 });
     }
-
-
-    /*public void getLanguages(final OnGetLanguagesCallback callback) {
+    public void getLanguages (final OnGetLanguagesCallback callback) {
         api.getLanguages(BuildConfig.API_KEY)
-                .enqueue(new Callback<LanguagesResponse>() {
+                .enqueue(new Callback<List<Language>>() {
                     @Override
-                    public void onResponse(@NotNull Call<LanguagesResponse> call, @NotNull Response<LanguagesResponse> response) {
+                    public void onResponse(@NotNull Call<List<Language>> call, @NotNull Response<List<Language>> response) {
                         if (response.isSuccessful()) {
-                            LanguagesResponse languagesResponse = response.body();
-                            if (languagesResponse != null && languagesResponse.get() != null) {
-                                callback.onSuccess(languagesResponse.getLan());
-                            } else {
-                                callback.onError();
+                            List<Language> languages = response.body();
+                            for (Language lang : languages) {
+                                Log.d("Contenido de Langs", "Idiomas: "
+                                        + lang.getLangIsoStandard() + ", "
+                                        + lang.getName() + ", "
+                                        + lang.getEnglishName()
+                                        + ", ");
                             }
+                            Log.i("autolog", "onResponse");
+                                callback.onSuccess(languages);
                         } else {
                             callback.onError();
                         }
                     }
 
                     @Override
-                    public void onFailure(@NotNull Call<LanguagesResponse> call, @NotNull Throwable t) {
+                    public void onFailure(@NotNull Call<List<Language>> call, @NotNull Throwable t) {
+                        Log.d("TMDbRepositoryAPI lang", "Dentro de onFailure: "+ t.getCause());
                         callback.onError();
                     }
                 });
-    }*/
 
+    }
 }

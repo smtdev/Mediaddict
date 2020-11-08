@@ -99,7 +99,7 @@ public class Movie {
 
     @SerializedName("spoken_languages")
     @Expose
-    private List<Languages> languages;
+    private List<Language> languages;
 
 
     public int getId() {
@@ -254,11 +254,11 @@ public class Movie {
         this.imdbId = imdbId;
     }
 
-    public List<Languages> getLanguages() {
+    public List<Language> getLanguages() {
         return languages;
     }
 
-    public void setLanguages(List<Languages> languages) {
+    public void setLanguages(List<Language> languages) {
         this.languages = languages;
     }
 

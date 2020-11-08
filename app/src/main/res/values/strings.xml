@@ -112,6 +112,7 @@
     <string name="star_content_description">Imagen de estrella de puntuación</string>
     <string name="movie_details_genres_textview">Género</string>
     <string name="error_message_loading_trailers">Ha habido un error al obtener la información de los trailers</string>
+    <string name="error_message_loading_lang">Ha habido un error al obtener la información de los idiomas</string>
     <string name="error_network_message">Hay algún problema con tu conexión a internet</string>
     <string name="error_message_loading_movies_panel">Ha habido un error al obtener la información de la lista de películas</string>
     <string name="offline">Parece que no estás conectado a internet</string>

@@ -3,10 +3,14 @@ package me.sergiomartin.tvshowmovietracker.moviesModule.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Languages {
+public class Language {
     @SerializedName("iso_639_1")
     @Expose
     private String langIsoStandard;
+
+    @SerializedName("english_name")
+    @Expose
+    private String englishName;
 
     @SerializedName("name")
     @Expose
@@ -18,6 +22,14 @@ public class Languages {
 
     public void setLangIsoStandard(String langIsoStandard) {
         this.langIsoStandard = langIsoStandard;
+    }
+
+    public String getEnglishName() {
+        return englishName;
+    }
+
+    public void setEnglishName(String englishName) {
+        this.englishName = englishName;
     }
 
     public String getName() {

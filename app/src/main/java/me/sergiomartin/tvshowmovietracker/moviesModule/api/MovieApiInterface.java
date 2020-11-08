@@ -1,5 +1,8 @@
 package me.sergiomartin.tvshowmovietracker.moviesModule.api;
 
+import java.util.List;
+
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.Language;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -11,14 +14,14 @@ public interface MovieApiInterface {
     @GET("movie/{movie_id}")
     Call<Movie> getMovie(
             @Path("movie_id") int id,
-            @Query("api_key") String apiKEy,
+            @Query("api_key") String apiKey,
             @Query("language") String language
     );
 
     @GET("movie/{movie_id}/videos")
     Call<TrailerListResponse> getTrailers(
             @Path("movie_id") int id,
-            @Query("api_key") String apiKEy,
+            @Query("api_key") String apiKey,
             @Query("language") String language
     );
 
@@ -57,7 +60,7 @@ public interface MovieApiInterface {
     );
 
     @GET("configuration/languages")
-    Call<LanguagesResponse> getLanguages (
+    Call<List<Language>> getLanguages (
             @Query("api_key") String apiKey
     );
 }
