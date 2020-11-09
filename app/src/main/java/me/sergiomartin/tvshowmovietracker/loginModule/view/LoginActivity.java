@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 import me.sergiomartin.tvshowmovietracker.R;
 import me.sergiomartin.tvshowmovietracker.loginModule.LoginPresenter;
 import me.sergiomartin.tvshowmovietracker.loginModule.LoginPresenterClass;
-import me.sergiomartin.tvshowmovietracker.MainActivity;
+import me.sergiomartin.tvshowmovietracker.moviesModule.ui.MainActivity;
 
 public class LoginActivity extends AppCompatActivity implements LoginView {
 

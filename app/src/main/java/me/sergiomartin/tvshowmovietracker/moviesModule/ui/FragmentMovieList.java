@@ -1,4 +1,4 @@
-package me.sergiomartin.tvshowmovietracker.moviesModule.fragments;
+package me.sergiomartin.tvshowmovietracker.moviesModule.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +21,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import me.sergiomartin.tvshowmovietracker.MovieDetailsActivity;
 import me.sergiomartin.tvshowmovietracker.R;
 import me.sergiomartin.tvshowmovietracker.common.model.dataAccess.TMDbRepositoryAPI;
 import me.sergiomartin.tvshowmovietracker.common.utils.Constants;

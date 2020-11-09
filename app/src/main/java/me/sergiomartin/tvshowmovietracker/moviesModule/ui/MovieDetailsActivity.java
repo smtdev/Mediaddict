@@ -1,4 +1,4 @@
-package me.sergiomartin.tvshowmovietracker;
+package me.sergiomartin.tvshowmovietracker.moviesModule.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -17,16 +17,21 @@ import android.view.animation.AnimationUtils;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatRatingBar;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
@@ -37,6 +42,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import me.sergiomartin.tvshowmovietracker.R;
 import me.sergiomartin.tvshowmovietracker.common.model.dataAccess.TMDbRepositoryAPI;
 import me.sergiomartin.tvshowmovietracker.common.utils.CommonUtils;
 import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
@@ -112,6 +119,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
     ConstraintLayout clMovieDetailsPanel;
     @BindView(R.id.cl_main_layout)
     CoordinatorLayout clMainLayout;
+    @BindView(R.id.ctl_movie_details)
+    CollapsingToolbarLayout ctlMovieDetails;
+    @BindView(R.id.bottomAppBar)
+    BottomAppBar bottomAppBar;
 
 
     private TMDbRepositoryAPI mTMDbRepositoryAPI;
@@ -131,20 +142,27 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         mTMDbRepositoryAPI = TMDbRepositoryAPI.getInstance();
 
-        //setupToolbar();
+        setupToolbar();
 
+        bottomAppBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         getMovie();
     }
 
-    /*private void setupToolbar() {
-        Toolbar toolbar = findViewById(R.id.main_toolbar);
+    private void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.tb_movie_details_toolbar);
         setSupportActionBar(toolbar);
-
-        if (getSupportActionBar() != null) {
+        ctlMovieDetails.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+        ctlMovieDetails.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color.transparent));
+        /*if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
-    }*/
+        }*/
+    }
 
     private void getMovie() {
         mTMDbRepositoryAPI.getMovie(movieId, new OnGetMovieCallback() {
@@ -152,6 +170,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Movie movie) {
                 tvMovieDetailsTitle.setText(movie.getTitle());
+                ctlMovieDetails.setTitle(movie.getTitle());
                 tvMovieDetailsLength.setText(CommonUtils.parseMinutesToHour((int) movie.getRuntime()));
                 //tvMovieDetailsLength.setText(String.format("%s %s", (int) movie.getRuntime(), "minutos"));
                 tvMovieDetailsSummary.setText(movie.getOverview());

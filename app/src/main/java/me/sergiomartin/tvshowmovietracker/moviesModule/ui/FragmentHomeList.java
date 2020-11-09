@@ -1,4 +1,4 @@
-package me.sergiomartin.tvshowmovietracker.moviesModule.fragments;
+package me.sergiomartin.tvshowmovietracker.moviesModule.ui;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
@@ -24,7 +24,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import me.sergiomartin.tvshowmovietracker.MovieDetailsActivity;
 import me.sergiomartin.tvshowmovietracker.R;
 import me.sergiomartin.tvshowmovietracker.common.model.dataAccess.TMDbRepositoryAPI;
 import me.sergiomartin.tvshowmovietracker.common.utils.Constants;

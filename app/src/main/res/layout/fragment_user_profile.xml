@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cl_main_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar"
+        android:id="@+id/abl_user_profile"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        app:titleTextColor="@color/colorAccent"
+        android:layout_height="270dp"
         android:background="@color/colorPrimary"
         android:theme="@style/AppThemeBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/ctl_movie_details"
+            android:id="@+id/ctl_user_profile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -25,29 +23,21 @@
             app:expandedTitleMarginStart="48dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/iv_movie_details_backdrop"
+            <ImageView
+                android:id="@+id/iv_user_profile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/profile_cover"
                 android:adjustViewBounds="true"
-                android:scaleType="centerInside"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.7" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/iv_movie_details_backdrop_gradient"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="170dp"
-                android:contentDescription="@string/gradient_content_description"
-                app:srcCompat="@drawable/gradient_bg" />
-
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/tb_movie_details_toolbar"
+                android:id="@+id/tb_user_profile"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
                 android:minHeight="?android:attr/actionBarSize"
-                app:titleTextColor="@color/colorAccent"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:popupTheme="@style/AppThemeBar" />
@@ -55,26 +45,17 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-            <include
-                android:id="@+id/contentScroll"
-                layout="@layout/fragment_movie_details" />
-
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
-        style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:fabAlignmentMode="end"
-        android:backgroundTint="#1C2632"
-        app:navigationIcon="@drawable/ic_back" />
+    <include layout="@layout/user_content_profile" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_user_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_star_rate_24"
+        android:layout_margin="@dimen/fab_margin"
         app:tint="@color/md_white"
+        android:src="@drawable/ic_account_edit"
         app:backgroundTint="@color/colorAccent"
-        app:layout_anchor="@id/bottomAppBar" />
+        app:layout_anchor="@id/abl_user_profile"
+        app:layout_anchorGravity="bottom|end" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,5 +1,6 @@
-package me.sergiomartin.tvshowmovietracker;
+package me.sergiomartin.tvshowmovietracker.moviesModule.ui;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,7 +10,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -17,16 +17,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import me.sergiomartin.tvshowmovietracker.common.model.dataAccess.TMDbRepositoryAPI;
+import me.sergiomartin.tvshowmovietracker.R;
 import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
 import me.sergiomartin.tvshowmovietracker.moviesModule.adapter.MoviesAdapter;
-import me.sergiomartin.tvshowmovietracker.moviesModule.fragments.FragmentHomeList;
-import me.sergiomartin.tvshowmovietracker.moviesModule.fragments.FragmentMovieList;
-import me.sergiomartin.tvshowmovietracker.moviesModule.fragments.FragmentShowList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,9 +57,6 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(mainToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        //mainToolbar.setNavigationIcon(R.drawable.ic_back);
-        mainToolbar.setLogo(R.drawable.ic_launcher_menu);
-
 
         openFragment(new FragmentHomeList());
 
@@ -82,12 +75,12 @@ public class MainActivity extends AppCompatActivity {
                     openFragment(new FragmentMovieList());
                     return true;
 
-                case R.id.app_bar_history:
-                    //openFragment(new AccountFragment());
+                case R.id.app_bar_fav:
+                    //openFragment(new FavouritesAccount());
                     return true;
 
                 case R.id.app_bar_profile:
-                    //openFragment(new SettingsFragment());
+                    openFragment(new FragmentUserProfile());
                     return true;
             }
             return false;
@@ -120,6 +113,9 @@ public class MainActivity extends AppCompatActivity {
             int searchImgId = androidx.appcompat.R.id.search_button;
             ImageView v = (ImageView) searchView.findViewById(searchImgId);
             v.setImageResource(R.drawable.ic_baseline_search_24);
+
+            ImageView searchClose = searchView.findViewById(R.id.search_close_btn);
+            searchClose.setColorFilter(Color.WHITE);
 
             // Cambiando el style al SearchView
             int searchEditId = androidx.appcompat.R.id.search_src_text;

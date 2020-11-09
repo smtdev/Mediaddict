@@ -70,7 +70,7 @@
 
     <string name="action_movie_title">Mis películas</string>
     <string name="action_tvshow_title">Mis series</string>
-    <string name="action_history_title">Historial</string>
+    <string name="action_fav_title">Favoritas</string>
 
     <string name="movie_genre_text">Genres</string>
     <string name="movie_rating_text">0.0</string>
@@ -121,4 +121,6 @@
     <string name="home_upcoming_movies_header_text">Próximamente</string>
     <string name="home_upcoming_movies_textview">Los próximos estrenos</string>
     <string name="home_movies_viewall_button">Ver todas</string>
+    <string name="user_profile_name">Nombre Apellido Apellido</string>
+    <string name="user_profile_close_session">Cerrar sesión</string>
 </resources>
