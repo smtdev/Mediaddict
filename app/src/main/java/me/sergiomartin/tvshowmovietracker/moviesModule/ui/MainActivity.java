@@ -1,13 +1,17 @@
 package me.sergiomartin.tvshowmovietracker.moviesModule.ui;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -17,9 +21,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.sergiomartin.tvshowmovietracker.BuildConfig;
 import me.sergiomartin.tvshowmovietracker.R;
 import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
 import me.sergiomartin.tvshowmovietracker.moviesModule.adapter.MoviesAdapter;
@@ -32,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     @BindView(R.id.mainConstraintLayout)
     ConstraintLayout mainConstraintLayout;
+    @BindView(R.id.frameLayout)
+    FrameLayout frameLayout;
 
     private MoviesAdapter adapter;
     private String sortBy = Constants.POPULAR;
@@ -57,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(mainToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        initApplication();
 
         openFragment(new FragmentHomeList());
 
@@ -87,7 +97,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    void openFragment(Fragment fragment) {
+    public void initApplication() {
+          try {
+            if (BuildConfig.API_KEY.isEmpty()) {
+                Snackbar.make(frameLayout, "Por favor, necesitas añadir la clave API de https://themoviedb.org para continuar", Snackbar.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Log.d("LoadingAppError", e.getMessage());
+        }
+    }
+
+    public void openFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment);
         fragmentTransaction.addToBackStack(null);

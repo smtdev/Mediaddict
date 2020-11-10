@@ -112,5 +112,6 @@
     <color name="blue_gray_700">#455A64</color>
     <color name="blue_gray_800">#37474F</color>
     <color name="blue_gray_900">#263238</color>
+    <color name="bottomAppBarColor">#1C2632</color>
 
 </resources>

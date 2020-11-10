@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -167,21 +168,6 @@ public class FragmentMovieList extends Fragment {
             FragmentMovieList.this.startActivity(intent);
         }
     };
-
-    /*private void setTitle() {
-        switch (sortBy) {
-            case TMDbRepositoryAPI.POPULAR:
-                setTitle(getString(R.string.toolbar_menu_search_category_popular));
-                break;
-            case TMDbRepositoryAPI.TOP_RATED:
-                setTitle(getString(R.string.toolbar_menu_search_category_toprated));
-                break;
-            case TMDbRepositoryAPI.UPCOMING:
-                setTitle(getString(R.string.toolbar_menu_search_category_upcoming));
-                break;
-        }
-    }*/
-
 
     /*// TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
