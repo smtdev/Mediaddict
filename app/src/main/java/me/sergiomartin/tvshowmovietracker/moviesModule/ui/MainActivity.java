@@ -1,6 +1,5 @@
 package me.sergiomartin.tvshowmovietracker.moviesModule.ui;
 
-import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -68,13 +66,13 @@ public class MainActivity extends AppCompatActivity {
 
         initApplication();
 
-        openFragment(new FragmentHomeList());
+        openFragment(new HomeListFragment());
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
 
             switch (item.getItemId()) {
                 case R.id.app_bar_home:
-                    openFragment(new FragmentHomeList());
+                    openFragment(new HomeListFragment());
                     return true;
 
                 /*case R.id.app_bar_tvshow:
@@ -82,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;*/
 
                 case R.id.app_bar_movie:
-                    openFragment(new FragmentMovieList());
+                    openFragment(new MovieListFragment());
                     return true;
 
                 case R.id.app_bar_fav:
@@ -90,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
 
                 case R.id.app_bar_profile:
-                    openFragment(new FragmentUserProfile());
+                    openFragment(new UserProfileFragment());
                     return true;
             }
             return false;
@@ -98,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initApplication() {
-          try {
+        try {
             if (BuildConfig.API_KEY.isEmpty()) {
                 Snackbar.make(frameLayout, "Por favor, necesitas añadir la clave API de https://themoviedb.org para continuar", Snackbar.LENGTH_LONG).show();
             }

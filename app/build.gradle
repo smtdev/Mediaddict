@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services' // Google Services
+apply plugin: 'com.jakewharton.butterknife'
 
 android {
     compileSdkVersion 30
@@ -57,6 +58,7 @@ dependencies {
     implementation 'androidx.fragment:fragment:1.2.5'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation "androidx.preference:preference:1.1.1"
 
     // Firebase dependencies
     implementation platform('com.google.firebase:firebase-bom:25.12.0')

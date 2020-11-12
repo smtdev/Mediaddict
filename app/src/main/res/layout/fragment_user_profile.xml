@@ -48,6 +48,17 @@
     <include layout="@layout/user_content_profile" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        app:tint="@color/md_white"
+        android:src="@drawable/ic_baseline_settings_24"
+        app:backgroundTint="@color/colorAccent"
+        app:layout_anchor="@id/abl_user_profile"
+        app:layout_anchorGravity="bottom" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_user_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,10 +35,10 @@ import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGe
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link FragmentHomeList#newInstance} factory method to
+ * Use the {@link HomeListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentHomeList extends Fragment {
+public class HomeListFragment extends Fragment {
 
     //@BindView(R.id.home_list_indicator_tabLayout)
     //TabLayout homeIndicatorTabLayout;
@@ -53,6 +54,9 @@ public class FragmentHomeList extends Fragment {
     AppCompatButton btnHomeListTopratedViewallTextview;
     @BindView(R.id.btn_home_list_upcoming_viewall_textview)
     AppCompatButton btnHomeListUpcomingViewallTextview;
+    @BindView(R.id.pb_home_list)
+    ProgressBar pbHomeList;
+
 
     private MoviesAdapter adapter;
     private TMDbRepositoryAPI mTMDbRepositoryAPI;
@@ -68,12 +72,12 @@ public class FragmentHomeList extends Fragment {
      */
     private int currentPage = 1;
 
-    public FragmentHomeList() {
+    public HomeListFragment() {
         // Required empty public constructor
     }
 
-    public static FragmentHomeList newInstance() {
-        return new FragmentHomeList();
+    public static HomeListFragment newInstance() {
+        return new HomeListFragment();
     }
 
     @Override
@@ -95,6 +99,10 @@ public class FragmentHomeList extends Fragment {
         rvHomePopularMoviesRecyclerview = view.findViewById(R.id.rv_home_popular_movies_recyclerview);
         rvHomeTopratedMoviesRecyclerview = view.findViewById(R.id.rv_home_toprated_movies_recyclerview);
         rvHomeUpcomingMoviesRecyclerview = view.findViewById(R.id.rv_home_upcoming_movies_recyclerview);
+
+        rvHomePopularMoviesRecyclerview.setVisibility(View.GONE);
+        rvHomeTopratedMoviesRecyclerview.setVisibility(View.GONE);
+        rvHomeUpcomingMoviesRecyclerview.setVisibility(View.GONE);
 
         initRecyclerView();
         //getMovies(currentPage, sortBy);
@@ -137,6 +145,10 @@ public class FragmentHomeList extends Fragment {
                 rv.setAdapter(adapter);
                 adapter.appendMovies(movies);
                 currentPage = page;
+                pbHomeList.setVisibility(View.GONE);
+                rvHomePopularMoviesRecyclerview.setVisibility(View.VISIBLE);
+                rvHomeTopratedMoviesRecyclerview.setVisibility(View.VISIBLE);
+                rvHomeUpcomingMoviesRecyclerview.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -149,16 +161,16 @@ public class FragmentHomeList extends Fragment {
     OnMoviesClickCallback callback = new OnMoviesClickCallback() {
         @Override
         public void onClick(Movie movie, ImageView moviePosterImageView) {
-            Intent intent = new Intent(FragmentHomeList.this.getContext(), MovieDetailsActivity.class);
+            Intent intent = new Intent(HomeListFragment.this.getContext(), MovieDetailsActivity.class);
             intent.putExtra(Constants.MOVIE_ID, movie.getId());
             // se puede utilizar para mostrar el título de la película en un toolbar, por ejemplo
             //intent.putExtra("movieTitle", movie.getTitle());
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
-                    FragmentHomeList.this.getActivity(),
+                    HomeListFragment.this.getActivity(),
                     moviePosterImageView,
                     "fromHomeToMovieDetails"
             );
-            FragmentHomeList.this.startActivity(intent, options.toBundle());
+            HomeListFragment.this.startActivity(intent, options.toBundle());
         }
     };
 
@@ -208,7 +220,7 @@ public class FragmentHomeList extends Fragment {
         // https://stackoverflow.com/a/40949016/1552146
         Bundle bundle = new Bundle();
 
-        FragmentMovieList movieList = new FragmentMovieList();
+        MovieListFragment movieList = new MovieListFragment();
         movieList.setArguments(bundle);
         switch (view.getId()) {
             case R.id.btn_home_list_popular_viewall_textview:
@@ -228,6 +240,5 @@ public class FragmentHomeList extends Fragment {
                 .replace(((ViewGroup) getView().getParent()).getId(), movieList, "FragmentMovieListFiltered")
                 .addToBackStack(null)
                 .commit();
-
     }
 }

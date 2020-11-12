@@ -2,6 +2,7 @@ package me.sergiomartin.tvshowmovietracker.moviesModule.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,7 +18,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -28,12 +28,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.math.BigDecimal;
@@ -123,10 +125,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
     CollapsingToolbarLayout ctlMovieDetails;
     @BindView(R.id.bottomAppBar)
     BottomAppBar bottomAppBar;
+    @BindView(R.id.fab_movie_details)
+    FloatingActionButton fabMovieDetails;
 
 
     private TMDbRepositoryAPI mTMDbRepositoryAPI;
     private int movieId;
+    private boolean isRotate, isStarred = false;
 
     public MovieDetailsActivity() {
         // Required empty public constructor
@@ -384,4 +389,23 @@ public class MovieDetailsActivity extends AppCompatActivity {
         return true;
     }
 
+    @OnClick(R.id.fab_movie_details)
+    public void onClick(View view) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        if (isStarred) {
+            fabMovieDetails.setImageResource(R.drawable.ic_star_rate_removed);
+            isStarred = false;
+            Snackbar.make(clMainLayout, "Película eliminada de favoritos correctamente.", Snackbar.LENGTH_SHORT).show();
+        } else {
+            fabMovieDetails.setImageResource(R.drawable.ic_star_rate_added);
+            isStarred = true;
+            Snackbar.make(clMainLayout, "Película añadida a favoritos correctamente.", Snackbar.LENGTH_SHORT).show();
+        }
+
+        // Animación de sacudida
+        AnimationView.shakeFab(view, 200L);
+        // Animación de rotado de imagen interior
+        isRotate = AnimationView.rotateFab(view, !isRotate);
+    }
 }

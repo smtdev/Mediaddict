@@ -123,4 +123,7 @@
     <string name="home_movies_viewall_button">Ver todas</string>
     <string name="user_profile_name">Nombre Apellido Apellido</string>
     <string name="user_profile_close_session">Cerrar sesión</string>
+    <string name="title_first_section">General</string>
+    <string name="text_tmdb_usage">La aplicación utiliza la API de TMDb a modo educativo</string>
+    <string name="title_info_category">Información</string>
 </resources>

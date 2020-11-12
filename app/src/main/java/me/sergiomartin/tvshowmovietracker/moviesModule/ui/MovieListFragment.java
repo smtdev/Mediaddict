@@ -2,17 +2,16 @@ package me.sergiomartin.tvshowmovietracker.moviesModule.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -28,14 +27,16 @@ import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
 import me.sergiomartin.tvshowmovietracker.moviesModule.adapter.MoviesAdapter;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Genre;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.action.OnMoviesClickCallback;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetGenresCallback;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetMoviesCallback;
-import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.action.OnMoviesClickCallback;
 
-public class FragmentMovieList extends Fragment {
+public class MovieListFragment extends Fragment {
 
     @BindView(R.id.fragment_movie_list_recyclerView)
     RecyclerView moviesListRecyclerView;
+    @BindView(R.id.srl_fragment_movie_list)
+    SwipeRefreshLayout srlFragmentMovieList;
 
     private MoviesAdapter adapter;
     private TMDbRepositoryAPI mTMDbRepositoryAPI;
@@ -56,12 +57,12 @@ public class FragmentMovieList extends Fragment {
      */
     private int currentPage = 1;
 
-    public FragmentMovieList() {
+    public MovieListFragment() {
         // Required empty public constructor
     }
 
-    public static FragmentMovieList newInstance()  {
-        return new FragmentMovieList();
+    public static MovieListFragment newInstance() {
+        return new MovieListFragment();
     }
 
     @Override
@@ -80,7 +81,7 @@ public class FragmentMovieList extends Fragment {
         // Recoger parámetros enviados por el fragment anterior
         Bundle bundle = this.getArguments();
 
-        if(bundle != null) {
+        if (bundle != null) {
             sortBy = bundle.getString("movieFilter");
         }
 
@@ -94,6 +95,18 @@ public class FragmentMovieList extends Fragment {
         initRecyclerViewAndScrolling(sortBy);
 
         getGenres(sortBy);
+
+        srlFragmentMovieList.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initRecyclerViewAndScrolling(sortBy);
+                srlFragmentMovieList.setRefreshing(false);
+                srlFragmentMovieList.setColorSchemeColors(
+                        getActivity().getResources().getColor(R.color.colorAccent),
+                        getActivity().getResources().getColor(R.color.text_light_blue)
+                );
+            }
+        });
         // Inflate the layout for this fragment
         return view;
     }
@@ -163,9 +176,9 @@ public class FragmentMovieList extends Fragment {
     OnMoviesClickCallback callback = new OnMoviesClickCallback() {
         @Override
         public void onClick(Movie movie, ImageView movieImageView) {
-            Intent intent = new Intent(FragmentMovieList.this.getContext(), MovieDetailsActivity.class);
+            Intent intent = new Intent(MovieListFragment.this.getContext(), MovieDetailsActivity.class);
             intent.putExtra(Constants.MOVIE_ID, movie.getId());
-            FragmentMovieList.this.startActivity(intent);
+            MovieListFragment.this.startActivity(intent);
         }
     };
 
@@ -210,9 +223,9 @@ public class FragmentMovieList extends Fragment {
 
 
     public void showError() {
-         /*
-          * Context from: https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
-          */
+        /*
+         * Context from: https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
+         */
         Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.error_message_loading_movies_panel, Snackbar.LENGTH_LONG)
                 .setAnchorView(R.id.bottom_navigation)
                 .show();

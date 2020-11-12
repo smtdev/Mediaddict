@@ -8,17 +8,17 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.sergiomartin.tvshowmovietracker.R;
 
-public class FragmentUserProfile extends Fragment {
+public class UserProfileFragment extends Fragment {
 
     @BindView(R.id.tb_user_profile)
     Toolbar tbUserProfile;
@@ -26,8 +26,10 @@ public class FragmentUserProfile extends Fragment {
     CollapsingToolbarLayout ctlUserProfile;
     @BindView(R.id.fab_user_profile)
     FloatingActionButton fabUserProfile;
+    @BindView(R.id.fab_settings)
+    FloatingActionButton fabSettings;
 
-    public FragmentUserProfile() {
+    public UserProfileFragment() {
         // Required empty public constructor
     }
 
@@ -71,8 +73,10 @@ public class FragmentUserProfile extends Fragment {
 
         //((AppCompatActivity)getActivity()).setSupportActionBar(tbUserProfile);
 
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
+
+        ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
@@ -83,8 +87,23 @@ public class FragmentUserProfile extends Fragment {
         //ProfileHelper.with(getActivity()).loadProfile();
     }
 
-    @OnClick(R.id.fab_user_profile)
-    public void onClick() {
+    @OnClick({R.id.fab_user_profile, R.id.fab_settings})
+    public void onClick(View view) {
+        Bundle bundle = new Bundle();
 
+        SettingsFragment settingsFragment = new SettingsFragment();
+        settingsFragment.setArguments(bundle);
+
+        switch (view.getId()) {
+            case R.id.fab_user_profile:
+                break;
+            case R.id.fab_settings:
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        // ((ViewGroup)getView().getParent()).getId() -> es el id del fragment actual
+                        .replace(((ViewGroup) getView().getParent()).getId(), settingsFragment, "FragmentPreferences")
+                        .addToBackStack(null)
+                        .commit();
+        }
     }
+
 }
