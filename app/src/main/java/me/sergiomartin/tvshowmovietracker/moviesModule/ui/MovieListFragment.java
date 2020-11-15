@@ -33,10 +33,10 @@ import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGe
 
 public class MovieListFragment extends Fragment {
 
-    @BindView(R.id.fragment_movie_list_recyclerView)
-    RecyclerView moviesListRecyclerView;
     @BindView(R.id.srl_fragment_movie_list)
     SwipeRefreshLayout srlFragmentMovieList;
+    @BindView(R.id.rv_fragment_movie_list)
+    RecyclerView rvFragmentMovieList;
 
     private MoviesAdapter adapter;
     private TMDbRepositoryAPI mTMDbRepositoryAPI;
@@ -87,10 +87,10 @@ public class MovieListFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        moviesListRecyclerView = view.findViewById(R.id.fragment_movie_list_recyclerView);
-        moviesListRecyclerView.setHasFixedSize(true);
+        rvFragmentMovieList = view.findViewById(R.id.rv_fragment_movie_list);
+        rvFragmentMovieList.setHasFixedSize(true);
 
-        moviesListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvFragmentMovieList.setLayoutManager(new LinearLayoutManager(getContext()));
 
         initRecyclerViewAndScrolling(sortBy);
 
@@ -113,8 +113,8 @@ public class MovieListFragment extends Fragment {
 
     private void initRecyclerViewAndScrolling(String sortByFilter) {
         final LinearLayoutManager manager = new LinearLayoutManager(getContext());
-        moviesListRecyclerView.setLayoutManager(manager);
-        moviesListRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        rvFragmentMovieList.setLayoutManager(manager);
+        rvFragmentMovieList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NotNull RecyclerView recyclerView, int dx, int dy) {
                 int totalItemCount = manager.getItemCount();
@@ -153,7 +153,7 @@ public class MovieListFragment extends Fragment {
                 Log.d("FragmentMovie-getMovies", "Current Page = " + page);
                 if (adapter == null) {
                     adapter = new MoviesAdapter(movies, movieGenres, callback);
-                    moviesListRecyclerView.setAdapter(adapter);
+                    rvFragmentMovieList.setAdapter(adapter);
                 } else {
                     if (page == 1) {
                         adapter.clearMovies();
@@ -178,6 +178,12 @@ public class MovieListFragment extends Fragment {
         public void onClick(Movie movie, ImageView movieImageView) {
             Intent intent = new Intent(MovieListFragment.this.getContext(), MovieDetailsActivity.class);
             intent.putExtra(Constants.MOVIE_ID, movie.getId());
+            intent.putExtra(Constants.MOVIE_TITLE, movie.getTitle());
+            intent.putExtra(Constants.MOVIE_THUMBNAIL, movie.getBackdrop());
+            intent.putExtra(Constants.MOVIE_RATING, movie.getRating());
+            intent.putExtra(Constants.MOVIE_SUMMARY, movie.getOverview());
+            intent.putExtra(Constants.MOVIE_POSTERPATH, movie.getPosterPath());
+
             MovieListFragment.this.startActivity(intent);
         }
     };

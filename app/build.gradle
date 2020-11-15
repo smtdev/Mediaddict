@@ -87,6 +87,9 @@ dependencies {
     // MaterialShowcaseView
     implementation 'com.github.deano2390:MaterialShowcaseView:1.3.4'
 
+    //MaterialFavoriteButton
+    implementation 'com.github.ivbaranov:materialfavoritebutton:0.1.5'
+
     // TheMovieDB API wrapper Library
     implementation group: 'info.movito', name: 'themoviedbapi', version:'1.10'
 

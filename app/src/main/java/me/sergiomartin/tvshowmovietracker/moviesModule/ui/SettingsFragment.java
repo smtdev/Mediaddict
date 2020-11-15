@@ -12,6 +12,8 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import java.util.Objects;
+
 import me.sergiomartin.tvshowmovietracker.R;
 
 
@@ -31,7 +33,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onStop() {
         super.onStop();
         // mostrar la Toolbar
-        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).show();
     }
 
     @Override
@@ -39,14 +41,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         super.onResume();
 
         // ocultar la Toolbar
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).hide();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).show();
     }
 
 
@@ -58,7 +60,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // ocultar la Toolbar principal al iniciar View
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).hide();
         
         // Recoger parámetros enviados por el fragment anterior
         Bundle bundle = this.getArguments();

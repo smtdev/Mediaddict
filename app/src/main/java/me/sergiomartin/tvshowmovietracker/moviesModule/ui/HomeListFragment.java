@@ -158,20 +158,26 @@ public class HomeListFragment extends Fragment {
         });
     }
 
-    OnMoviesClickCallback callback = new OnMoviesClickCallback() {
-        @Override
-        public void onClick(Movie movie, ImageView moviePosterImageView) {
-            Intent intent = new Intent(HomeListFragment.this.getContext(), MovieDetailsActivity.class);
-            intent.putExtra(Constants.MOVIE_ID, movie.getId());
-            // se puede utilizar para mostrar el título de la película en un toolbar, por ejemplo
-            //intent.putExtra("movieTitle", movie.getTitle());
-            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
-                    HomeListFragment.this.getActivity(),
-                    moviePosterImageView,
-                    "fromHomeToMovieDetails"
-            );
-            HomeListFragment.this.startActivity(intent, options.toBundle());
-        }
+    OnMoviesClickCallback callback = (movie, moviePosterImageView) -> {
+
+        /*
+         * Enviar información entre activities y fragments para manejarla y mostrarla
+         */
+        Intent intent = new Intent(HomeListFragment.this.getContext(), MovieDetailsActivity.class);
+
+        intent.putExtra(Constants.MOVIE_ID, movie.getId());
+        intent.putExtra(Constants.MOVIE_TITLE, movie.getTitle());
+        intent.putExtra(Constants.MOVIE_THUMBNAIL, movie.getBackdrop());
+        intent.putExtra(Constants.MOVIE_RATING, movie.getRating());
+        intent.putExtra(Constants.MOVIE_SUMMARY, movie.getOverview());
+        intent.putExtra(Constants.MOVIE_POSTERPATH, movie.getPosterPath());
+
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+                HomeListFragment.this.getActivity(),
+                moviePosterImageView,
+                "fromHomeToMovieDetails"
+        );
+        HomeListFragment.this.startActivity(intent, options.toBundle());
     };
 
 

@@ -101,6 +101,8 @@ public class Movie {
     @Expose
     private List<Language> languages;
 
+    public Movie() {
+    }
 
     public int getId() {
         return id;

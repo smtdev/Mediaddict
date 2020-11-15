@@ -1,5 +1,6 @@
 package me.sergiomartin.tvshowmovietracker.moviesModule.adapter;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,12 +41,20 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     private static final int LIST_ITEM = 0;
     private static final int GRID_ITEM = 1;
 
+    private Context context;
     private List<Movie> movies;
     private List<Movie> filteredMovies;
     private List<Genre> genres;
     private OnMoviesClickCallback callback;
     private boolean isSwitchView = true;
     private boolean isLinearLayout;
+
+    public MoviesAdapter(List<Movie> movies, Context context) {
+        this.context = context;
+        this.movies = movies;
+        this.filteredMovies = movies;
+        isLinearLayout = false;
+    }
 
     public MoviesAdapter(List<Movie> movies, OnMoviesClickCallback callback) {
         this.callback = callback;

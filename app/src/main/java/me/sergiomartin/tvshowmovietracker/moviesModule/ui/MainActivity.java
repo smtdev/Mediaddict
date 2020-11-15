@@ -64,8 +64,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mainToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        initApplication();
-
         openFragment(new HomeListFragment());
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
@@ -84,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
 
                 case R.id.app_bar_fav:
-                    //openFragment(new FavouritesAccount());
+                    openFragment(new FavoritesFragment());
                     return true;
 
                 case R.id.app_bar_profile:
@@ -93,16 +91,6 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
-    }
-
-    public void initApplication() {
-        try {
-            if (BuildConfig.API_KEY.isEmpty()) {
-                Snackbar.make(frameLayout, "Por favor, necesitas añadir la clave API de https://themoviedb.org para continuar", Snackbar.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            Log.d("LoadingAppError", e.getMessage());
-        }
     }
 
     public void openFragment(Fragment fragment) {

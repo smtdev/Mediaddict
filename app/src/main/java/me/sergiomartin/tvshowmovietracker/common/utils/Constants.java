@@ -7,6 +7,12 @@ public class Constants {
 
     // Filtros
     public static final String MOVIE_ID = "movie_id";
+    public static final String MOVIE_TITLE = "movie_title";
+    public static final String MOVIE_THUMBNAIL = "movie_thumbnail";
+    public static final String MOVIE_RATING = "movie_rating";
+    public static final String MOVIE_SUMMARY = "movie_summary";
+    public static final String MOVIE_POSTERPATH = "movie_posterpath";
+
     public static final String POPULAR = "popular";
     public static final String TOP_RATED = "top_rated";
     public static final String UPCOMING = "upcoming";
