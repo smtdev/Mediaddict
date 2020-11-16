@@ -3,23 +3,31 @@ package me.sergiomartin.tvshowmovietracker.moviesModule.ui;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,6 +38,7 @@ import me.sergiomartin.tvshowmovietracker.common.model.dataAccess.TMDbRepository
 import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
 import me.sergiomartin.tvshowmovietracker.moviesModule.adapter.MoviesAdapter;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.data.MoviesDbHelper;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.action.OnMoviesClickCallback;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetMoviesCallback;
 
@@ -57,14 +66,14 @@ public class HomeListFragment extends Fragment {
     @BindView(R.id.pb_home_list)
     ProgressBar pbHomeList;
 
-
+    private MoviesDbHelper moviesDbHelper;
     private MoviesAdapter adapter;
     private TMDbRepositoryAPI mTMDbRepositoryAPI;
 
-    private List<Movie> movieList;
+    private List<Movie> savedMovieList;
 
     private String sortBy;
-
+    private boolean isFavoriteChecked = false;
     /**
      * Mediante esta variable indicamos en qué página inicializa
      * el listado extraido de la API. Cada vez que se haga scroll al 50%
@@ -84,8 +93,10 @@ public class HomeListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mTMDbRepositoryAPI = TMDbRepositoryAPI.getInstance();
+        // para poder filtrar por el botón de búsqueda
+        setHasOptionsMenu(true);
 
+        mTMDbRepositoryAPI = TMDbRepositoryAPI.getInstance();
     }
 
     @Override
@@ -111,6 +122,58 @@ public class HomeListFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+
+        inflater.inflate(R.menu.search_menu, menu);
+        MenuItem item = menu.findItem(R.id.app_bar_search);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+        SearchView searchView = (SearchView) item.getActionView();
+
+        /**
+         * Info sacada de: https://guides.codepath.com/android/Extended-ActionBar-Guide#adding-searchview-to-actionbar
+         */
+        // Modificando el icono de búsqueda del SearchView de la AppBar
+        int searchImgId = androidx.appcompat.R.id.search_button;
+        ImageView v = (ImageView) searchView.findViewById(searchImgId);
+        v.setImageResource(R.drawable.ic_baseline_search_24);
+
+        ImageView searchClose = searchView.findViewById(R.id.search_close_btn);
+        searchClose.setColorFilter(Color.WHITE);
+
+        // Cambiando el style al SearchView
+        int searchEditId = androidx.appcompat.R.id.search_src_text;
+        EditText et = (EditText) searchView.findViewById(searchEditId);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            et.setTextColor(requireActivity().getBaseContext().getResources().getColor(R.color.colorAccent, requireActivity().getBaseContext().getTheme()));
+            et.setBackgroundColor(requireActivity().getBaseContext().getResources().getColor(R.color.gray_800, requireActivity().getBaseContext().getTheme()));
+        } else {
+            et.setTextColor(requireActivity().getBaseContext().getResources().getColor(R.color.colorAccent));
+            et.setBackgroundColor(requireActivity().getBaseContext().getResources().getColor(R.color.gray_800));
+        }
+
+        et.setHint(R.string.searchview_text);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                // Here is where we are going to implement the filter logic
+                return true;
+            }
+        });
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -120,6 +183,10 @@ public class HomeListFragment extends Fragment {
     }
 
     private void initRecyclerView() {
+
+        // inicializando ArrayList de películas marcadas como favoritas
+        savedMovieList = new ArrayList<>();
+
         // Configuración del RecyclerView
         rvHomePopularMoviesRecyclerview.setHasFixedSize(true);
         rvHomeTopratedMoviesRecyclerview.setHasFixedSize(true);
@@ -159,11 +226,23 @@ public class HomeListFragment extends Fragment {
     }
 
     OnMoviesClickCallback callback = (movie, moviePosterImageView) -> {
-
+        isFavoriteChecked = false;
         /*
          * Enviar información entre activities y fragments para manejarla y mostrarla
          */
         Intent intent = new Intent(HomeListFragment.this.getContext(), MovieDetailsActivity.class);
+
+        /*
+         * Recuperando películas guardadas para saber si ya están marcadas como favoritas
+         * y mantener marcado el fab de MovieDetailsActivity
+         */
+        getFavoriteMovies();
+
+        for(Movie savedMovie : savedMovieList) {
+            if(savedMovie.getId() == movie.getId()) {
+                isFavoriteChecked = true;
+            }
+        }
 
         intent.putExtra(Constants.MOVIE_ID, movie.getId());
         intent.putExtra(Constants.MOVIE_TITLE, movie.getTitle());
@@ -171,6 +250,7 @@ public class HomeListFragment extends Fragment {
         intent.putExtra(Constants.MOVIE_RATING, movie.getRating());
         intent.putExtra(Constants.MOVIE_SUMMARY, movie.getOverview());
         intent.putExtra(Constants.MOVIE_POSTERPATH, movie.getPosterPath());
+        intent.putExtra("movie_favorite_status", isFavoriteChecked);
 
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
                 HomeListFragment.this.getActivity(),
@@ -246,5 +326,15 @@ public class HomeListFragment extends Fragment {
                 .replace(((ViewGroup) getView().getParent()).getId(), movieList, "FragmentMovieListFiltered")
                 .addToBackStack(null)
                 .commit();
+    }
+
+    /*
+     * Recuperar en un nuevo hilo la lista de películas almacenadas en la SQLite
+     */
+    private void getFavoriteMovies() {
+        moviesDbHelper = new MoviesDbHelper(requireActivity().getApplicationContext());
+
+        savedMovieList.clear();
+        savedMovieList.addAll(moviesDbHelper.getSavedMovies());
     }
 }

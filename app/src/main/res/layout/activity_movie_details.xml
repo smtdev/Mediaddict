@@ -74,7 +74,7 @@
         android:id="@+id/fab_movie_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_star_rate_removed"
+        android:src="@drawable/ic_heart_outline_favorite"
         app:tint="@color/md_white"
         app:backgroundTint="@color/md_red_500"
         app:layout_anchor="@id/bottomAppBar" />

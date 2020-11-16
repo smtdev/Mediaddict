@@ -15,7 +15,7 @@ import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
 public class MoviesDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "app.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String SQL_DROP_TABLE_IF_EXISTS = "DROP TABLE IF EXISTS ";
     public static final String LOGTAG = "FAVORITE";
 
@@ -98,7 +98,7 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
 
     public void deleteSavedMovie(int id){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(MoviesContract.MoviesEntry.TABLE_NAME, MoviesContract.MoviesEntry.COLUMN_MOVIE_ID+ "=" + id, null);
+        db.delete(MoviesContract.MoviesEntry.TABLE_NAME, MoviesContract.MoviesEntry.COLUMN_MOVIE_ID + "=" + id, null);
     }
 
     public List<Movie> getSavedMovies(){
@@ -114,6 +114,8 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
         String sortOrder = MoviesContract.MoviesEntry._ID + " ASC";
         List<Movie> favoriteList = new ArrayList<>();
 
+        Log.d("RecuperandoPeliculas", "dentro de getSavedMovies");
+
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(MoviesContract.MoviesEntry.TABLE_NAME,
@@ -128,7 +130,7 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
             do {
                 Movie movie = new Movie();
                 movie.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_MOVIE_ID))));
-                movie.setOriginalTitle(cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_TITLE)));
+                movie.setTitle(cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_TITLE)));
                 movie.setRating((float) Double.parseDouble(cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_USERRATING))));
                 movie.setPosterPath(cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_POSTERPATH)));
                 movie.setOverview(cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_SUMMARY)));
@@ -141,4 +143,5 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
         db.close();
 
         return favoriteList;
-    }}
+    }
+}

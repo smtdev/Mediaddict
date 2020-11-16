@@ -21,6 +21,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.sergiomartin.tvshowmovietracker.BuildConfig;
@@ -39,22 +41,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.frameLayout)
     FrameLayout frameLayout;
 
-    private MoviesAdapter adapter;
-    private String sortBy = Constants.POPULAR;
-
-    /**
-     * Determina si está cerca la siguiente página de la API.
-     * Se utiliza para evitar duplicidad y mostrar siempre
-     * las mismas películas al hacer scroll
-     */
-    private boolean isFetchingMovies;
-    /**
-     * Mediante esta variable indicamos en qué página inicializa
-     * el listado extraido de la API. Cada vez que se haga scroll al 50%
-     * del listado de películas, se incrementará +1
-     */
-    private int currentPage = 1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(mainToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
         openFragment(new HomeListFragment());
 
@@ -77,9 +63,9 @@ public class MainActivity extends AppCompatActivity {
                     openFragment(new FragmentShowList());
                     return true;*/
 
-                case R.id.app_bar_movie:
+                /*case R.id.app_bar_movie:
                     openFragment(new MovieListFragment());
-                    return true;
+                    return true;*/
 
                 case R.id.app_bar_fav:
                     openFragment(new FavoritesFragment());
@@ -100,60 +86,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Añade los menús disponibles al Toolbar
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.toolbar_menu, menu);
-
-        // Crea barra de búsqueda
-        MenuItem searchItem = menu.findItem(R.id.app_bar_search);
-
-        if (searchItem != null) {
-            final SearchView searchView = (SearchView) searchItem.getActionView();
-
-            /**
-             * Info sacada de: https://guides.codepath.com/android/Extended-ActionBar-Guide#adding-searchview-to-actionbar
-             */
-            // Modificando el icono de búsqueda del SearchView de la AppBar
-            int searchImgId = androidx.appcompat.R.id.search_button;
-            ImageView v = (ImageView) searchView.findViewById(searchImgId);
-            v.setImageResource(R.drawable.ic_baseline_search_24);
-
-            ImageView searchClose = searchView.findViewById(R.id.search_close_btn);
-            searchClose.setColorFilter(Color.WHITE);
-
-            // Cambiando el style al SearchView
-            int searchEditId = androidx.appcompat.R.id.search_src_text;
-            EditText et = (EditText) searchView.findViewById(searchEditId);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                et.setTextColor(getBaseContext().getResources().getColor(R.color.colorAccent, getBaseContext().getTheme()));
-                et.setBackgroundColor(getBaseContext().getResources().getColor(R.color.gray_800, getBaseContext().getTheme()));
-            } else {
-                et.setTextColor(getBaseContext().getResources().getColor(R.color.colorAccent));
-                et.setBackgroundColor(getBaseContext().getResources().getColor(R.color.gray_800));
-            }
-
-            et.setHint(R.string.searchview_text);
-
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    // use this method for auto complete search process
-                    adapter.getFilter().filter(newText);
-                    return true;
-                }
-            });
-            //search(searchView);
-        }
-        return true;
-    }
+    // MENUUUUUU
 
     /**
      * Métodos para ordenar en base a un item de menú

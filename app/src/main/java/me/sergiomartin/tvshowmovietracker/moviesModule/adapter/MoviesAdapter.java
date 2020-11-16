@@ -33,11 +33,7 @@ import me.sergiomartin.tvshowmovietracker.moviesModule.module.GlideApp;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> implements Filterable {
 
-    /**
-     * Image size info:
-     * https://www.themoviedb.org/talk/53c11d4ec3a3684cf4006400
-     * https://www.themoviedb.org/talk/5aeaaf56c3a3682ddf0010de?language=es
-     */
+
     private static final int LIST_ITEM = 0;
     private static final int GRID_ITEM = 1;
 
@@ -49,7 +45,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     private boolean isSwitchView = true;
     private boolean isLinearLayout;
 
-    public MoviesAdapter(List<Movie> movies, Context context) {
+    public MoviesAdapter(List<Movie> movies, Context context, OnMoviesClickCallback callback) {
+        this.callback = callback;
         this.context = context;
         this.movies = movies;
         this.filteredMovies = movies;
@@ -154,7 +151,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
                 if (charString.isEmpty()) {
                     filteredMovies = movies;
                 } else {
-                    ArrayList<Movie> filterMoviesList = new ArrayList<>();
+                    List<Movie> filterMoviesList = new ArrayList<>();
 
                     for (Movie movie : movies) {
                         if (movie.getTitle().toLowerCase().contains(charString)) {

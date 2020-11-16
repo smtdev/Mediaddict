@@ -93,7 +93,7 @@ dependencies {
     // TheMovieDB API wrapper Library
     implementation group: 'info.movito', name: 'themoviedbapi', version:'1.10'
 
-    // Butter Knife
+    // ButterKnife
     implementation 'com.jakewharton:butterknife:10.2.3'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
 
@@ -105,6 +105,10 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
+
+    // okHttp
+    implementation "com.squareup.okhttp3:okhttp:3.14.9"
+    implementation "com.squareup.okhttp3:logging-interceptor:3.14.9"
 
     // EventBus
     implementation 'org.greenrobot:eventbus:3.2.0'
@@ -121,9 +125,6 @@ dependencies {
 
     // Gson
     implementation 'com.google.code.gson:gson:2.8.6'
-
-    // Volley
-    implementation 'com.android.volley:volley:1.1.1'
 
     // AndroidUtils
     implementation("com.uwetrottmann.androidutils:androidutils:2.4.1")

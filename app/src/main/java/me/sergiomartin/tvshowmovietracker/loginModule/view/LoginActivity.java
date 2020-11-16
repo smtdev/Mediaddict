@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
                         "https://mockupPrivacyPolicy.example")
                 .setAvailableProviders(providers)
                 .setTheme(R.style.AppTheme)
-                .setLogo(R.mipmap.ic_launcher)
+                .setLogo(R.mipmap.ic_launcher_highres)
                 .build(), RC_SIGN_IN);
     }
 

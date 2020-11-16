@@ -120,7 +120,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
         movieRating = getIntent().getFloatExtra(Constants.MOVIE_RATING, movieRating);
         movieSummary = getIntent().getStringExtra(Constants.MOVIE_SUMMARY);
         moviePosterpath = getIntent().getStringExtra(Constants.MOVIE_POSTERPATH);
+        isStarred = getIntent().getBooleanExtra(Constants.MOVIE_FAVORITE_STATUS, isStarred);
 
+        Log.d("isStarredRecibido", "isStarred recibido: " + isStarred);
         mTMDbRepositoryAPI = TMDbRepositoryAPI.getInstance();
 
         setupToolbar();
@@ -182,6 +184,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 tvPopularityInfoMdp.setText((movie.getPopularity().compareTo(BigDecimal.ZERO) > 0.0) ? String.format("%,.2f", movie.getPopularity()) : "-");
                 tvRevenueInfoMdp.setText((movie.getRevenue().compareTo(BigDecimal.ZERO) > 0.0) ? String.format("%,.2f €", movie.getRevenue()) : "-");
                 tvStatusInfoMdp.setText(movie.getStatus().equals("") ? "-" : movie.getStatus());
+
+                if(isStarred) {
+                    fabMovieDetails.setImageResource(R.drawable.ic_heart_favorite);
+                } else {
+                    fabMovieDetails.setImageResource(R.drawable.ic_heart_outline_favorite);
+                }
 
                 /**
                  * Campos generados desde API
@@ -371,7 +379,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         moviesDbHelper = new MoviesDbHelper(getApplicationContext());
 
         if (isStarred) {
-            fabMovieDetails.setImageResource(R.drawable.ic_star_rate_removed);
+            fabMovieDetails.setImageResource(R.drawable.ic_heart_outline_favorite);
             isStarred = false;
 
             // Eliminando de las SharedPreferences
@@ -381,11 +389,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
             Snackbar.make(bottomAppBar, "Película eliminada de favoritos correctamente.", Snackbar.LENGTH_SHORT).show();
 
         } else {
-            fabMovieDetails.setImageResource(R.drawable.ic_star_rate_added);
+            fabMovieDetails.setImageResource(R.drawable.ic_heart_favorite);
             isStarred = true;
 
             // Guardando en las SharedPreferences
-            saveFavorite();
+            addToFavorite();
             editor.putBoolean("Starred movie added", true);
 
             Snackbar.make(bottomAppBar, "Película añadida a favoritos correctamente.", Snackbar.LENGTH_SHORT).show();
@@ -399,7 +407,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         isRotate = AnimationView.rotateFab(view, !isRotate);
     }
 
-    private void saveFavorite() {
+    private void addToFavorite() {
         moviesDbHelper = new MoviesDbHelper(getApplicationContext());
         Movie movie = new Movie();
 

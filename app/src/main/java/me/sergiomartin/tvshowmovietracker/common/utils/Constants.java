@@ -4,6 +4,8 @@ public class Constants {
 
     // APIs
     public static final String BASE_URL_TMDB = "https://api.themoviedb.org/3/";
+    public static final String HEADER_CACHE_CONTROL = "Cache-Control";
+    public static final String HEADER_PRAGMA = "Pragma";
 
     // Filtros
     public static final String MOVIE_ID = "movie_id";
@@ -16,11 +18,17 @@ public class Constants {
     public static final String POPULAR = "popular";
     public static final String TOP_RATED = "top_rated";
     public static final String UPCOMING = "upcoming";
-    public static final String MOVIE_CURRENT_FILTER = "filter";
+
+    public static final String MOVIE_FAVORITE_STATUS = "movie_favorite_status";
+
     // Idioma por defecto
     public static final String LANGUAGE = "es";
 
-    // Imágenes
+    /*
+     * Info de los tamaños de las imágenes:
+     * https://www.themoviedb.org/talk/53c11d4ec3a3684cf4006400
+     * https://www.themoviedb.org/talk/5aeaaf56c3a3682ddf0010de?language=es
+     */
     public static final String IMAGE_BASE_URL_W500 = "https://image.tmdb.org/t/p/w500";
     public static final String IMAGE_BASE_URL_w780 = "https://image.tmdb.org/t/p/w780";
 
