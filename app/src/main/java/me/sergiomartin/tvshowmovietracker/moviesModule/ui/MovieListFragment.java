@@ -117,6 +117,8 @@ public class MovieListFragment extends Fragment {
         rvFragmentMovieList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NotNull RecyclerView recyclerView, int dx, int dy) {
+                Log.d("DentroDelOnScrolledML", "dentro del onScrolled");
+
                 int totalItemCount = manager.getItemCount();
                 int visibleItemCount = manager.getChildCount();
                 int firstVisibleItem = manager.findFirstVisibleItemPosition();
@@ -150,7 +152,7 @@ public class MovieListFragment extends Fragment {
         mTMDbRepositoryAPI.getMovies(page, sortByFilter, new OnGetMoviesCallback() {
             @Override
             public void onSuccess(int page, List<Movie> movies) {
-                Log.d("FragmentMovie-getMovies", "Current Page = " + page);
+                Log.d("MovieListFragment", "Current Page = " + page);
                 if (adapter == null) {
                     adapter = new MoviesAdapter(movies, movieGenres, callback);
                     rvFragmentMovieList.setAdapter(adapter);

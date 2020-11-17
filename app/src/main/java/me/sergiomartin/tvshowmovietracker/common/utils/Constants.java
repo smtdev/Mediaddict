@@ -7,7 +7,7 @@ public class Constants {
     public static final String HEADER_CACHE_CONTROL = "Cache-Control";
     public static final String HEADER_PRAGMA = "Pragma";
 
-    // Filtros
+    // SQLite
     public static final String MOVIE_ID = "movie_id";
     public static final String MOVIE_TITLE = "movie_title";
     public static final String MOVIE_THUMBNAIL = "movie_thumbnail";
@@ -15,11 +15,14 @@ public class Constants {
     public static final String MOVIE_SUMMARY = "movie_summary";
     public static final String MOVIE_POSTERPATH = "movie_posterpath";
 
+    // Constante para comprobar si una película está marcada como favorita
+    public static final String MOVIE_FAVORITE_STATUS = "movie_favorite_status";
+
+    // Búsquedas de películas
     public static final String POPULAR = "popular";
     public static final String TOP_RATED = "top_rated";
     public static final String UPCOMING = "upcoming";
-
-    public static final String MOVIE_FAVORITE_STATUS = "movie_favorite_status";
+    public static final String SEARCH = "search_movies";
 
     // Idioma por defecto
     public static final String LANGUAGE = "es";
@@ -36,4 +39,8 @@ public class Constants {
     public static final String YOUTUBE_VIDEO_URL = "https://www.youtube.com/watch?v=%s";
     public static final String YOUTUBE_THUMBNAIL_URL = "https://img.youtube.com/vi/%s/0.jpg";
 
+    // Layout
+    public static final int LIST_ITEM = 0;
+    public static final int GRID_ITEM = 1;
+    public static int view = LIST_ITEM;
 }

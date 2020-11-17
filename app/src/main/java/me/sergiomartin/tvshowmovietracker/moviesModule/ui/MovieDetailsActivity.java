@@ -19,6 +19,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatRatingBar;
@@ -31,6 +32,7 @@ import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.chip.Chip;
@@ -95,7 +97,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @BindView(R.id.ctl_movie_details) CollapsingToolbarLayout ctlMovieDetails;
     @BindView(R.id.bottomAppBar) BottomAppBar bottomAppBar;
     @BindView(R.id.fab_movie_details) FloatingActionButton fabMovieDetails;
-
+    @BindView(R.id.app_bar) AppBarLayout appBarLayout;
 
     private MoviesDbHelper moviesDbHelper;
     private TMDbRepositoryAPI mTMDbRepositoryAPI;
@@ -133,6 +135,18 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+        params.setBehavior(new AppBarLayout.Behavior());
+
+        AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+        behavior.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
+            @Override
+            public boolean canDrag(@NonNull AppBarLayout appBarLayout) {
+                return false;
+            }
+        });
+
         getMovie();
     }
 
@@ -199,14 +213,14 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 getLanguages(movie);
                 getProductionCompany(movie);
                 if (!isFinishing()) {
-                    GlideApp.with(MovieDetailsActivity.this)
+                    GlideApp.with(getApplicationContext())
                             .load(Constants.IMAGE_BASE_URL_w780 + movie.getBackdrop())
                             .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
                             .into(ivMovieDetailsBackdrop);
 
                     ivMovieDetailsBackdrop.setAnimation(AnimationUtils.loadAnimation(getBaseContext(), R.anim.scale_animation));
 
-                    GlideApp.with(MovieDetailsActivity.this)
+                    GlideApp.with(getApplicationContext())
                             .load(Constants.IMAGE_BASE_URL_W500 + movie.getPosterPath())
                             .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
                             .into(ivMovieDetailsPoster);
@@ -286,7 +300,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         ImageView thumbnail = parent.findViewById(R.id.thumbnail);
                         thumbnail.requestLayout();
                         thumbnail.setOnClickListener(v -> showTrailer(String.format(Constants.YOUTUBE_VIDEO_URL, trailer.getKey())));
-                        GlideApp.with(MovieDetailsActivity.this)
+                        GlideApp.with(getApplicationContext())
                                 .load(String.format(Constants.YOUTUBE_THUMBNAIL_URL, trailer.getKey()))
                                 .apply(RequestOptions.placeholderOf(R.color.colorPrimary).centerCrop())
                                 .into(thumbnail);
@@ -301,7 +315,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onError() {
-                /**
+                /*
                  * https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
                  */
                 Snackbar.make(clMainLayout, R.string.error_message_loading_trailers, Snackbar.LENGTH_LONG)

@@ -63,16 +63,6 @@ public class FavoritesFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
-
-        inflater.inflate(R.menu.switchview_menu, menu);
-        MenuItem item = menu.findItem(R.id.app_bar_switchview);
-        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
@@ -114,6 +104,47 @@ public class FavoritesFragment extends Fragment {
         moviesDbHelper = new MoviesDbHelper(requireContext());
         getFavoriteMovies();
     }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+
+        inflater.inflate(R.menu.switchview_menu, menu);
+        MenuItem item = menu.findItem(R.id.app_bar_switchview);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int mNoOfColumns = CommonUtils.calculateNoOfColumns(requireContext(), 140);
+
+        switch (item.getItemId()) {
+            case R.id.app_bar_switchview:
+                requireActivity().invalidateOptionsMenu();
+
+                //boolean isSwitched = adapter.toggleItemViewType();
+
+                if (Constants.view == Constants.LIST_ITEM) {
+                    rvFragmentFavoritesList.setLayoutManager(new LinearLayoutManager(requireContext()));
+                } else {
+                    rvFragmentFavoritesList.setLayoutManager(new GridLayoutManager(requireContext(), mNoOfColumns));
+                }
+
+                initRecyclerViewAndScrolling();
+
+                /*if (isSwitched) {
+                    rvFragmentFavoritesList.setLayoutManager(new LinearLayoutManager(requireContext()));
+                } else {
+                    rvFragmentFavoritesList.setLayoutManager(new GridLayoutManager(requireContext(), mNoOfColumns));
+                }
+                adapter.notifyDataSetChanged();*/
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     /*
      * Manejar el clic a la película para que muestre detalles

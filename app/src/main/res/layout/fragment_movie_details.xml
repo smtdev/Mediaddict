@@ -12,10 +12,10 @@
     android:fillViewport="true"
     tools:showIn="@layout/activity_movie_details">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:background="@color/colorPrimary"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,12 +24,13 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary">
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cv_movie_details_poster"
                 android:layout_width="109dp"
                 android:layout_height="144dp"
                 android:layout_marginStart="16dp"
                 app:cardCornerRadius="8dp"
+                app:cardBackgroundColor="@color/text_light_blue"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/gl_movie_details_backgdrop_guideline">
 
@@ -40,7 +41,7 @@
                     android:contentDescription="@string/poster_content_description"
                     android:scaleType="centerCrop"
                     android:transitionName="fromHomeToMovieDetails" />
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/gl_movie_details_backgdrop_guideline"
@@ -169,7 +170,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:progressBackgroundTint="@color/text_light_blue"
-                android:progressTint="@color/red_900"
+                android:progressTint="@color/md_red_500"
                 android:secondaryProgressTint="@color/md_white"
                 app:layout_constraintEnd_toEndOf="@+id/cv_movie_details_poster"
                 app:layout_constraintStart_toStartOf="@+id/cv_movie_details_poster"
@@ -262,9 +263,10 @@
 
             <HorizontalScrollView
                 android:id="@+id/hsv_movie_details_trailer_container"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginTop="2dp"
+                android:fillViewport="true"
                 android:visibility="gone"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -309,7 +311,7 @@
             <FrameLayout
                 android:id="@+id/fl_movie_details_panel"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -320,9 +322,9 @@
                     android:id="@+id/frag_movie_details_panel"
                     layout="@layout/fragment_movie_details_panel"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="8dp" />
             </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+    </RelativeLayout>
 </androidx.core.widget.NestedScrollView>

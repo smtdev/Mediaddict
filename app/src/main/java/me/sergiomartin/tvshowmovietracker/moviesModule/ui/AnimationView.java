@@ -5,8 +5,11 @@ import android.animation.AnimatorListenerAdapter;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.Random;
 
 import me.sergiomartin.tvshowmovietracker.R;
 
@@ -32,6 +35,22 @@ public class AnimationView {
         anim.setDuration(durationMillis);
 
         v.startAnimation(anim);
+    }
+
+    /*
+     * Personalización de animación en el scrolling de las listas de películas
+     * https://stackoverflow.com/a/36545709/1552146
+     */
+    private static int lastPosition = -1;
+
+    public static void setScrollingAnimation(View viewToAnimate, int position) {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition) {
+            ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            anim.setDuration(new Random().nextInt(501));//to make duration random number between [0,501)
+            viewToAnimate.startAnimation(anim);
+            lastPosition = position;
+        }
     }
 
 }

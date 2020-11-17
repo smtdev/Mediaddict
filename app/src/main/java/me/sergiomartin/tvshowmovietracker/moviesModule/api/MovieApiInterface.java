@@ -11,19 +11,13 @@ import retrofit2.http.Query;
 
 public interface MovieApiInterface {
 
-    @GET("movie/{movie_id}")
-    Call<Movie> getMovie(
-            @Path("movie_id") int id,
+    @GET("search/movie")
+    Call<MoviesListResponse> getSearchMovies (
             @Query("api_key") String apiKey,
-            @Query("language") String language
-    );
-
-    @GET("movie/{movie_id}/videos")
-    Call<TrailerListResponse> getTrailers(
-            @Path("movie_id") int id,
-            @Query("api_key") String apiKey,
-            @Query("language") String language
-    );
+            @Query("language") String language,
+            @Query("page") int page,
+            @Query("query") String query
+        );
 
     @GET("movie/popular")
     Call<MoviesListResponse> getPopularMovies(
@@ -46,17 +40,30 @@ public interface MovieApiInterface {
             @Query("page") int page
     );
 
-    @GET("genre/movie/list")
-    Call<GenresListResponse> getGenres(
+    @GET("movie/{movie_id}")
+    Call<Movie> getMovie(
+            @Path("movie_id") int id,
             @Query("api_key") String apiKey,
             @Query("language") String language
     );
 
-    @GET("search/movie")
-    Call<MoviesListResponse> getSearchMovies (
-            @Query("api_key") String apiKey,
-            @Query("query") String query
+    @GET("movie/{movie_id}/videos")
+    Call<TrailerListResponse> getTrailers(
+            @Path("movie_id") int id,
+            @Query("api_key") String apiKey
+    );
 
+    /*@GET("movie/{movie_id}/videos")
+    Call<TrailerListResponse> getTrailers(
+            @Path("movie_id") int id,
+            @Query("api_key") String apiKey,
+            @Query("language") String language
+    );*/
+
+    @GET("genre/movie/list")
+    Call<GenresListResponse> getGenres(
+            @Query("api_key") String apiKey,
+            @Query("language") String language
     );
 
     @GET("configuration/languages")

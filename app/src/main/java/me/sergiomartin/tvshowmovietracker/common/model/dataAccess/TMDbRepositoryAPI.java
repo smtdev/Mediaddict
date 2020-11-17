@@ -18,6 +18,7 @@ import me.sergiomartin.tvshowmovietracker.moviesModule.api.MoviesListResponse;
 import me.sergiomartin.tvshowmovietracker.moviesModule.api.TrailerListResponse;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Language;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.action.OnSearchMovieCallback;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetGenresCallback;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetLanguagesCallback;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetMovieCallback;
@@ -144,6 +145,35 @@ public class TMDbRepositoryAPI {
         return httpLoggingInterceptor;
     }
 
+    public void searchMovies(int page, String query, final OnSearchMovieCallback callback) {
+        api.getSearchMovies(BuildConfig.API_KEY, Constants.LANGUAGE, page, query)
+                .enqueue(new Callback<MoviesListResponse>() {
+                    @Override
+                    public void onResponse(@NotNull Call<MoviesListResponse> call, @NotNull Response<MoviesListResponse> response) {
+                        if (response.isSuccessful()) {
+                            MoviesListResponse moviesResponse = response.body();
+                            Log.d("API-Repo-SearchMovies", "Resultados: " + moviesResponse.getTotalResults());
+
+                            if (moviesResponse != null && moviesResponse.getMovies() != null) {
+                                callback.onSuccess(moviesResponse.getPage(), moviesResponse.getMovies(), query);
+                            } else {
+                                callback.onEmptyResult();
+                            }
+                        } else {
+                            callback.onError();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NotNull Call<MoviesListResponse> call, @NotNull Throwable t) {
+                        Log.d("searchMovies API err->", t.getMessage());
+
+                        callback.onError();
+                    }
+
+                });
+    }
+
     public void getMovies(int page, String sortBy, final OnGetMoviesCallback callback) {
         Log.d("TMDbRepositoryAPI class", "Page = " + page);
 
@@ -247,7 +277,7 @@ public class TMDbRepositoryAPI {
     }
 
     public void getTrailers(int movieId, final OnGetTrailersCallback callback) {
-        api.getTrailers(movieId, BuildConfig.API_KEY, Constants.LANGUAGE)
+        api.getTrailers(movieId, BuildConfig.API_KEY)
                 .enqueue(new Callback<TrailerListResponse>() {
                     @Override
                     public void onResponse(@NotNull Call<TrailerListResponse> call, @NotNull Response<TrailerListResponse> response) {
@@ -270,7 +300,7 @@ public class TMDbRepositoryAPI {
                 });
     }
 
-    public void getLanguages (final OnGetLanguagesCallback callback) {
+    public void getLanguages(final OnGetLanguagesCallback callback) {
         api.getLanguages(BuildConfig.API_KEY)
                 .enqueue(new Callback<List<Language>>() {
                     @Override

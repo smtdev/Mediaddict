@@ -37,9 +37,11 @@ import me.sergiomartin.tvshowmovietracker.R;
 import me.sergiomartin.tvshowmovietracker.common.model.dataAccess.TMDbRepositoryAPI;
 import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
 import me.sergiomartin.tvshowmovietracker.moviesModule.adapter.MoviesAdapter;
+import me.sergiomartin.tvshowmovietracker.moviesModule.adapter.SearchAdapter;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.data.MoviesDbHelper;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.action.OnMoviesClickCallback;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.action.OnSearchMovieCallback;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetMoviesCallback;
 
 /**
@@ -68,6 +70,7 @@ public class HomeListFragment extends Fragment {
 
     private MoviesDbHelper moviesDbHelper;
     private MoviesAdapter adapter;
+    private SearchAdapter searchAdapter;
     private TMDbRepositoryAPI mTMDbRepositoryAPI;
 
     private List<Movie> savedMovieList;
@@ -116,7 +119,6 @@ public class HomeListFragment extends Fragment {
         rvHomeUpcomingMoviesRecyclerview.setVisibility(View.GONE);
 
         initRecyclerView();
-        //getMovies(currentPage, sortBy);
 
         return view;
     }
@@ -137,15 +139,20 @@ public class HomeListFragment extends Fragment {
          */
         // Modificando el icono de búsqueda del SearchView de la AppBar
         int searchImgId = androidx.appcompat.R.id.search_button;
-        ImageView v = (ImageView) searchView.findViewById(searchImgId);
+        ImageView v = searchView.findViewById(searchImgId);
         v.setImageResource(R.drawable.ic_baseline_search_24);
 
+        // maximizando tamaño hasta ocupar toda la pantalla
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        // controlando dinámicamente el botón "X"
         ImageView searchClose = searchView.findViewById(R.id.search_close_btn);
         searchClose.setColorFilter(Color.WHITE);
+        searchClose.setVisibility(View.VISIBLE);
 
         // Cambiando el style al SearchView
         int searchEditId = androidx.appcompat.R.id.search_src_text;
-        EditText et = (EditText) searchView.findViewById(searchEditId);
+        EditText et = searchView.findViewById(searchEditId);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             et.setTextColor(requireActivity().getBaseContext().getResources().getColor(R.color.colorAccent, requireActivity().getBaseContext().getTheme()));
@@ -161,13 +168,25 @@ public class HomeListFragment extends Fragment {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
+                Bundle bundle = new Bundle();
+
+                SearchFragment searchFragment = new SearchFragment();
+                searchFragment.setArguments(bundle);
+
+                bundle.putString("queryValue", query);
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        // ((ViewGroup)getView().getParent()).getId() -> es el id del fragment actual
+                        .replace(((ViewGroup) getView().getParent()).getId(), searchFragment, "HomeListFragmentToSearchFragment")
+                        .addToBackStack(null)
+                        .commit();
                 return false;
             }
 
+
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
-                // Here is where we are going to implement the filter logic
+
                 return true;
             }
         });
@@ -207,7 +226,7 @@ public class HomeListFragment extends Fragment {
         mTMDbRepositoryAPI.getMovies(page, sortBy, new OnGetMoviesCallback() {
             @Override
             public void onSuccess(int page, List<Movie> movies) {
-                Log.d("FragmentHome-getMovies", "Current Page = " + page);
+                Log.d("HomeListFragment-gMovie", "Current Page = " + page);
                 adapter = new MoviesAdapter(movies, callback);
                 rv.setAdapter(adapter);
                 adapter.appendMovies(movies);

@@ -72,10 +72,10 @@
     <string name="action_tvshow_title">Mis series</string>
     <string name="action_fav_title">Favoritas</string>
 
-    <string name="movie_genre_text">Genres</string>
-    <string name="movie_rating_text">0.0</string>
-    <string name="movie_title_text">Movie title</string>
-    <string name="movie_releasedate_text">2018</string>
+    <string name="movie_genre_text">-</string>
+    <string name="movie_rating_text">-</string>
+    <string name="movie_title_text">-</string>
+    <string name="movie_releasedate_text">-</string>
 
     <string name="toolbar_menu_search_button">Buscar</string>
     <string name="toolbar_menu_filter_button">Filtrar</string>
@@ -115,6 +115,7 @@
     <string name="error_message_loading_lang">Ha habido un error al obtener la información de los idiomas</string>
     <string name="error_network_message">Hay algún problema con tu conexión a internet</string>
     <string name="error_message_loading_movies_panel">Ha habido un error al obtener la información de la lista de películas</string>
+    <string name="error_message_loading_search_movie">Error cargando lista de películas buscada</string>
     <string name="offline">Parece que no estás conectado a internet</string>
     <string name="home_toprated_movies_header_text">Mejor valoradas</string>
     <string name="home_toprated_movies_textview">Películas mejor valoradas</string>
