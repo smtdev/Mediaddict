@@ -14,10 +14,10 @@ import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
 
 public class MoviesDbHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "app.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final String DATABASE_NAME = "movies.db";
+    private static final int DATABASE_VERSION = 5;
     private static final String SQL_DROP_TABLE_IF_EXISTS = "DROP TABLE IF EXISTS ";
-    public static final String LOGTAG = "FAVORITE";
+    public static final String LOGTAG = "FAVORITES";
 
     SQLiteOpenHelper dbHandler;
     SQLiteDatabase db;
@@ -46,11 +46,14 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         final String SQL_CREATE_TABLE = "CREATE TABLE " + MoviesContract.MoviesEntry.TABLE_NAME + " (" +
                 MoviesContract.MoviesEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                MoviesContract.MoviesEntry.COLUMN_MOVIE_ID + " INTEGER, " +
-                MoviesContract.MoviesEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
-                MoviesContract.MoviesEntry.COLUMN_USERRATING + " REAL NOT NULL, " +
-                MoviesContract.MoviesEntry.COLUMN_POSTERPATH + " TEXT NOT NULL, " +
-                MoviesContract.MoviesEntry.COLUMN_SUMMARY + " TEXT NOT NULL" +
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_TITLE + " TEXT NOT NULL, " +
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_POSTER_PATH + " TEXT NOT NULL, " +
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_OVERVIEW + " TEXT NOT NULL, " +
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_VOTE_AVERAGE + " REAL NOT NULL, " +
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_RELEASE_DATE + " TEXT NOT NULL, " +
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_BACKDROP_PATH + " TEXT NOT NULL, " +
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_GENRES_ID + " TEXT NOT NULL " +
                 "); ";
 
         db.execSQL(SQL_CREATE_TABLE);
@@ -87,10 +90,13 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_ID, movie.getId());
-        values.put(MoviesContract.MoviesEntry.COLUMN_TITLE, movie.getTitle());
-        values.put(MoviesContract.MoviesEntry.COLUMN_USERRATING, movie.getRating());
-        values.put(MoviesContract.MoviesEntry.COLUMN_POSTERPATH, movie.getPosterPath());
-        values.put(MoviesContract.MoviesEntry.COLUMN_SUMMARY, movie.getOverview());
+        values.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_TITLE, movie.getTitle());
+        values.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_POSTER_PATH, movie.getPosterPath());
+        values.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_OVERVIEW, movie.getOverview());
+        values.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_VOTE_AVERAGE, movie.getRating());
+        values.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_RELEASE_DATE, movie.getReleaseDate());
+        values.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_BACKDROP_PATH, movie.getBackdrop());
+        values.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_GENRES_ID, movie.getGenreIdString());
 
         db.insert(MoviesContract.MoviesEntry.TABLE_NAME, null, values);
         db.close();
@@ -105,10 +111,13 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
         String[] columns = {
                 MoviesContract.MoviesEntry._ID,
                 MoviesContract.MoviesEntry.COLUMN_MOVIE_ID,
-                MoviesContract.MoviesEntry.COLUMN_TITLE,
-                MoviesContract.MoviesEntry.COLUMN_USERRATING,
-                MoviesContract.MoviesEntry.COLUMN_POSTERPATH,
-                MoviesContract.MoviesEntry.COLUMN_SUMMARY
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_TITLE,
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_POSTER_PATH,
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_OVERVIEW,
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_VOTE_AVERAGE,
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_RELEASE_DATE,
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_BACKDROP_PATH,
+                MoviesContract.MoviesEntry.COLUMN_MOVIE_GENRES_ID
         };
 
         String sortOrder = MoviesContract.MoviesEntry._ID + " ASC";
@@ -130,10 +139,13 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
             do {
                 Movie movie = new Movie();
                 movie.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_MOVIE_ID))));
-                movie.setTitle(cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_TITLE)));
-                movie.setRating((float) Double.parseDouble(cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_USERRATING))));
-                movie.setPosterPath(cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_POSTERPATH)));
-                movie.setOverview(cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_SUMMARY)));
+                movie.setTitle(cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_MOVIE_TITLE)));
+                movie.setPosterPath(cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_MOVIE_POSTER_PATH)));
+                movie.setOverview(cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_MOVIE_OVERVIEW)));
+                movie.setRating((float) Double.parseDouble(cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_MOVIE_VOTE_AVERAGE))));
+                movie.setReleaseDate(cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_MOVIE_RELEASE_DATE)));
+                movie.setBackdrop(cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_MOVIE_BACKDROP_PATH)));
+                movie.setGenreIdString(cursor.getString(cursor.getColumnIndex(MoviesContract.MoviesEntry.COLUMN_MOVIE_GENRES_ID)));
 
                 favoriteList.add(movie);
 

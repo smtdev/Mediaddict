@@ -23,21 +23,24 @@ public interface MovieApiInterface {
     Call<MoviesListResponse> getPopularMovies(
             @Query("api_key") String apiKey,
             @Query("language") String language,
-            @Query("page") int page
+            @Query("page") int page,
+            @Query("region") String region
     );
 
     @GET("movie/top_rated")
     Call<MoviesListResponse> getTopRatedMovies(
             @Query("api_key") String apiKey,
             @Query("language") String language,
-            @Query("page") int page
+            @Query("page") int page,
+            @Query("region") String region
     );
 
     @GET("movie/upcoming")
     Call<MoviesListResponse> getUpcomingMovies(
             @Query("api_key") String apiKey,
             @Query("language") String language,
-            @Query("page") int page
+            @Query("page") int page,
+            @Query("region") String region
     );
 
     @GET("movie/{movie_id}")
@@ -52,13 +55,6 @@ public interface MovieApiInterface {
             @Path("movie_id") int id,
             @Query("api_key") String apiKey
     );
-
-    /*@GET("movie/{movie_id}/videos")
-    Call<TrailerListResponse> getTrailers(
-            @Path("movie_id") int id,
-            @Query("api_key") String apiKey,
-            @Query("language") String language
-    );*/
 
     @GET("genre/movie/list")
     Call<GenresListResponse> getGenres(

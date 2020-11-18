@@ -101,6 +101,8 @@ public class Movie {
     @Expose
     private List<Language> languages;
 
+    private String genreIdString;
+
     public Movie() {
     }
 
@@ -286,5 +288,13 @@ public class Movie {
 
     public void setRuntime(double runtime) {
         this.runtime = runtime;
+    }
+
+    public String getGenreIdString() {
+        return genreIdString;
+    }
+
+    public void setGenreIdString(String genreIdString) {
+        this.genreIdString = genreIdString;
     }
 }

@@ -29,7 +29,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
-import androidx.preference.PreferenceManager;
 
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
@@ -40,8 +39,11 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -102,7 +104,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private MoviesDbHelper moviesDbHelper;
     private TMDbRepositoryAPI mTMDbRepositoryAPI;
     private int movieId;
-    private String movieTitle, movieThumbnail, movieSummary, moviePosterpath;
+    private String movieTitle, movieBackdrop, movieSummary, moviePosterpath, movieReleaseDate, movieGenreIds;
     private float movieRating;
     private boolean isRotate, isStarred = false;
 
@@ -118,10 +120,15 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         movieId = getIntent().getIntExtra(Constants.MOVIE_ID, movieId);
         movieTitle = getIntent().getStringExtra(Constants.MOVIE_TITLE);
-        movieThumbnail = getIntent().getStringExtra(Constants.MOVIE_THUMBNAIL);
+        movieBackdrop = getIntent().getStringExtra(Constants.MOVIE_BACKDROP);
         movieRating = getIntent().getFloatExtra(Constants.MOVIE_RATING, movieRating);
-        movieSummary = getIntent().getStringExtra(Constants.MOVIE_SUMMARY);
+        movieSummary = getIntent().getStringExtra(Constants.MOVIE_OVERVIEW);
         moviePosterpath = getIntent().getStringExtra(Constants.MOVIE_POSTERPATH);
+        movieReleaseDate = getIntent().getStringExtra(Constants.MOVIE_RELEASE_DATE);
+        movieGenreIds = getIntent().getStringExtra(Constants.MOVIE_GENRES_ID);
+
+        Log.d("GenreIdString", "GenreIdStringOnCreatE: " + movieGenreIds);
+
         isStarred = getIntent().getBooleanExtra(Constants.MOVIE_FAVORITE_STATUS, isStarred);
 
         Log.d("isStarredRecibido", "isStarred recibido: " + isStarred);
@@ -129,12 +136,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         setupToolbar();
 
-        bottomAppBar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        bottomAppBar.setOnClickListener(v -> onBackPressed());
 
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
         params.setBehavior(new AppBarLayout.Behavior());
@@ -155,10 +157,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ctlMovieDetails.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.colorAccent));
         ctlMovieDetails.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color.transparent));
-        /*if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }*/
     }
 
     private void getMovie() {
@@ -166,6 +164,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
             @SuppressLint("DefaultLocale")
             @Override
             public void onSuccess(Movie movie) {
+                Log.d("MovieData", movie.getTitle() + " " + movie.getHomepage());
+
                 tvMovieDetailsTitle.setText(movie.getTitle());
                 ctlMovieDetails.setTitle(movie.getTitle());
                 tvMovieDetailsLength.setText(CommonUtils.parseMinutesToHour((int) movie.getRuntime()));
@@ -193,7 +193,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 tvOriginalTitleInfoMdp.setText(movie.getOriginalTitle());
                 Log.d("MovieDetailsActivity", String.valueOf(movie.getBudget()));
                 tvBudgetInfoMdp.setText((movie.getBudget().compareTo(BigDecimal.ZERO) > 0.0) ? String.format("%,.2f €", movie.getBudget()) : "-");
-                tvHomepageInfoMdp.setText(movie.getHomepage().equals("") ? "-" : movie.getHomepage());
+                tvHomepageInfoMdp.setText(movie.getHomepage().equals("") || movie.getHomepage().isEmpty() ? "-" : movie.getHomepage());
                 tvOriginalLangInfoMdp.setText(movie.getOriginalLanguage().equals("") ? "-" : movie.getOriginalLanguage().toUpperCase());
                 tvPopularityInfoMdp.setText((movie.getPopularity().compareTo(BigDecimal.ZERO) > 0.0) ? String.format("%,.2f", movie.getPopularity()) : "-");
                 tvRevenueInfoMdp.setText((movie.getRevenue().compareTo(BigDecimal.ZERO) > 0.0) ? String.format("%,.2f €", movie.getRevenue()) : "-");
@@ -234,7 +234,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                  * https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
                  */
                 Snackbar.make(clMainLayout, R.string.error_message_loading_movie_info, Snackbar.LENGTH_LONG)
-                        //.setAnchorView(R.id.bottom_navigation)
+                        .setAnchorView(fabMovieDetails)
                         .show();
             }
 
@@ -245,11 +245,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
         mTMDbRepositoryAPI.getGenres(new OnGetGenresCallback() {
             @Override
             public void onSuccess(List<Genre> genres) {
-                tvMovieDetailsGenresTitle.setVisibility(View.VISIBLE);
-                vMovieDetailsFirstDivider.setVisibility(View.VISIBLE);
-                cgMovieDetailsGenre.setVisibility(View.VISIBLE);
+                if (movie.getGenres().size() > 0) {
+                    tvMovieDetailsGenresTitle.setVisibility(View.VISIBLE);
+                    vMovieDetailsFirstDivider.setVisibility(View.VISIBLE);
+                    cgMovieDetailsGenre.setVisibility(View.VISIBLE);
 
-                if (movie.getGenres() != null) {
                     for (Genre genre : movie.getGenres()) {
                         Chip mChip = (Chip) getLayoutInflater().inflate(R.layout.item_chip_category, null, false);
                         mChip.setText(genre.getName());
@@ -275,7 +275,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                  * https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
                  */
                 Snackbar.make(clMainLayout, R.string.error_message_loading_genres, Snackbar.LENGTH_LONG)
-                        //.setAnchorView(R.id.bottom_navigation)
+                        .setAnchorView(fabMovieDetails)
                         .show();
 
                 tvMovieDetailsGenresTitle.setVisibility(View.GONE);
@@ -304,6 +304,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                                 .load(String.format(Constants.YOUTUBE_THUMBNAIL_URL, trailer.getKey()))
                                 .apply(RequestOptions.placeholderOf(R.color.colorPrimary).centerCrop())
                                 .into(thumbnail);
+                        AnimationView.outlineImageview(thumbnail);
                         lyMovieDetailsTrailer.addView(parent);
                     }
                 } else {
@@ -319,7 +320,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                  * https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
                  */
                 Snackbar.make(clMainLayout, R.string.error_message_loading_trailers, Snackbar.LENGTH_LONG)
-                        //.setAnchorView(R.id.bottom_navigation)
+                        .setAnchorView(fabMovieDetails)
                         .show();
 
                 tvMovieDetailsTrailerTitle.setVisibility(View.GONE);
@@ -346,17 +347,21 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             }
                         }
                     }
-                    TextUtils.join(", ", definitiveMmovieLangs);
-                    tvLanguagesInfoMdp.setText(definitiveMmovieLangs.toString()
-                            .replace("[", "")
-                            .replace("]", ""));
+                    if (definitiveMmovieLangs.size() > 0) {
+                        TextUtils.join(", ", definitiveMmovieLangs);
+                        tvLanguagesInfoMdp.setText(definitiveMmovieLangs.toString()
+                                .replace("[", "")
+                                .replace("]", ""));
+                    } else {
+                        tvLanguagesInfoMdp.setText("-");
+                    }
                 }
             }
 
             @Override
             public void onError() {
                 Snackbar.make(clMainLayout, R.string.error_message_loading_lang, Snackbar.LENGTH_LONG)
-                        //.setAnchorView(R.id.bottom_navigation)
+                        .setAnchorView(fabMovieDetails)
                         .show();
             }
         });
@@ -371,9 +376,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
             }
             TextUtils.join(", ", companies);
         }
-        tvProdCompaniesInfoMdp.setText(companies.toString()
-                .replace("[", "")
-                .replace("]", ""));
+        if(companies.size() > 0) {
+            tvProdCompaniesInfoMdp.setText(companies.toString()
+                    .replace("[", "")
+                    .replace("]", ""));
+        } else {
+            tvProdCompaniesInfoMdp.setText("-");
+        }
     }
 
     private void showTrailer(String url) {
@@ -400,7 +409,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
             editor.putBoolean("Starred movie removed", true);
             moviesDbHelper.deleteSavedMovie(movieId);
 
-            Snackbar.make(bottomAppBar, "Película eliminada de favoritos correctamente.", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(clMainLayout, "Película eliminada de favoritos correctamente.", Snackbar.LENGTH_SHORT)
+                    .setAnchorView(fabMovieDetails)
+                    .show();
 
         } else {
             fabMovieDetails.setImageResource(R.drawable.ic_heart_favorite);
@@ -410,7 +421,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
             addToFavorite();
             editor.putBoolean("Starred movie added", true);
 
-            Snackbar.make(bottomAppBar, "Película añadida a favoritos correctamente.", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(clMainLayout, "Película añadida a favoritos correctamente.", Snackbar.LENGTH_SHORT)
+                    .setAnchorView(fabMovieDetails)
+                    .show();
         }
 
         editor.apply();
@@ -425,13 +438,24 @@ public class MovieDetailsActivity extends AppCompatActivity {
         moviesDbHelper = new MoviesDbHelper(getApplicationContext());
         Movie movie = new Movie();
 
-        Log.d("MoviestoAdd", movieId + " " + movieTitle + " " + movieThumbnail + " " + movieRating + " " +movieSummary + " " + moviePosterpath);
+        /*List<String> tempList = new ArrayList<>(Arrays.asList(movieGenreIds.split(",")));
+        List<Integer> movieGenreIdList = new ArrayList<>();
+
+        for (String s : tempList) {
+            movieGenreIdList.add(Integer.parseInt(String.valueOf(tempList).trim()));
+        }*/
+
+        Log.d("MoviestoAdd", movieId + " " + movieTitle + " " + movieBackdrop + " " + movieRating + " " +movieSummary + " " + moviePosterpath + " " + movieReleaseDate);
         movie.setId(movieId);
         movie.setTitle(movieTitle);
-        movie.setPosterPath(movieThumbnail);
+        movie.setBackdrop(movieBackdrop);
         movie.setRating((float)movieRating);
         movie.setOverview(movieSummary);
         movie.setPosterPath(moviePosterpath);
+        movie.setReleaseDate(movieReleaseDate);
+        movie.setGenreIdString(movieGenreIds);
+
+        Log.d("GenreIdString", "GenreIdString: " + movie.getGenreIdString());
 
         moviesDbHelper.saveMovie(movie);
     }

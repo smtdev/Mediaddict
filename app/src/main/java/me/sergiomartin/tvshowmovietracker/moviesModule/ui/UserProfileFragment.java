@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -37,7 +39,7 @@ public class UserProfileFragment extends Fragment {
     public void onStop() {
         super.onStop();
         // mostrar la Toolbar
-        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).show();
     }
 
     @Override
@@ -45,14 +47,14 @@ public class UserProfileFragment extends Fragment {
         super.onResume();
 
         // ocultar la Toolbar
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).hide();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).show();
     }
 
     @Override
@@ -60,19 +62,12 @@ public class UserProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // ocultar la Toolbar principal al iniciar View
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-
-        /*ctlUserProfile.setTitle("test");
-        ctlUserProfile.setCollapsedTitleTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
-        ctlUserProfile.setExpandedTitleColor(ContextCompat.getColor(getContext(), R.color.colorAccent));*/
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).hide();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        //((AppCompatActivity)getActivity()).setSupportActionBar(tbUserProfile);
-
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
         ButterKnife.bind(this, view);
@@ -83,8 +78,6 @@ public class UserProfileFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setRetainInstance(true);
-
-        //ProfileHelper.with(getActivity()).loadProfile();
     }
 
     @OnClick({R.id.fab_user_profile, R.id.fab_settings})
@@ -98,12 +91,11 @@ public class UserProfileFragment extends Fragment {
             case R.id.fab_user_profile:
                 break;
             case R.id.fab_settings:
-                getActivity().getSupportFragmentManager().beginTransaction()
+                requireActivity().getSupportFragmentManager().beginTransaction()
                         // ((ViewGroup)getView().getParent()).getId() -> es el id del fragment actual
-                        .replace(((ViewGroup) getView().getParent()).getId(), settingsFragment, "FragmentPreferences")
+                        .replace(((ViewGroup) requireView().getParent()).getId(), settingsFragment, "FragmentPreferences")
                         .addToBackStack(null)
                         .commit();
         }
     }
-
 }

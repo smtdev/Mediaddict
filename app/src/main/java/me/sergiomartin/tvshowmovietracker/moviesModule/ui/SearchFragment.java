@@ -4,10 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -20,6 +26,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,6 +77,29 @@ public class SearchFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(String.format("Búsqueda: %s", query));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -86,35 +116,34 @@ public class SearchFragment extends Fragment {
 
         if (bundle != null) {
             query = bundle.getString("queryValue");
+            Log.d("QueryValue", "La búsqueda es: " + query);
         }
-
-        Log.d("QueryValue", "La búsqueda es: " + query);
 
         ButterKnife.bind(this, view);
 
         rvFragmentSearch = view.findViewById(R.id.rv_fragment_search);
         rvFragmentSearch.setHasFixedSize(true);
 
-        /*rvFragmentSearch.setLayoutManager(new LinearLayoutManager(getContext()));
-        int mNoOfColumns = CommonUtils.calculateNoOfColumns(getContext(), 140);
-        rvFragmentSearch.setLayoutManager(new GridLayoutManager(getContext(), mNoOfColumns));*/
-
         initRecyclerViewAndScrolling(query);
 
         getSearchedMovieList(currentPage, query);
-        srlFragmentSearch.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                initRecyclerViewAndScrolling(query);
-                srlFragmentSearch.setRefreshing(false);
-                srlFragmentSearch.setColorSchemeColors(
-                        getActivity().getResources().getColor(R.color.colorAccent),
-                        getActivity().getResources().getColor(R.color.text_light_blue)
-                );
-            }
+        srlFragmentSearch.setOnRefreshListener(() -> {
+            initRecyclerViewAndScrolling(query);
+            srlFragmentSearch.setRefreshing(false);
+            srlFragmentSearch.setColorSchemeColors(
+                    getActivity().getResources().getColor(R.color.colorAccent),
+                    getActivity().getResources().getColor(R.color.text_light_blue)
+            );
         });
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(String.format("Búsqueda: %s", query));
     }
 
     private void initRecyclerViewAndScrolling(String queryFilter) {
@@ -122,8 +151,6 @@ public class SearchFragment extends Fragment {
 
         final LinearLayoutManager manager = new GridLayoutManager(getContext(), mNoOfColumns);
         rvFragmentSearch.setLayoutManager(manager);
-        /*final LinearLayoutManager manager = new LinearLayoutManager(getContext());
-        rvFragmentSearch.setLayoutManager(manager);*/
         rvFragmentSearch.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NotNull RecyclerView recyclerView, int dx, int dy) {
@@ -174,19 +201,17 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    OnMoviesClickCallback callback = new OnMoviesClickCallback() {
-        @Override
-        public void onClick(Movie movie, ImageView movieImageView) {
-            Intent intent = new Intent(SearchFragment.this.getContext(), MovieDetailsActivity.class);
-            intent.putExtra(Constants.MOVIE_ID, movie.getId());
-            intent.putExtra(Constants.MOVIE_TITLE, movie.getTitle());
-            intent.putExtra(Constants.MOVIE_THUMBNAIL, movie.getBackdrop());
-            intent.putExtra(Constants.MOVIE_RATING, movie.getRating());
-            intent.putExtra(Constants.MOVIE_SUMMARY, movie.getOverview());
-            intent.putExtra(Constants.MOVIE_POSTERPATH, movie.getPosterPath());
+    OnMoviesClickCallback callback = (movie, movieImageView) -> {
+        Intent intent = new Intent(SearchFragment.this.getContext(), MovieDetailsActivity.class);
+        intent.putExtra(Constants.MOVIE_ID, movie.getId());
+        intent.putExtra(Constants.MOVIE_TITLE, movie.getTitle());
+        intent.putExtra(Constants.MOVIE_BACKDROP, movie.getBackdrop());
+        intent.putExtra(Constants.MOVIE_RATING, movie.getRating());
+        intent.putExtra(Constants.MOVIE_OVERVIEW, movie.getOverview());
+        intent.putExtra(Constants.MOVIE_POSTERPATH, movie.getPosterPath());
+        intent.putExtra(Constants.MOVIE_RELEASE_DATE, movie.getReleaseDate());
 
-            SearchFragment.this.startActivity(intent);
-        }
+        SearchFragment.this.startActivity(intent);
     };
 
     public void showError() {

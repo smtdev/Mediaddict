@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,6 +30,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,7 +72,6 @@ public class HomeListFragment extends Fragment {
 
     private MoviesDbHelper moviesDbHelper;
     private MoviesAdapter adapter;
-    private SearchAdapter searchAdapter;
     private TMDbRepositoryAPI mTMDbRepositoryAPI;
 
     private List<Movie> savedMovieList;
@@ -124,75 +125,6 @@ public class HomeListFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
-
-        inflater.inflate(R.menu.search_menu, menu);
-        MenuItem item = menu.findItem(R.id.app_bar_search);
-        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-        SearchView searchView = (SearchView) item.getActionView();
-
-        /**
-         * Info sacada de: https://guides.codepath.com/android/Extended-ActionBar-Guide#adding-searchview-to-actionbar
-         */
-        // Modificando el icono de búsqueda del SearchView de la AppBar
-        int searchImgId = androidx.appcompat.R.id.search_button;
-        ImageView v = searchView.findViewById(searchImgId);
-        v.setImageResource(R.drawable.ic_baseline_search_24);
-
-        // maximizando tamaño hasta ocupar toda la pantalla
-        searchView.setMaxWidth(Integer.MAX_VALUE);
-
-        // controlando dinámicamente el botón "X"
-        ImageView searchClose = searchView.findViewById(R.id.search_close_btn);
-        searchClose.setColorFilter(Color.WHITE);
-        searchClose.setVisibility(View.VISIBLE);
-
-        // Cambiando el style al SearchView
-        int searchEditId = androidx.appcompat.R.id.search_src_text;
-        EditText et = searchView.findViewById(searchEditId);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            et.setTextColor(requireActivity().getBaseContext().getResources().getColor(R.color.colorAccent, requireActivity().getBaseContext().getTheme()));
-            et.setBackgroundColor(requireActivity().getBaseContext().getResources().getColor(R.color.gray_800, requireActivity().getBaseContext().getTheme()));
-        } else {
-            et.setTextColor(requireActivity().getBaseContext().getResources().getColor(R.color.colorAccent));
-            et.setBackgroundColor(requireActivity().getBaseContext().getResources().getColor(R.color.gray_800));
-        }
-
-        et.setHint(R.string.searchview_text);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Bundle bundle = new Bundle();
-
-                SearchFragment searchFragment = new SearchFragment();
-                searchFragment.setArguments(bundle);
-
-                bundle.putString("queryValue", query);
-
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        // ((ViewGroup)getView().getParent()).getId() -> es el id del fragment actual
-                        .replace(((ViewGroup) getView().getParent()).getId(), searchFragment, "HomeListFragmentToSearchFragment")
-                        .addToBackStack(null)
-                        .commit();
-                return false;
-            }
-
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                return true;
-            }
-        });
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -219,6 +151,75 @@ public class HomeListFragment extends Fragment {
         rvHomePopularMoviesRecyclerview.setLayoutManager(managerPopular);
         rvHomeTopratedMoviesRecyclerview.setLayoutManager(managerToprated);
         rvHomeUpcomingMoviesRecyclerview.setLayoutManager(managerUpcoming);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+
+        inflater.inflate(R.menu.search_menu, menu);
+        MenuItem item = menu.findItem(R.id.app_bar_search);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+        SearchView searchView = (SearchView) item.getActionView();
+
+        /**
+         * Info sacada de: https://guides.codepath.com/android/Extended-ActionBar-Guide#adding-searchview-to-actionbar
+         */
+        // Modificando el icono de búsqueda del SearchView de la AppBar
+        int searchImgId = R.id.search_button;
+        ImageView v = searchView.findViewById(searchImgId);
+        v.setImageResource(R.drawable.ic_baseline_search_24);
+
+        // maximizando tamaño hasta ocupar toda la pantalla
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        // controlando dinámicamente el botón "X"
+        ImageView searchClose = searchView.findViewById(R.id.search_close_btn);
+        searchClose.setColorFilter(Color.WHITE);
+        searchClose.setVisibility(View.VISIBLE);
+
+        // Cambiando el style al SearchView
+        int searchEditId = R.id.search_src_text;
+        EditText et = searchView.findViewById(searchEditId);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            et.setTextColor(requireActivity().getBaseContext().getResources().getColor(R.color.colorAccent, requireActivity().getBaseContext().getTheme()));
+            et.setBackgroundColor(requireActivity().getBaseContext().getResources().getColor(R.color.gray_800, requireActivity().getBaseContext().getTheme()));
+        } else {
+            et.setTextColor(requireActivity().getBaseContext().getResources().getColor(R.color.colorAccent));
+            et.setBackgroundColor(requireActivity().getBaseContext().getResources().getColor(R.color.gray_800));
+        }
+
+        et.setHint(R.string.searchview_text);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Bundle bundle = new Bundle();
+
+                SearchFragment searchFragment = new SearchFragment();
+                searchFragment.setArguments(bundle);
+
+                bundle.putString("queryValue", query);
+
+                if (requireView().getParent()!= null) {
+                    requireActivity().getSupportFragmentManager().beginTransaction()
+                            // ((ViewGroup)getView().getParent()).getId() -> es el id del fragment actual
+                            .replace(((ViewGroup) requireView().getParent()).getId(), searchFragment, "HomeListFragmentToSearchFragment")
+                            .addToBackStack(null)
+                            .commit();
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return true;
+            }
+        });
     }
 
     private void getHomeMovies(int page, String sortBy, RecyclerView rv) {
@@ -248,6 +249,7 @@ public class HomeListFragment extends Fragment {
         isFavoriteChecked = false;
         /*
          * Enviar información entre activities y fragments para manejarla y mostrarla
+         * https://developer.android.com/training/basics/fragments/pass-data-between
          */
         Intent intent = new Intent(HomeListFragment.this.getContext(), MovieDetailsActivity.class);
 
@@ -265,10 +267,13 @@ public class HomeListFragment extends Fragment {
 
         intent.putExtra(Constants.MOVIE_ID, movie.getId());
         intent.putExtra(Constants.MOVIE_TITLE, movie.getTitle());
-        intent.putExtra(Constants.MOVIE_THUMBNAIL, movie.getBackdrop());
+        intent.putExtra(Constants.MOVIE_BACKDROP, movie.getBackdrop());
         intent.putExtra(Constants.MOVIE_RATING, movie.getRating());
-        intent.putExtra(Constants.MOVIE_SUMMARY, movie.getOverview());
+        intent.putExtra(Constants.MOVIE_OVERVIEW, movie.getOverview());
         intent.putExtra(Constants.MOVIE_POSTERPATH, movie.getPosterPath());
+        intent.putExtra(Constants.MOVIE_RELEASE_DATE, movie.getReleaseDate());
+        intent.putExtra(Constants.MOVIE_GENRES_ID, TextUtils.join(",", movie.getGenreIds()));
+
         intent.putExtra("movie_favorite_status", isFavoriteChecked);
 
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
@@ -279,9 +284,6 @@ public class HomeListFragment extends Fragment {
         HomeListFragment.this.startActivity(intent, options.toBundle());
     };
 
-
-    @SuppressLint("NonConstantResourceId")
-    // se añade ya que los resource ids no son finals desde Gradle 5.0 y hay que evitar usarlo en switchs
     private void displaySortedMovieList(RecyclerView rv) {
         currentPage = 1; // Volvemos al inicio cada vez que entremos en una de las listas
 
@@ -295,16 +297,6 @@ public class HomeListFragment extends Fragment {
             case R.id.rv_home_upcoming_movies_recyclerview:
                 sortBy = Constants.UPCOMING;
                 break;
-            /**
-             * Cambiar vista entre lista y póster
-             * https://stackoverflow.com/questions/45456601/switch-between-layouts-on-list-to-grid-recyclerview
-             */
-            /*case R.id.switch_view:
-                //getActivity().invalidateOptionsMenu();
-                boolean isSwitched = adapter.toggleItemViewType();
-                //mRecyclerView.setLayoutManager(isSwitched ? new LinearLayoutManager(this) : new GridLayoutManager(this, 2));
-                adapter.notifyDataSetChanged();
-                return true;*/
         }
         getHomeMovies(currentPage, sortBy, rv);
     }
@@ -340,9 +332,9 @@ public class HomeListFragment extends Fragment {
         }
         bundle.putString("movieFilter", sortFilter);
 
-        getActivity().getSupportFragmentManager().beginTransaction()
+        requireActivity().getSupportFragmentManager().beginTransaction()
                 // ((ViewGroup)getView().getParent()).getId() -> es el id del fragment actual
-                .replace(((ViewGroup) getView().getParent()).getId(), movieList, "FragmentMovieListFiltered")
+                .replace(((ViewGroup) requireView().getParent()).getId(), movieList, "FragmentMovieListFiltered")
                 .addToBackStack(null)
                 .commit();
     }

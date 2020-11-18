@@ -10,10 +10,13 @@ public class Constants {
     // SQLite
     public static final String MOVIE_ID = "movie_id";
     public static final String MOVIE_TITLE = "movie_title";
-    public static final String MOVIE_THUMBNAIL = "movie_thumbnail";
+    public static final String MOVIE_BACKDROP = "movie_backdrop";
     public static final String MOVIE_RATING = "movie_rating";
-    public static final String MOVIE_SUMMARY = "movie_summary";
+    public static final String MOVIE_OVERVIEW = "movie_overview";
     public static final String MOVIE_POSTERPATH = "movie_posterpath";
+    public static final String MOVIE_RELEASE_DATE = "movie_release_date";
+    public static final String MOVIE_GENRES = "movie_genres";
+    public static final String MOVIE_GENRES_ID = "movie_genres_id";
 
     // Constante para comprobar si una película está marcada como favorita
     public static final String MOVIE_FAVORITE_STATUS = "movie_favorite_status";
@@ -40,7 +43,7 @@ public class Constants {
     public static final String YOUTUBE_THUMBNAIL_URL = "https://img.youtube.com/vi/%s/0.jpg";
 
     // Layout
-    public static final int LIST_ITEM = 0;
-    public static final int GRID_ITEM = 1;
-    public static int view = LIST_ITEM;
+    public static final int GRID_ITEM = 0;
+    public static final int LIST_ITEM = 1;
+    public static final int GRID_COLUMN_SIZE = 140;
 }

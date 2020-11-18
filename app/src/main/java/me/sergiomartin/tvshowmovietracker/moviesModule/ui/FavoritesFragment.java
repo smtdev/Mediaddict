@@ -44,8 +44,7 @@ public class FavoritesFragment extends Fragment {
     private MoviesDbHelper moviesDbHelper;
     private MoviesAdapter adapter;
     private List<Movie> savedMovieList;
-
-    private boolean isFavoriteChecked = false;
+    private int viewLayoutType;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -69,34 +68,34 @@ public class FavoritesFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
+        setHasOptionsMenu(true);
+
+        viewLayoutType = Constants.GRID_ITEM;
+
         rvFragmentFavoritesList = view.findViewById(R.id.rv_fragment_favorites_list);
         rvFragmentFavoritesList.setHasFixedSize(true);
 
         initRecyclerViewAndScrolling();
 
-        srlFragmentFavoritesList.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                initRecyclerViewAndScrolling();
-                srlFragmentFavoritesList.setRefreshing(false);
-                srlFragmentFavoritesList.setColorSchemeColors(
-                        getActivity().getResources().getColor(R.color.colorAccent),
-                        getActivity().getResources().getColor(R.color.text_light_blue)
-                );
-            }
+        srlFragmentFavoritesList.setOnRefreshListener(() -> {
+            initRecyclerViewAndScrolling();
+            srlFragmentFavoritesList.setRefreshing(false);
+            srlFragmentFavoritesList.setColorSchemeColors(
+                    requireActivity().getResources().getColor(R.color.colorAccent),
+                    requireActivity().getResources().getColor(R.color.text_light_blue)
+            );
         });
 
-        // Inflate the layout for this fragment
         return view;
     }
 
     private void initRecyclerViewAndScrolling() {
-        int mNoOfColumns = CommonUtils.calculateNoOfColumns(requireContext(), 140);
-
         savedMovieList = new ArrayList<>();
-        adapter = new MoviesAdapter(savedMovieList, requireContext(), callback);
 
-        final LinearLayoutManager manager = new GridLayoutManager(getContext(), mNoOfColumns);
+        int mNoOfColumns = CommonUtils.calculateNoOfColumns(requireContext(), Constants.GRID_COLUMN_SIZE);
+        final GridLayoutManager manager = new GridLayoutManager(getContext(), mNoOfColumns);
+
+        adapter = new MoviesAdapter(savedMovieList, requireContext(), callback, viewLayoutType);
         rvFragmentFavoritesList.setLayoutManager(manager);
         rvFragmentFavoritesList.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -112,45 +111,43 @@ public class FavoritesFragment extends Fragment {
 
         inflater.inflate(R.menu.switchview_menu, menu);
         MenuItem item = menu.findItem(R.id.app_bar_switchview);
-        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int mNoOfColumns = CommonUtils.calculateNoOfColumns(requireContext(), 140);
+        // handle item selection
+        if (item.getItemId() == R.id.app_bar_switchview) {
+            int mNoOfColumns = CommonUtils.calculateNoOfColumns(requireContext(), Constants.GRID_COLUMN_SIZE);
 
-        switch (item.getItemId()) {
-            case R.id.app_bar_switchview:
-                requireActivity().invalidateOptionsMenu();
+            if (viewLayoutType == Constants.LIST_ITEM) {
+                final GridLayoutManager manager = new GridLayoutManager(getContext(), mNoOfColumns);
+                adapter = new MoviesAdapter(savedMovieList, requireContext(), callback, Constants.GRID_ITEM);
+                viewLayoutType = Constants.GRID_ITEM;
+                rvFragmentFavoritesList.setLayoutManager(manager);
+                item.setIcon(R.drawable.ic_list_layout_format);
+            } else {
+                final LinearLayoutManager manager;
+                adapter = new MoviesAdapter(savedMovieList, requireContext(), callback, Constants.LIST_ITEM);
+                manager = new LinearLayoutManager(getContext());
+                viewLayoutType = Constants.LIST_ITEM;
+                rvFragmentFavoritesList.setLayoutManager(manager);
+                item.setIcon(R.drawable.ic_grid_layout_format);
+            }
 
-                //boolean isSwitched = adapter.toggleItemViewType();
+            rvFragmentFavoritesList.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
 
-                if (Constants.view == Constants.LIST_ITEM) {
-                    rvFragmentFavoritesList.setLayoutManager(new LinearLayoutManager(requireContext()));
-                } else {
-                    rvFragmentFavoritesList.setLayoutManager(new GridLayoutManager(requireContext(), mNoOfColumns));
-                }
-
-                initRecyclerViewAndScrolling();
-
-                /*if (isSwitched) {
-                    rvFragmentFavoritesList.setLayoutManager(new LinearLayoutManager(requireContext()));
-                } else {
-                    rvFragmentFavoritesList.setLayoutManager(new GridLayoutManager(requireContext(), mNoOfColumns));
-                }
-                adapter.notifyDataSetChanged();*/
-                break;
+            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
-
 
     /*
      * Manejar el clic a la película para que muestre detalles
      */
     OnMoviesClickCallback callback = (movie, moviePosterImageView) -> {
-        isFavoriteChecked = false;
+        boolean isFavoriteChecked = false;
 
         // Enviar información entre activities y fragments para manejarla y mostrarla
         Intent intent = new Intent(FavoritesFragment.this.getContext(), MovieDetailsActivity.class);
@@ -170,12 +167,17 @@ public class FavoritesFragment extends Fragment {
         }
 
         Log.d("FavoritesFragment", "Favoritos después de comprobar pelis guardadas: " + isFavoriteChecked);
+
         intent.putExtra(Constants.MOVIE_ID, movie.getId());
         intent.putExtra(Constants.MOVIE_TITLE, movie.getTitle());
-        intent.putExtra(Constants.MOVIE_THUMBNAIL, movie.getBackdrop());
+        intent.putExtra(Constants.MOVIE_BACKDROP, movie.getBackdrop());
         intent.putExtra(Constants.MOVIE_RATING, movie.getRating());
-        intent.putExtra(Constants.MOVIE_SUMMARY, movie.getOverview());
+        intent.putExtra(Constants.MOVIE_OVERVIEW, movie.getOverview());
         intent.putExtra(Constants.MOVIE_POSTERPATH, movie.getPosterPath());
+        intent.putExtra(Constants.MOVIE_RELEASE_DATE, movie.getReleaseDate());
+        intent.putExtra(Constants.MOVIE_GENRES_ID, movie.getGenreIdString());
+
+        Log.d("GenreOnFragment", movie.getGenreIdString());
         intent.putExtra("movie_favorite_status", isFavoriteChecked);
 
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(

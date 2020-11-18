@@ -138,4 +138,6 @@
     <string name="fragment_movie_details_prod_countries">País de producción</string>
     <string name="fragment_movie_details_prod_companies">Productoras</string>
     <string name="fragment_movie_details_webpage">Página web</string>
+    <string name="release_date_movie_regex_separator">-</string>
+    <string name="toolbar_switch_view_button">Cambiar vista</string>
 </resources>

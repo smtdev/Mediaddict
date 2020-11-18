@@ -1,6 +1,5 @@
 package me.sergiomartin.tvshowmovietracker.moviesModule.adapter;
 
-import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +21,6 @@ import me.sergiomartin.tvshowmovietracker.R;
 import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.action.OnMoviesClickCallback;
-import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.action.OnSearchMovieCallback;
 import me.sergiomartin.tvshowmovietracker.moviesModule.module.GlideApp;
 import me.sergiomartin.tvshowmovietracker.moviesModule.ui.AnimationView;
 
@@ -104,6 +101,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             GlideApp.with(itemView.getContext())
                     .load(Constants.IMAGE_BASE_URL_W500 + movie.getPosterPath())
                     .into(itemMoviePoster);
+            AnimationView.outlineImageview(itemMoviePoster);
         }
     }
 }

@@ -2,6 +2,7 @@ package me.sergiomartin.tvshowmovietracker.moviesModule.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,7 +80,10 @@ public class MovieListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_movie_list, container, false);
 
-        // Recoger parámetros enviados por el fragment anterior
+        /*
+         * Recoger parámetros enviados por el fragment anterior
+         * https://developer.android.com/training/basics/fragments/pass-data-between
+         */
         Bundle bundle = this.getArguments();
 
         if (bundle != null) {
@@ -96,18 +101,15 @@ public class MovieListFragment extends Fragment {
 
         getGenres(sortBy);
 
-        srlFragmentMovieList.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                initRecyclerViewAndScrolling(sortBy);
-                srlFragmentMovieList.setRefreshing(false);
-                srlFragmentMovieList.setColorSchemeColors(
-                        getActivity().getResources().getColor(R.color.colorAccent),
-                        getActivity().getResources().getColor(R.color.text_light_blue)
-                );
-            }
+        srlFragmentMovieList.setOnRefreshListener(() -> {
+            initRecyclerViewAndScrolling(sortBy);
+            srlFragmentMovieList.setRefreshing(false);
+            srlFragmentMovieList.setColorSchemeColors(
+                    getActivity().getResources().getColor(R.color.colorAccent),
+                    getActivity().getResources().getColor(R.color.text_light_blue)
+            );
         });
-        // Inflate the layout for this fragment
+        // Inflar el diseño del fragment
         return view;
     }
 
@@ -164,8 +166,6 @@ public class MovieListFragment extends Fragment {
                 }
                 currentPage = page;
                 isFetchingMovies = false;
-
-                //setTitle();
             }
 
             @Override
@@ -175,60 +175,22 @@ public class MovieListFragment extends Fragment {
         });
     }
 
-    OnMoviesClickCallback callback = new OnMoviesClickCallback() {
-        @Override
-        public void onClick(Movie movie, ImageView movieImageView) {
-            Intent intent = new Intent(MovieListFragment.this.getContext(), MovieDetailsActivity.class);
-            intent.putExtra(Constants.MOVIE_ID, movie.getId());
-            intent.putExtra(Constants.MOVIE_TITLE, movie.getTitle());
-            intent.putExtra(Constants.MOVIE_THUMBNAIL, movie.getBackdrop());
-            intent.putExtra(Constants.MOVIE_RATING, movie.getRating());
-            intent.putExtra(Constants.MOVIE_SUMMARY, movie.getOverview());
-            intent.putExtra(Constants.MOVIE_POSTERPATH, movie.getPosterPath());
+    OnMoviesClickCallback callback = (movie, movieImageView) -> {
+        Intent intent = new Intent(MovieListFragment.this.getContext(), MovieDetailsActivity.class);
 
-            MovieListFragment.this.startActivity(intent);
-        }
+        intent.putExtra(Constants.MOVIE_ID, movie.getId());
+        intent.putExtra(Constants.MOVIE_TITLE, movie.getTitle());
+        intent.putExtra(Constants.MOVIE_BACKDROP, movie.getBackdrop());
+        intent.putExtra(Constants.MOVIE_RATING, movie.getRating());
+        intent.putExtra(Constants.MOVIE_OVERVIEW, movie.getOverview());
+        intent.putExtra(Constants.MOVIE_POSTERPATH, movie.getPosterPath());
+        intent.putExtra(Constants.MOVIE_RELEASE_DATE, movie.getReleaseDate());
+        intent.putExtra(Constants.MOVIE_GENRES_ID, TextUtils.join(",", movie.getGenreIds()));
+
+        Log.d("MOVIEGENRES", "Película: " + movie.getTitle() + " | GenreIDs: " + TextUtils.join(",", movie.getGenreIds()));
+
+        MovieListFragment.this.startActivity(intent);
     };
-
-    /*// TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    /*public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }*/
-
 
     public void showError() {
         /*

@@ -202,16 +202,15 @@ public class TMDbRepositoryAPI {
 
         switch (sortBy) {
             case Constants.TOP_RATED:
-                api.getTopRatedMovies(BuildConfig.API_KEY, Constants.LANGUAGE, page)
+                api.getTopRatedMovies(BuildConfig.API_KEY, Constants.LANGUAGE, page, Constants.LANGUAGE)
                         .enqueue(call);
                 break;
             case Constants.UPCOMING:
-                api.getUpcomingMovies(BuildConfig.API_KEY, Constants.LANGUAGE, page)
+                api.getUpcomingMovies(BuildConfig.API_KEY, Constants.LANGUAGE, page, Constants.LANGUAGE)
                         .enqueue(call);
                 break;
             case Constants.POPULAR:
-            default:
-                api.getPopularMovies(BuildConfig.API_KEY, Constants.LANGUAGE, page)
+                api.getPopularMovies(BuildConfig.API_KEY, Constants.LANGUAGE, page, Constants.LANGUAGE)
                         .enqueue(call);
                 break;
         }

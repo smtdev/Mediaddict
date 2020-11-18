@@ -6,10 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,8 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,26 +29,31 @@ import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.action.O
 import me.sergiomartin.tvshowmovietracker.moviesModule.module.GlideApp;
 import me.sergiomartin.tvshowmovietracker.moviesModule.ui.AnimationView;
 
-//public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> implements Filterable {
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>  {
 
     private Context context;
     private List<Movie> movies;
     private List<Genre> genres;
     private OnMoviesClickCallback callback;
+    private int viewLayoutType;
     private boolean isSwitchView;
+    private boolean isFavMovie = false;
 
-    public MoviesAdapter(List<Movie> movies, Context context, OnMoviesClickCallback callback) {
+    public MoviesAdapter(List<Movie> movies, Context context, OnMoviesClickCallback callback, int viewLayoutType) {
         this.callback = callback;
         this.context = context;
         this.movies = movies;
         isSwitchView = false;
+        this.viewLayoutType = viewLayoutType;
+        isFavMovie = true;
+        genres = new ArrayList<>();
     }
 
     public MoviesAdapter(List<Movie> movies, OnMoviesClickCallback callback) {
         this.callback = callback;
         this.movies = movies;
         isSwitchView = false;
+        viewLayoutType = Constants.GRID_ITEM;
     }
 
     public MoviesAdapter(List<Movie> movies, List<Genre> genres, OnMoviesClickCallback callback) {
@@ -59,6 +61,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         this.movies = movies;
         this.genres = genres;
         isSwitchView = true;
+        viewLayoutType = Constants.LIST_ITEM;
     }
 
     @NotNull
@@ -66,6 +69,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     public MovieViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         View view;
         if (viewType == Constants.LIST_ITEM) {
+        //if (isSwitchView) {
             view = LayoutInflater
                     .from(parent.getContext())
                     .inflate(R.layout.movie_card_layout, parent, false);
@@ -87,16 +91,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
     @Override
     public int getItemViewType(int position) {
-        if (isSwitchView) {
+        //if (isSwitchView) {
+        if(viewLayoutType == Constants.LIST_ITEM) {
             return Constants.LIST_ITEM;
         } else {
             return Constants.GRID_ITEM;
         }
-    }
-
-    public boolean toggleItemViewType() {
-        isSwitchView = !isSwitchView;
-        return isSwitchView;
     }
 
     @Override
@@ -113,42 +113,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         movies.addAll(moviesToAppend);
         notifyDataSetChanged();
     }
-
-    /*getFilter()
-
-    @Override
-    public Filter getFilter() {
-
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                String charString = constraint.toString();
-
-                if (charString.isEmpty()) {
-                    filteredMovies = movies;
-                } else {
-                    List<Movie> filterMoviesList = new ArrayList<>();
-
-                    for (Movie movie : movies) {
-                        if (movie.getTitle().toLowerCase().contains(charString)) {
-                            filterMoviesList.add(movie);
-                        }
-                    }
-                    filteredMovies = filterMoviesList;
-                }
-
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = filteredMovies;
-                return filterResults;
-            }
-
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                filteredMovies = (ArrayList<Movie>) results.values;
-                notifyDataSetChanged();
-            }
-        };
-    }*/
 
     class MovieViewHolder extends RecyclerView.ViewHolder {
         @Nullable @BindView(R.id.item_movie_release_date) TextView itemMovieReleaseDate;
@@ -171,25 +135,51 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         public void bind(@NotNull Movie movie) {
             this.movie = movie;
             Log.d("MoviesAdapterBind", "Dentro de bind: " + movie.getTitle());
-            if (isSwitchView) {
-                itemMovieReleaseDate.setText(movie.getReleaseDate().split("-")[0]);
-                itemMovieTitle.setText(movie.getTitle());
-                itemMovieRating.setText(String.valueOf(movie.getRating()));
-                itemMovieGenre.setText(getGenres(movie.getGenreIds()));
-            } else {
-                itemMovieTitle.setText(movie.getTitle());
-            }
-            GlideApp.with(itemView.getContext())
-                    .load(Constants.IMAGE_BASE_URL_W500 + movie.getPosterPath())
-                    .into(itemMoviePoster);
+            //if (isSwitchView) {
+            if (viewLayoutType == Constants.LIST_ITEM) {
+                if (itemMovieReleaseDate != null) {
+                    itemMovieReleaseDate.setText(movie.getReleaseDate().split(String.valueOf(R.string.release_date_movie_regex_separator))[0]);
+                }
+                if (itemMovieTitle != null) {
+                    itemMovieTitle.setText(movie.getTitle());
+                }
+                if (itemMovieRating != null) {
+                    itemMovieRating.setText(String.valueOf(movie.getRating()));
+                }
+                if (itemMovieGenre != null) {
+                    if(isFavMovie) {
+                        String genres = movie.getGenreIdString().replace("[", "").replace("]", "");
+                        List<String> tempList = new ArrayList<>(Arrays.asList(genres.split(",")));
+                        List<Integer> movieGenreIdList = new ArrayList<>();
 
+                        for (String s : tempList) {
+                            movieGenreIdList.add(Integer.parseInt(s.trim()));
+                        }
+
+                        itemMovieGenre.setText(getGenres(movieGenreIdList));
+                    } else {
+                        itemMovieGenre.setText(getGenres(movie.getGenreIds()));
+                    }
+
+                }
+            } else {
+                if (itemMovieTitle != null) {
+                    itemMovieTitle.setText(movie.getTitle());
+                }
+            }
+            if (itemMoviePoster != null) {
+                GlideApp.with(itemView.getContext())
+                        .load(Constants.IMAGE_BASE_URL_W500 + movie.getPosterPath())
+                        .into(itemMoviePoster);
+                AnimationView.outlineImageview(itemMoviePoster);
+            }
         }
 
         private String getGenres(@NotNull List<Integer> genreIds) {
             List<String> movieGenres = new ArrayList<>();
             for (Integer genreId : genreIds) {
                 for (Genre genre : genres) {
-                    if (genre.getId() == genreId) {
+                    if (Objects.equals(genre.getId(), genreId)) {
                         movieGenres.add(genre.getName());
                         break;
                     }
