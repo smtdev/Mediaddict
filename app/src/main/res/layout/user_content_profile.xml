@@ -6,24 +6,23 @@
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
     android:clipToPadding="false"
-    android:fillViewport="true"
     android:scrollbars="none"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/fragment_user_profile">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constly_movie_detail"
             android:layout_width="match_parent"
-            android:layout_height="525dp"
+            android:layout_height="match_parent"
             android:background="@color/colorPrimary">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/textView"
+                android:id="@+id/tv_user_profile_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -33,13 +32,30 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/tv_user_profile_email"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_user_profile_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="70dp"
+                android:text="@string/user_profile_email"
+                android:textColor="@color/text_light_blue"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/tv_user_profile_username"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/bt_user_profile_close_session" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/bt_user_profile"
+                android:id="@+id/bt_user_profile_close_session"
                 style="@style/SelectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="40dp"
                 android:text="@string/user_profile_close_session"
                 android:textColor="@color/text_light_blue"
                 android:textSize="18sp"

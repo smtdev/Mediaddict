@@ -46,4 +46,11 @@ public class Constants {
     public static final int GRID_ITEM = 0;
     public static final int LIST_ITEM = 1;
     public static final int GRID_COLUMN_SIZE = 140;
+
+    // Firebase
+    public static final boolean ONLINE = true;
+    public static final boolean OFFLINE = false;
+    public static final long ONLINE_VALUE = -1;
+    public static final int RC_PHOTO_PICKER = 22;
+    public static final int RP_STORAGE = 122;
 }

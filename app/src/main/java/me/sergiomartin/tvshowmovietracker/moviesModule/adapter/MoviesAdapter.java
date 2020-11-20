@@ -36,23 +36,21 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     private List<Genre> genres;
     private OnMoviesClickCallback callback;
     private int viewLayoutType;
-    private boolean isSwitchView;
     private boolean isFavMovie = false;
 
-    public MoviesAdapter(List<Movie> movies, Context context, OnMoviesClickCallback callback, int viewLayoutType) {
+    public MoviesAdapter(List<Movie> movies, List<Genre> genres, Context context, OnMoviesClickCallback callback, int viewLayoutType) {
         this.callback = callback;
         this.context = context;
         this.movies = movies;
-        isSwitchView = false;
+        this.genres = genres;
         this.viewLayoutType = viewLayoutType;
         isFavMovie = true;
-        genres = new ArrayList<>();
+        //genres = new ArrayList<>();
     }
 
     public MoviesAdapter(List<Movie> movies, OnMoviesClickCallback callback) {
         this.callback = callback;
         this.movies = movies;
-        isSwitchView = false;
         viewLayoutType = Constants.GRID_ITEM;
     }
 
@@ -60,7 +58,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         this.callback = callback;
         this.movies = movies;
         this.genres = genres;
-        isSwitchView = true;
         viewLayoutType = Constants.LIST_ITEM;
     }
 
@@ -69,7 +66,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     public MovieViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         View view;
         if (viewType == Constants.LIST_ITEM) {
-        //if (isSwitchView) {
             view = LayoutInflater
                     .from(parent.getContext())
                     .inflate(R.layout.movie_card_layout, parent, false);
@@ -78,7 +74,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
                     .from(parent.getContext())
                     .inflate(R.layout.movie_grid_layout, parent, false);
         }
-
         return new MovieViewHolder(view);
     }
 
@@ -91,7 +86,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
     @Override
     public int getItemViewType(int position) {
-        //if (isSwitchView) {
         if(viewLayoutType == Constants.LIST_ITEM) {
             return Constants.LIST_ITEM;
         } else {
@@ -135,8 +129,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         public void bind(@NotNull Movie movie) {
             this.movie = movie;
             Log.d("MoviesAdapterBind", "Dentro de bind: " + movie.getTitle());
-            //if (isSwitchView) {
-            if (viewLayoutType == Constants.LIST_ITEM) {
+            if (viewLayoutType == Constants.LIST_ITEM) { // Modo ListLayoutManager
                 if (itemMovieReleaseDate != null) {
                     itemMovieReleaseDate.setText(movie.getReleaseDate().split(String.valueOf(R.string.release_date_movie_regex_separator))[0]);
                 }
@@ -147,22 +140,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
                     itemMovieRating.setText(String.valueOf(movie.getRating()));
                 }
                 if (itemMovieGenre != null) {
-                    if(isFavMovie) {
-                        String genres = movie.getGenreIdString().replace("[", "").replace("]", "");
-                        List<String> tempList = new ArrayList<>(Arrays.asList(genres.split(",")));
-                        List<Integer> movieGenreIdList = new ArrayList<>();
-
-                        for (String s : tempList) {
-                            movieGenreIdList.add(Integer.parseInt(s.trim()));
-                        }
-
-                        itemMovieGenre.setText(getGenres(movieGenreIdList));
-                    } else {
+                    if(!isFavMovie) {
                         itemMovieGenre.setText(getGenres(movie.getGenreIds()));
+                    } else {
+                        itemMovieGenre.setText("");
                     }
 
                 }
-            } else {
+            } else { // Modo GridLayoutManager
                 if (itemMovieTitle != null) {
                     itemMovieTitle.setText(movie.getTitle());
                 }

@@ -79,23 +79,23 @@ public class SearchFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("");
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setTitle("");
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(false);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(String.format("Búsqueda: %s", query));
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(true);
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setTitle(String.format("Búsqueda: %s", query));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("");
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setTitle("");
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(false);
     }
 
 
@@ -131,8 +131,8 @@ public class SearchFragment extends Fragment {
             initRecyclerViewAndScrolling(query);
             srlFragmentSearch.setRefreshing(false);
             srlFragmentSearch.setColorSchemeColors(
-                    getActivity().getResources().getColor(R.color.colorAccent),
-                    getActivity().getResources().getColor(R.color.text_light_blue)
+                    requireActivity().getResources().getColor(R.color.colorAccent),
+                    requireActivity().getResources().getColor(R.color.text_light_blue)
             );
         });
 
@@ -142,8 +142,8 @@ public class SearchFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(String.format("Búsqueda: %s", query));
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayShowTitleEnabled(true);
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setTitle(String.format("Búsqueda: %s", query));
     }
 
     private void initRecyclerViewAndScrolling(String queryFilter) {
@@ -168,8 +168,6 @@ public class SearchFragment extends Fragment {
     }
 
     private void getSearchedMovieList(int page, String query) {
-        Log.d("dentroGetSearched", "dentro del getSearched");
-
         isFetchingMovies = true;
         mTMDbRepositoryAPI.searchMovies(page, query, new OnSearchMovieCallback() {
             @Override
@@ -194,7 +192,7 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onEmptyResult() {
-                Snackbar.make(mclFragmentSearch, "No se han encontrado resultados en la búsqueda.", Snackbar.LENGTH_LONG)
+                Snackbar.make(mclFragmentSearch, R.string.search_fragment_no_results_message, Snackbar.LENGTH_LONG)
                         .setAnchorView(mclFragmentSearch)
                         .show();
             }
@@ -204,12 +202,12 @@ public class SearchFragment extends Fragment {
     OnMoviesClickCallback callback = (movie, movieImageView) -> {
         Intent intent = new Intent(SearchFragment.this.getContext(), MovieDetailsActivity.class);
         intent.putExtra(Constants.MOVIE_ID, movie.getId());
-        intent.putExtra(Constants.MOVIE_TITLE, movie.getTitle());
+        /*intent.putExtra(Constants.MOVIE_TITLE, movie.getTitle());
         intent.putExtra(Constants.MOVIE_BACKDROP, movie.getBackdrop());
         intent.putExtra(Constants.MOVIE_RATING, movie.getRating());
         intent.putExtra(Constants.MOVIE_OVERVIEW, movie.getOverview());
         intent.putExtra(Constants.MOVIE_POSTERPATH, movie.getPosterPath());
-        intent.putExtra(Constants.MOVIE_RELEASE_DATE, movie.getReleaseDate());
+        intent.putExtra(Constants.MOVIE_RELEASE_DATE, movie.getReleaseDate());*/
 
         SearchFragment.this.startActivity(intent);
     };

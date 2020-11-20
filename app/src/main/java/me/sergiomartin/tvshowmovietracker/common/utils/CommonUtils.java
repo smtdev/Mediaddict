@@ -42,4 +42,12 @@ public class CommonUtils {
         int noOfColumns = (int) (screenWidthDp / columnWidthDp + 0.5); // +0.5 for correct rounding to int.
         return noOfColumns;
     }
+
+    /*
+     *   Codificar un correo electrónico
+     */
+    public static String getEmailEncoded(String email){
+        String preKey = email.replace("_", "__");
+        return preKey.replace(".", "_");
+    }
 }

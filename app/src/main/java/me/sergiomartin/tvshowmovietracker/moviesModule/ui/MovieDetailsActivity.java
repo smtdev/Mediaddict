@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -20,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatRatingBar;
@@ -39,12 +41,12 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,16 +55,19 @@ import me.sergiomartin.tvshowmovietracker.R;
 import me.sergiomartin.tvshowmovietracker.common.model.dataAccess.TMDbRepositoryAPI;
 import me.sergiomartin.tvshowmovietracker.common.utils.CommonUtils;
 import me.sergiomartin.tvshowmovietracker.common.utils.Constants;
+import me.sergiomartin.tvshowmovietracker.common.utils.FirebaseUtils;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Genre;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Language;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Movie;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.ProductionCompany;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.ProductionCountry;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.Trailer;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.data.MoviesDbHelper;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetGenresCallback;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetLanguagesCallback;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetMovieCallback;
 import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.get.OnGetTrailersCallback;
+import me.sergiomartin.tvshowmovietracker.moviesModule.model.dataAccess.listener.OnCheckIfMovieExistsListener;
 import me.sergiomartin.tvshowmovietracker.moviesModule.module.GlideApp;
 
 public class MovieDetailsActivity extends AppCompatActivity {
@@ -104,10 +109,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private MoviesDbHelper moviesDbHelper;
     private TMDbRepositoryAPI mTMDbRepositoryAPI;
     private int movieId;
-    private String movieTitle, movieBackdrop, movieSummary, moviePosterpath, movieReleaseDate, movieGenreIds;
-    private float movieRating;
-    private boolean isRotate, isStarred = false;
-
+    //private String movieTitle, movieBackdrop, movieSummary, moviePosterpath, movieReleaseDate, movieGenreIds;
+    //private float movieRating;
+    private boolean isRotate, isStarred;
+    private Movie currentMovie;
     public MovieDetailsActivity() {
         // Required empty public constructor
     }
@@ -118,24 +123,24 @@ public class MovieDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_details);
         ButterKnife.bind(this);
 
+        // Recibiendo info de los intents para saber si la película está
+        // en favoritos
         movieId = getIntent().getIntExtra(Constants.MOVIE_ID, movieId);
-        movieTitle = getIntent().getStringExtra(Constants.MOVIE_TITLE);
+        /*movieTitle = getIntent().getStringExtra(Constants.MOVIE_TITLE);
         movieBackdrop = getIntent().getStringExtra(Constants.MOVIE_BACKDROP);
         movieRating = getIntent().getFloatExtra(Constants.MOVIE_RATING, movieRating);
         movieSummary = getIntent().getStringExtra(Constants.MOVIE_OVERVIEW);
         moviePosterpath = getIntent().getStringExtra(Constants.MOVIE_POSTERPATH);
         movieReleaseDate = getIntent().getStringExtra(Constants.MOVIE_RELEASE_DATE);
         movieGenreIds = getIntent().getStringExtra(Constants.MOVIE_GENRES_ID);
+        isStarred = getIntent().getBooleanExtra(Constants.MOVIE_FAVORITE_STATUS, isStarred);*/
 
-        Log.d("GenreIdString", "GenreIdStringOnCreatE: " + movieGenreIds);
-
-        isStarred = getIntent().getBooleanExtra(Constants.MOVIE_FAVORITE_STATUS, isStarred);
-
-        Log.d("isStarredRecibido", "isStarred recibido: " + isStarred);
         mTMDbRepositoryAPI = TMDbRepositoryAPI.getInstance();
 
-        setupToolbar();
+        // comprueba si el usuario existe en Firebase y lo marca como "En favoritos"
+        checkIfUserExistsOnFirebase(movieId);
 
+        setupToolbar();
         bottomAppBar.setOnClickListener(v -> onBackPressed());
 
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
@@ -152,6 +157,31 @@ public class MovieDetailsActivity extends AppCompatActivity {
         getMovie();
     }
 
+    private void checkIfUserExistsOnFirebase(int movieId) {
+        /*
+         * Referencia: https://stackoverflow.com/a/48502715/1552146
+         */
+        FirebaseUtils.isMovieOnFirebase(movieId, new OnCheckIfMovieExistsListener() {
+            @Override
+            public void onCheckReceived(boolean movieExists) {
+                if (movieExists) {
+                    isStarred = true;
+                    fabMovieDetails.setImageResource(R.drawable.ic_heart_favorite);
+                } else {
+                    isStarred = false;
+                    fabMovieDetails.setImageResource(R.drawable.ic_heart_outline_favorite);
+                }
+            }
+
+            @Override
+            public void onError(Throwable error) {
+                Snackbar.make(clMainLayout, R.string.movie_details_on_firebase_exists_error, Snackbar.LENGTH_SHORT)
+                        .setAnchorView(fabMovieDetails)
+                        .show();
+            }
+        });
+    }
+
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.tb_movie_details_toolbar);
         setSupportActionBar(toolbar);
@@ -164,8 +194,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             @SuppressLint("DefaultLocale")
             @Override
             public void onSuccess(Movie movie) {
-                Log.d("MovieData", movie.getTitle() + " " + movie.getHomepage());
-
+                currentMovie = movie;
                 tvMovieDetailsTitle.setText(movie.getTitle());
                 ctlMovieDetails.setTitle(movie.getTitle());
                 tvMovieDetailsLength.setText(CommonUtils.parseMinutesToHour((int) movie.getRuntime()));
@@ -173,6 +202,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 tvMovieDetailsSummary.setText(movie.getOverview());
                 tvMovieDetailsRating.setVisibility(View.VISIBLE);
                 tvMovieDetailsRating.setRating(movie.getRating() / 2);
+
                 /*
                  * Cambiar tamaño de parte del textView para resaltar la puntuación
                  */
@@ -187,31 +217,25 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 tvMovieDetailsVotes.setText(String.format("%s", (int) movie.getVoteCount()));
                 tvMovieDetailsReleaseDate.setText(movie.getReleaseDate());
                 tvMovieDetailsTagline.setText(movie.getTagline());
-                /**
+
+                /*
                  * Campos importados en el fragment incrustado con detalles adicionales
                  */
                 tvOriginalTitleInfoMdp.setText(movie.getOriginalTitle());
-                Log.d("MovieDetailsActivity", String.valueOf(movie.getBudget()));
-                tvBudgetInfoMdp.setText((movie.getBudget().compareTo(BigDecimal.ZERO) > 0.0) ? String.format("%,.2f €", movie.getBudget()) : "-");
+                tvBudgetInfoMdp.setText(movie.getBudget() > 0.0 ? String.format("%,.2f €", movie.getBudget()) : "-");
                 tvHomepageInfoMdp.setText(movie.getHomepage().equals("") || movie.getHomepage().isEmpty() ? "-" : movie.getHomepage());
                 tvOriginalLangInfoMdp.setText(movie.getOriginalLanguage().equals("") ? "-" : movie.getOriginalLanguage().toUpperCase());
-                tvPopularityInfoMdp.setText((movie.getPopularity().compareTo(BigDecimal.ZERO) > 0.0) ? String.format("%,.2f", movie.getPopularity()) : "-");
-                tvRevenueInfoMdp.setText((movie.getRevenue().compareTo(BigDecimal.ZERO) > 0.0) ? String.format("%,.2f €", movie.getRevenue()) : "-");
+                tvPopularityInfoMdp.setText(movie.getPopularity() > 0.0 ? String.format("%,.2f", movie.getPopularity()) : "-");
+                tvRevenueInfoMdp.setText(movie.getRevenue() > 0.0 ? String.format("%,.2f €", movie.getRevenue()) : "-");
                 tvStatusInfoMdp.setText(movie.getStatus().equals("") ? "-" : movie.getStatus());
-
-                if(isStarred) {
-                    fabMovieDetails.setImageResource(R.drawable.ic_heart_favorite);
-                } else {
-                    fabMovieDetails.setImageResource(R.drawable.ic_heart_outline_favorite);
-                }
-
-                /**
+                /*
                  * Campos generados desde API
                  */
                 getGenres(movie);
                 getTrailers(movie);
                 getLanguages(movie);
                 getProductionCompany(movie);
+                getProductionCountries(movie);
                 if (!isFinishing()) {
                     GlideApp.with(getApplicationContext())
                             .load(Constants.IMAGE_BASE_URL_w780 + movie.getBackdrop())
@@ -230,7 +254,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             @Override
             public void onError() {
                 finish();
-                /**
+                /*
                  * https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
                  */
                 Snackbar.make(clMainLayout, R.string.error_message_loading_movie_info, Snackbar.LENGTH_LONG)
@@ -271,7 +295,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onError() {
-                /**
+                /*
                  * https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
                  */
                 Snackbar.make(clMainLayout, R.string.error_message_loading_genres, Snackbar.LENGTH_LONG)
@@ -385,6 +409,24 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
     }
 
+    public void getProductionCountries(Movie movie) {
+        List<String> countries = new ArrayList<>();
+        if (movie.getCountries() != null) {
+            for (ProductionCountry country : movie.getCountries()) {
+                Log.d("MovieDetailsProdComp", countries.toString());
+                countries.add(country.getName());
+            }
+            TextUtils.join(", ", countries);
+        }
+        if(countries.size() > 0) {
+            tvProdCountriesInfoMdp.setText(countries.toString()
+                    .replace("[", "")
+                    .replace("]", ""));
+        } else {
+            tvProdCountriesInfoMdp.setText("-");
+        }
+    }
+
     private void showTrailer(String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(intent);
@@ -398,35 +440,33 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.fab_movie_details)
     public void onClick(View view) {
-        SharedPreferences.Editor editor = getSharedPreferences(getApplicationContext().getPackageName() + "_starredMovie", MODE_PRIVATE).edit();
-        moviesDbHelper = new MoviesDbHelper(getApplicationContext());
+        //moviesDbHelper = new MoviesDbHelper(getApplicationContext());
 
         if (isStarred) {
             fabMovieDetails.setImageResource(R.drawable.ic_heart_outline_favorite);
             isStarred = false;
 
-            // Eliminando de las SharedPreferences
-            editor.putBoolean("Starred movie removed", true);
-            moviesDbHelper.deleteSavedMovie(movieId);
+            // Eliminando de la sqlite
+            //moviesDbHelper.deleteSavedMovie(movieId);
+            // Eliminando de Firebase
+            FirebaseUtils.deleteFromFavorite(movieId);
 
-            Snackbar.make(clMainLayout, "Película eliminada de favoritos correctamente.", Snackbar.LENGTH_SHORT)
+            Snackbar.make(clMainLayout, R.string.successfully_movie_deleted_from_favs, Snackbar.LENGTH_SHORT)
                     .setAnchorView(fabMovieDetails)
                     .show();
-
         } else {
             fabMovieDetails.setImageResource(R.drawable.ic_heart_favorite);
             isStarred = true;
 
-            // Guardando en las SharedPreferences
-            addToFavorite();
-            editor.putBoolean("Starred movie added", true);
+            // Añandiendo a la sqlite
+            //addToFavorite();
+            // Añadiendo a Firebase
+            FirebaseUtils.addToFavorite(currentMovie);
 
-            Snackbar.make(clMainLayout, "Película añadida a favoritos correctamente.", Snackbar.LENGTH_SHORT)
+            Snackbar.make(clMainLayout, R.string.successfully_movie_added_to_favs, Snackbar.LENGTH_SHORT)
                     .setAnchorView(fabMovieDetails)
                     .show();
         }
-
-        editor.apply();
 
         // Animación de sacudida
         AnimationView.shakeFab(view, 200L);
@@ -434,16 +474,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
         isRotate = AnimationView.rotateFab(view, !isRotate);
     }
 
-    private void addToFavorite() {
+    /*private void addToFavorite() {
         moviesDbHelper = new MoviesDbHelper(getApplicationContext());
         Movie movie = new Movie();
-
-        /*List<String> tempList = new ArrayList<>(Arrays.asList(movieGenreIds.split(",")));
-        List<Integer> movieGenreIdList = new ArrayList<>();
-
-        for (String s : tempList) {
-            movieGenreIdList.add(Integer.parseInt(String.valueOf(tempList).trim()));
-        }*/
 
         Log.d("MoviestoAdd", movieId + " " + movieTitle + " " + movieBackdrop + " " + movieRating + " " +movieSummary + " " + moviePosterpath + " " + movieReleaseDate);
         movie.setId(movieId);
@@ -458,5 +491,5 @@ public class MovieDetailsActivity extends AppCompatActivity {
         Log.d("GenreIdString", "GenreIdString: " + movie.getGenreIdString());
 
         moviesDbHelper.saveMovie(movie);
-    }
+    }*/
 }

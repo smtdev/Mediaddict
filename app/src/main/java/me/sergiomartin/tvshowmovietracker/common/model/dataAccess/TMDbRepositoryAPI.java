@@ -180,6 +180,7 @@ public class TMDbRepositoryAPI {
         Callback<MoviesListResponse> call = new Callback<MoviesListResponse>() {
             @Override
             public void onResponse(@NotNull Call<MoviesListResponse> call, Response<MoviesListResponse> response) {
+                Log.d(TAG, "onResponse getMovies: " + response.body());
                 if (response.isSuccessful()) {
                     MoviesListResponse moviesResponse = response.body();
                     if (moviesResponse != null && moviesResponse.getMovies() != null) {
@@ -222,7 +223,7 @@ public class TMDbRepositoryAPI {
                     @Override
                     public void onResponse(@NotNull Call<Movie> call, @NotNull Response<Movie> response) {
                         Log.e(TAG, "log: -----------------------------");
-                        Log.d(TAG, "onResponse: " + response.body());
+                        Log.d(TAG, "onResponse getMovie: " + response.body());
 
                         if(response.raw().networkResponse() != null){
                             Log.d(TAG, "onResponse: la respuesta NO es cacheada.");

@@ -75,7 +75,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     /**
      * LoginView
      */
-
     @Override
     public void showProgress() {
         pbPreloadingLogin.setVisibility(View.VISIBLE);

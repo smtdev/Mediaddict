@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +71,7 @@ public class HomeListFragment extends Fragment {
     @BindView(R.id.pb_home_list)
     ProgressBar pbHomeList;
 
-    private MoviesDbHelper moviesDbHelper;
+    //private MoviesDbHelper moviesDbHelper;
     private MoviesAdapter adapter;
     private TMDbRepositoryAPI mTMDbRepositoryAPI;
 
@@ -246,7 +247,7 @@ public class HomeListFragment extends Fragment {
     }
 
     OnMoviesClickCallback callback = (movie, moviePosterImageView) -> {
-        isFavoriteChecked = false;
+        //isFavoriteChecked = false;
         /*
          * Enviar información entre activities y fragments para manejarla y mostrarla
          * https://developer.android.com/training/basics/fragments/pass-data-between
@@ -257,16 +258,16 @@ public class HomeListFragment extends Fragment {
          * Recuperando películas guardadas para saber si ya están marcadas como favoritas
          * y mantener marcado el fab de MovieDetailsActivity
          */
-        getFavoriteMovies();
+        /*getFavoriteMovies();
 
         for(Movie savedMovie : savedMovieList) {
             if(savedMovie.getId() == movie.getId()) {
                 isFavoriteChecked = true;
             }
-        }
+        }*/
 
         intent.putExtra(Constants.MOVIE_ID, movie.getId());
-        intent.putExtra(Constants.MOVIE_TITLE, movie.getTitle());
+        /*intent.putExtra(Constants.MOVIE_TITLE, movie.getTitle());
         intent.putExtra(Constants.MOVIE_BACKDROP, movie.getBackdrop());
         intent.putExtra(Constants.MOVIE_RATING, movie.getRating());
         intent.putExtra(Constants.MOVIE_OVERVIEW, movie.getOverview());
@@ -274,7 +275,7 @@ public class HomeListFragment extends Fragment {
         intent.putExtra(Constants.MOVIE_RELEASE_DATE, movie.getReleaseDate());
         intent.putExtra(Constants.MOVIE_GENRES_ID, TextUtils.join(",", movie.getGenreIds()));
 
-        intent.putExtra("movie_favorite_status", isFavoriteChecked);
+        intent.putExtra("movie_favorite_status", isFavoriteChecked);*/
 
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
                 HomeListFragment.this.getActivity(),
@@ -305,7 +306,7 @@ public class HomeListFragment extends Fragment {
         /**
          * https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
          */
-        Snackbar.make(getActivity().findViewById(android.R.id.content), "Error 1", Snackbar.LENGTH_LONG)
+        Snackbar.make(requireActivity().findViewById(android.R.id.content), R.string.error_message_loading_movies_panel, Snackbar.LENGTH_LONG)
                 .setAnchorView(R.id.bottom_navigation)
                 .show();
     }
@@ -340,12 +341,12 @@ public class HomeListFragment extends Fragment {
     }
 
     /*
-     * Recuperar en un nuevo hilo la lista de películas almacenadas en la SQLite
+     * Recuperar la lista de películas almacenadas en la SQLite
      */
-    private void getFavoriteMovies() {
+    /*private void getFavoriteMovies() {
         moviesDbHelper = new MoviesDbHelper(requireActivity().getApplicationContext());
 
         savedMovieList.clear();
         savedMovieList.addAll(moviesDbHelper.getSavedMovies());
-    }
+    }*/
 }

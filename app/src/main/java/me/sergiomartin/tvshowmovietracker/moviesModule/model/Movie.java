@@ -1,7 +1,5 @@
 package me.sergiomartin.tvshowmovietracker.moviesModule.model;
 
-import java.math.BigDecimal;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -43,7 +41,7 @@ public class Movie {
 
     @SerializedName("revenue")
     @Expose
-    private BigDecimal revenue;
+    private double revenue;
 
     @SerializedName("backdrop_path")
     @Expose
@@ -59,7 +57,7 @@ public class Movie {
 
     @SerializedName("popularity")
     @Expose
-    private BigDecimal popularity;
+    private double popularity;
 
     @SerializedName("status")
     @Expose
@@ -75,7 +73,7 @@ public class Movie {
 
     @SerializedName("budget")
     @Expose
-    private BigDecimal budget;
+    private double budget;
 
     @SerializedName("runtime")
     @Expose
@@ -202,11 +200,11 @@ public class Movie {
         this.countries = countries;
     }
 
-    public BigDecimal getRevenue() {
+    public double getRevenue() {
         return revenue;
     }
 
-    public void setRevenue(BigDecimal revenue) {
+    public void setRevenue(double revenue) {
         this.revenue = revenue;
     }
 
@@ -266,19 +264,19 @@ public class Movie {
         this.languages = languages;
     }
 
-    public BigDecimal getPopularity() {
+    public double getPopularity() {
         return popularity;
     }
 
-    public void setPopularity(BigDecimal popularity) {
+    public void setPopularity(double popularity) {
         this.popularity = popularity;
     }
 
-    public BigDecimal getBudget() {
+    public double getBudget() {
         return budget;
     }
 
-    public void setBudget(BigDecimal budget) {
+    public void setBudget(double budget) {
         this.budget = budget;
     }
 

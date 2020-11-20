@@ -105,8 +105,8 @@ public class MovieListFragment extends Fragment {
             initRecyclerViewAndScrolling(sortBy);
             srlFragmentMovieList.setRefreshing(false);
             srlFragmentMovieList.setColorSchemeColors(
-                    getActivity().getResources().getColor(R.color.colorAccent),
-                    getActivity().getResources().getColor(R.color.text_light_blue)
+                    requireActivity().getResources().getColor(R.color.colorAccent),
+                    requireActivity().getResources().getColor(R.color.text_light_blue)
             );
         });
         // Inflar el diseño del fragment
@@ -179,15 +179,13 @@ public class MovieListFragment extends Fragment {
         Intent intent = new Intent(MovieListFragment.this.getContext(), MovieDetailsActivity.class);
 
         intent.putExtra(Constants.MOVIE_ID, movie.getId());
-        intent.putExtra(Constants.MOVIE_TITLE, movie.getTitle());
+        /*intent.putExtra(Constants.MOVIE_TITLE, movie.getTitle());
         intent.putExtra(Constants.MOVIE_BACKDROP, movie.getBackdrop());
         intent.putExtra(Constants.MOVIE_RATING, movie.getRating());
         intent.putExtra(Constants.MOVIE_OVERVIEW, movie.getOverview());
         intent.putExtra(Constants.MOVIE_POSTERPATH, movie.getPosterPath());
         intent.putExtra(Constants.MOVIE_RELEASE_DATE, movie.getReleaseDate());
-        intent.putExtra(Constants.MOVIE_GENRES_ID, TextUtils.join(",", movie.getGenreIds()));
-
-        Log.d("MOVIEGENRES", "Película: " + movie.getTitle() + " | GenreIDs: " + TextUtils.join(",", movie.getGenreIds()));
+        intent.putExtra(Constants.MOVIE_GENRES_ID, TextUtils.join(",", movie.getGenreIds()));*/
 
         MovieListFragment.this.startActivity(intent);
     };
@@ -196,7 +194,7 @@ public class MovieListFragment extends Fragment {
         /*
          * Context from: https://stackoverflow.com/questions/49289281/android-support-library-27-1-0-new-methods-requireactivity-requirecontext
          */
-        Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.error_message_loading_movies_panel, Snackbar.LENGTH_LONG)
+        Snackbar.make(requireActivity().findViewById(android.R.id.content), R.string.error_message_loading_movies_panel, Snackbar.LENGTH_LONG)
                 .setAnchorView(R.id.bottom_navigation)
                 .show();
     }
