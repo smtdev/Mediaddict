@@ -38,11 +38,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     private int viewLayoutType;
     private boolean isFavMovie = false;
 
-    public MoviesAdapter(List<Movie> movies, List<Genre> genres, Context context, OnMoviesClickCallback callback, int viewLayoutType) {
+    public MoviesAdapter(List<Movie> movies, Context context, OnMoviesClickCallback callback, int viewLayoutType) {
         this.callback = callback;
         this.context = context;
         this.movies = movies;
-        this.genres = genres;
         this.viewLayoutType = viewLayoutType;
         isFavMovie = true;
         //genres = new ArrayList<>();
@@ -121,9 +120,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            itemView.setOnClickListener(v -> {
-                callback.onClick(movie, itemMoviePoster);
-            });
+            itemView.setOnClickListener(v -> callback.onClick(movie, itemMoviePoster));
         }
 
         public void bind(@NotNull Movie movie) {
@@ -145,7 +142,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
                     } else {
                         itemMovieGenre.setText("");
                     }
-
                 }
             } else { // Modo GridLayoutManager
                 if (itemMovieTitle != null) {

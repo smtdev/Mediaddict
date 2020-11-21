@@ -45,12 +45,9 @@ public class FavoritesFragment extends Fragment {
     @BindView(R.id.pb_favorites_fragment)
     ProgressBar pbFavoritesFragment;
 
-    private TMDbRepositoryAPI mTMDbRepositoryAPI;
-
     //private MoviesDbHelper moviesDbHelper;
     private MoviesAdapter adapter;
     private List<Movie> savedMovieList;
-    private List<Genre> movieGenres;
     private int viewLayoutType;
 
     public FavoritesFragment() {
@@ -65,7 +62,6 @@ public class FavoritesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mTMDbRepositoryAPI = TMDbRepositoryAPI.getInstance();
         setHasOptionsMenu(true);
     }
 
@@ -100,12 +96,11 @@ public class FavoritesFragment extends Fragment {
 
     private void initRecyclerViewAndScrolling() {
         savedMovieList = new ArrayList<>();
-        movieGenres = new ArrayList<>();
 
         int mNoOfColumns = CommonUtils.calculateNoOfColumns(requireContext(), Constants.GRID_COLUMN_SIZE);
         final GridLayoutManager manager = new GridLayoutManager(getContext(), mNoOfColumns);
 
-        adapter = new MoviesAdapter(savedMovieList, movieGenres, requireContext(), callback, viewLayoutType);
+        adapter = new MoviesAdapter(savedMovieList, requireContext(), callback, viewLayoutType);
         rvFragmentFavoritesList.setLayoutManager(manager);
         rvFragmentFavoritesList.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -113,6 +108,7 @@ public class FavoritesFragment extends Fragment {
        // moviesDbHelper = new MoviesDbHelper(requireContext());
 
         FirebaseUtils.fetchFavoriteMoviesFromUser(savedMovieList, adapter);
+        pbFavoritesFragment.setVisibility(View.GONE);
         //getFavoriteMovies();
     }
 
@@ -133,13 +129,13 @@ public class FavoritesFragment extends Fragment {
 
             if (viewLayoutType == Constants.LIST_ITEM) {
                 final GridLayoutManager manager = new GridLayoutManager(getContext(), mNoOfColumns);
-                adapter = new MoviesAdapter(savedMovieList, movieGenres, requireContext(), callback, Constants.GRID_ITEM);
+                adapter = new MoviesAdapter(savedMovieList, requireContext(), callback, Constants.GRID_ITEM);
                 viewLayoutType = Constants.GRID_ITEM;
                 rvFragmentFavoritesList.setLayoutManager(manager);
                 item.setIcon(R.drawable.ic_list_layout_format);
             } else {
                 final LinearLayoutManager manager;
-                adapter = new MoviesAdapter(savedMovieList, movieGenres, requireContext(), callback, Constants.LIST_ITEM);
+                adapter = new MoviesAdapter(savedMovieList, requireContext(), callback, Constants.LIST_ITEM);
                 manager = new LinearLayoutManager(getContext());
                 viewLayoutType = Constants.LIST_ITEM;
                 rvFragmentFavoritesList.setLayoutManager(manager);
