@@ -1,72 +1,11 @@
 <resources>
-    <string name="app_name">TV Show &amp; Movie Tracker</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
-    <string name="title_activity_scrolling">ScrollingActivity</string>
-    <string name="action_settings">Configuración</string>
-    <string name="main_hint_userName">Nombre</string>
-    <string name="main_hint_email">Email</string>
-    <string name="main_hint_provider">Proveedor</string>
-    <string name="main_menu_signOut">Cerrar sesión</string>
-    <string name="toolbar_title_text"><![CDATA[TV Show & Movie Tracker]]></string>
-
-    <string name="movie_title_textview_text">Movie</string>
-    <string name="movie_releaseDate_textview_text">Release date</string>
-    <string name="movie_overview_textview_text">Movie overview</string>
-
-    <string name="common_error_server">Ha ocurrido un problema en el servidor, intente más tarde.</string>
-    <string name="common_label_ok">OK</string>
-    <string name="common_label_accept">Aceptar</string>
-    <string name="common_label_cancel">Cancelar</string>
-    <string name="common_label_email">Correo electrónico</string>
-    <string name="common_message_noInternet">Sin acceso a internet, verifique su conexión</string>
-    <string name="common_validate_field_required">Este campo es requerido.</string>
-    <string name="common_validate_email_invalid">Este correo no tiene un formato válido, verifique.</string>
-
+    <string name="app_name">Mediaddict - seguimiento de películas y series</string>
     <!-- Login nuevo -->
-    <string name="about_messaggi_description">La marca Texting y el logo son propiedad de Cursos
-        Android ANT. Todos los derechos reservados.</string>
-    <string name="about_privacy">Aviso de privacidad</string>
-    <string name="about_version">Version:</string>
-    <string name="about_webSite">www.texting.cursos-android-ant.com</string>
-
     <string name="login_error_user_exist">Usuario nuevo, registrando&#8230;></string>
     <string name="login_message_loading">Iniciando sesión&#8230;</string>
     <string name="login_message_starting">Cargando&#8230;</string>
     <string name="login_message_error">Imposible iniciar sesión, intente más tarde.</string>
     <string name="login_message_success">Bienvenido %s</string>
-
-    <string name="main_dialog_accept">Eliminar</string>
-    <!--<string name="main_dialog_message_confirmDelete">¿Estas seguro que quieres quitar a %s de tus amigos?
-        \nSus conversaciones no se eliminarán permanentemente.</string>
-    <string name="main_dialog_title_confirmDelete">Eliminar amigo</string>-->
-    <string name="main_error_permission_denied">Cerrando&#8230;</string>
-    <string name="main_menu_about">Acerca de</string>
-    <string name="main_menu_action_singoff">Cerrar sesión</string>
-    <!--<string name="main_message_request_accepted">Ahora %s y tu son amigos.</string>
-    <string name="main_message_request_denied">Solicitud rechazada.</string>
-    <string name="main_message_user_removed">Listo! Ya no son amigos.</string>
-    <string name="main_title">Amigos</string>-->
-
-    <string name="profile_title">Perfil</string>
-    <string name="profile_dialog_title">Actualizar imagen de perfil</string>
-    <string name="profile_dialog_message">¿Desea subir esta imagen a su perfil de usuario?</string>
-    <string name="profile_dialog_accept">Subir</string>
-    <string name="profile_error_userUpdated">Error al actualizar el usuario, intente más tarde.</string>
-    <string name="profile_error_imageUpdated">Error al actualizar la imagen de perfil, intente más tarde.</string>
-    <string name="profile_error_invalid_image">Esta imagen no se pudo procesar.</string>
-    <string name="profile_error_notfound">Imagen/archivo no encontrado.</string>
-    <string name="profile_hint_username">username</string>
-    <string name="profile_message_userUpdated">Usuario actualizado correctamente.</string>
-    <string name="profile_message_imageUploading">Cambiando imagen de perfil, espere&#8230;</string>
-    <string name="profile_message_imageUpdated">Imagen de perfil actualizada correctamente.</string>
 
     <string name="action_movie_title">Mis películas</string>
     <string name="action_tvshow_title">Mis series</string>
@@ -78,12 +17,7 @@
     <string name="movie_releasedate_text">-</string>
 
     <string name="toolbar_menu_search_button">Buscar</string>
-    <string name="toolbar_menu_filter_button">Filtrar</string>
-    <string name="toolbar_menu_search_category_popular">Más populares</string>
-    <string name="toolbar_menu_search_category_toprated">Mejor puntuadas</string>
-    <string name="toolbar_menu_search_category_upcoming">Próximos estrenos</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="action_profile">Perfil</string>
     <string name="action_center_button">Botón central</string>
     <string name="movie_details_textview_summary">Sinopsis</string>
@@ -146,4 +80,10 @@
     <string name="search_fragment_no_results_message">No se han encontrado resultados en la búsqueda.</string>
     <string name="movie_details_on_firebase_exists_error">Ha habido un error obteniendo el estado de la película</string>
     <string name="favorites_fragment_on_genre_listener_error">No se han podido recuperar los géneros de las películas</string>
+    <string name="message_welcome_post_login">Bienvenido a Mediaddict!</string>
+    <string name="error_message_bad_login">Se ha producido un error al hacer login. Vuelve a intentarlo de nuevo.</string>
+    <string name="login_activity_tos_url">https://sites.google.com/view/mediaddict/terms-and-conditions</string>
+    <string name="login_activity_privacypolicy_url">https://sites.google.com/view/mediaddict/privacy-policy</string>
+    <string name="error_message_adding_movie_firebase">\"Error añadiendo a favoritos: \"</string>
+    <string name="error_message_deleting_movie_firebase">\"Error eliminando de favoritos: \"</string>
 </resources>

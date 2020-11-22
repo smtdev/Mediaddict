@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name = "TV Show & Movie Tracker"
+rootProject.name = "Mediaddict - Seguimiento de películas y series"

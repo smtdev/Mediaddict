@@ -15,7 +15,7 @@ android {
     localProperties.load(new FileInputStream(localPropertiesFile))
 
     defaultConfig {
-        applicationId "me.sergiomartin.tvshowmovietracker"
+        applicationId "me.smt.mediaddict"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
@@ -67,6 +67,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-storage'
     implementation 'com.google.firebase:firebase-database'
+    apply plugin: 'com.google.firebase.crashlytics'
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
     //implementation 'com.google.firebase:firebase-firestore'
 
     // FirebaseUI dependencies
