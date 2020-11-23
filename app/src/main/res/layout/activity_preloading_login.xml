@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".moviesModule.ui.LoginActivity">
+    tools:context=".ui.LoginActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_preloading_login_logo"

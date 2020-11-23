@@ -18,21 +18,47 @@ import java.util.Map;
 import java.util.Objects;
 
 import me.smt.mediaddict.R;
-import me.smt.mediaddict.moviesModule.adapter.MoviesAdapter;
-import me.smt.mediaddict.moviesModule.model.Movie;
-import me.smt.mediaddict.moviesModule.model.dataAccess.listener.OnCheckIfMovieExistsListener;
+import me.smt.mediaddict.adapter.MoviesAdapter;
+import me.smt.mediaddict.model.Movie;
+import me.smt.mediaddict.model.dataAccess.listener.OnCheckIfMovieExistsListener;
 
+/**
+ * Clase que contiene diferentes métodos utilizados para
+ * añadir y eliminar películas de Firebase.
+ * @author Sergio Martín Teruel
+ * @version 1.0
+ **/
 public class FirebaseUtils {
 
+    /**
+     * Atributo que contiene el TAG para las trazas de logging.
+     */
     private static final String TAG = "FIREBASE_UTILS";
-    private static final String NODENAME = "/users";
-    private static final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();;
-    private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private static final DatabaseReference dbRef = database.getReference(NODENAME);;
 
-    /*
-     * Almacena todos los datos de una película al hacer clic
-     * en el botón de favoritos
+    /**
+     * Atributo que define el nodo inicial de búsqueda.
+     */
+    private static final String NODENAME = "/users";
+
+    /**
+     * Atributo que devuelve al usuario actual de la sesión.
+     */
+    private static final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+    /**
+     * Atributo que crea una nueva instancia de acceso a la BBDD de Firebase.
+     */
+    private static final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+    /**
+     * Atributo que define una referencia al nodo padre de la BBDD de Firebase.
+     */
+    private static final DatabaseReference dbRef = database.getReference(NODENAME);
+
+    /**
+     * Método que almacena todos los datos de una película al hacer clic
+     * en el botón de favoritos.
+     * @param movie la película a añadir.
      */
     public static void addToFavorite(Movie movie)  {
         dbRef.child(Objects.requireNonNull(user).getUid())
@@ -42,9 +68,10 @@ public class FirebaseUtils {
                 .addOnFailureListener(e -> Log.d(TAG, R.string.error_message_adding_movie_firebase  + " " + e.getMessage()));
     }
 
-    /*
-     * Elimina todos los datos de una película al hacer clic en el botón
-     * de favoritos
+    /**
+     * Método que elimina todos los datos de una película al hacer
+     * clic en el botón de favoritos.
+     * @param movieId el ID de la película a eliminar.
      */
     public static void deleteFromFavorite(int movieId) {
         dbRef.child(Objects.requireNonNull(user).getUid())
@@ -53,8 +80,11 @@ public class FirebaseUtils {
                 .removeValue().addOnFailureListener(e -> Log.d(TAG, R.string.error_message_deleting_movie_firebase + " " + e.getMessage()));
     }
 
-    /*
-     * Recupera todas las películas almacenadas como favoritas de un mismo usuario
+    /**
+     * Método que recupera todas las películas almacenadas como favoritas
+     * de un mismo usuario.
+     * @param movieList listado de películas.
+     * @param adapter adaptador que procesará la lista de películas.
      */
     public static void fetchFavoriteMoviesFromUser(List<Movie> movieList,  MoviesAdapter adapter) {
         dbRef.child(Objects.requireNonNull(user).getUid())
@@ -77,11 +107,13 @@ public class FirebaseUtils {
                 );
     }
 
-    /*
+    /**
      * Método para comprobar si una película está en Firebase
      * con el fin de marcar como favorito la película al entrar en detalles.
      * Utiliza un listener que, en base al valor recibido, actúa de una u otra forma
-     * en consecuencia
+     * en consecuencia.
+     * @param movieId el ID de la película.
+     * @param listener el listener.
      */
     public static void isMovieOnFirebase(int movieId, final OnCheckIfMovieExistsListener listener) {
         dbRef.child(Objects.requireNonNull(user).getUid())
@@ -104,8 +136,9 @@ public class FirebaseUtils {
                 );
     }
 
-    /*
-     * Recupera todas las películas favoritas de todos los usuarios
+    /**
+     * Método que recupera todas las películas favoritas de
+     * todos los usuarios de Firebase.
      */
     public static void fetchFavoritesFromAllUsers() {
         Query mQuery = dbRef.orderByKey();
@@ -125,11 +158,12 @@ public class FirebaseUtils {
                 });
     }
 
-
-    /*
-     * Método de almacenamiento de películas secundario
+    /**
+     * Método de almacenamiento de películas secundario.
      * Éste recibe un Map con los datos concretos que se quieren introducir
-     * y los almacena en el subnodo "favs"
+     * y los almacena en el subnodo "favs".
+     * @param movieInfo datos a añadir.
+     * @param movieId ID de la película.
      */
     public static void addToFavorite(Map<String, Object> movieInfo, int movieId) {
         /* Bloque de datos de ejemplo:

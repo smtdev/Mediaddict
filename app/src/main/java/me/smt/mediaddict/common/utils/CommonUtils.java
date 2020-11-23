@@ -7,9 +7,18 @@ import android.widget.Toast;
 import com.uwetrottmann.androidutils.AndroidUtils;
 import me.smt.mediaddict.R;
 
+/**
+ * Clase que contiene métodos útiles para utilizar a lo largo
+ * del código de la aplicación.
+ * @author Sergio Martín Teruel
+ * @version 1.0
+ */
 public class CommonUtils {
+
     /**
-     * Convert minutes to HH:MM
+     * Método para convertir minutos en hora con formato "XXh YYm".
+     * @param totalTime el tiempo en minutos .
+     * @return el tiempo esperado.
      */
     public static String parseMinutesToHour(int totalTime) {
         int hours = totalTime / 60;
@@ -19,7 +28,9 @@ public class CommonUtils {
     }
 
     /**
-     * Checks for an available network connection.
+     * Método que comprueba si hay conexión disponible.
+     * @param context el contexto de la aplicación.
+     * @return el estado de la red.
      */
     public static boolean isNotConnected(Context context) {
         boolean isConnected = AndroidUtils.isNetworkConnected(context);
@@ -32,22 +43,18 @@ public class CommonUtils {
         return !isConnected;
     }
 
-    /*
-     * Utilidad para ajustar las columnas de un RecyclerView que cargue un GridLayoutManager
-     * SO: https://stackoverflow.com/a/38472370/1552146
+    /**
+     * Método que se utiliza para calcular el ancho de las columnas de
+     * un GridLayoutManager, en base a su dpi.
+     * Más info: https://stackoverflow.com/a/38472370/1552146
+     * @param context el contexto de la aplicación.
+     * @param columnWidthDp el tamaño de las columnas.
+     * @return el número de columnas totales.
      */
     public static int calculateNoOfColumns(Context context, float columnWidthDp) { // For example columnWidthdp=180
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float screenWidthDp = displayMetrics.widthPixels / displayMetrics.density;
         int noOfColumns = (int) (screenWidthDp / columnWidthDp + 0.5); // +0.5 for correct rounding to int.
         return noOfColumns;
-    }
-
-    /*
-     *   Codificar un correo electrónico
-     */
-    public static String getEmailEncoded(String email){
-        String preKey = email.replace("_", "__");
-        return preKey.replace(".", "_");
     }
 }

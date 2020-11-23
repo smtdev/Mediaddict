@@ -13,9 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="me.smt.mediaddict.moviesModule.ui.MovieDetailsActivity" />
+        <activity android:name="me.smt.mediaddict.ui.MovieDetailsActivity" />
         <activity
-            android:name="me.smt.mediaddict.moviesModule.ui.MainActivity"
+            android:name="me.smt.mediaddict.ui.MainActivity"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan">
@@ -25,7 +25,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="me.smt.mediaddict.moviesModule.ui.LoginActivity">
+        <activity android:name="me.smt.mediaddict.ui.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

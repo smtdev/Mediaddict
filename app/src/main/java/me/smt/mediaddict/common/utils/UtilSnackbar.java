@@ -8,7 +8,7 @@ import android.view.View;
 import com.google.android.material.snackbar.Snackbar;
 
 /*
- * Based on https://gist.github.com/devrath/26a182559a643fc5085b
+ * Basado en este: https://gist.github.com/devrath/26a182559a643fc5085b
  */
 public final class UtilSnackbar {
 

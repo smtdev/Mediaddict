@@ -1,4 +1,4 @@
-package me.smt.mediaddict.ui;
+package me.smt.mediaddict.moviesModule;
 
 
 import android.view.View;
@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import me.smt.mediaddict.R;
+import me.smt.mediaddict.ui.LoginActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;

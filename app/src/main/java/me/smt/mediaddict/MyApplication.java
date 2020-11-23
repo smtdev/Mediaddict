@@ -8,9 +8,16 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 
+/**
+ * Clase que crea un Singleton de la aplicación.
+ */
 public class MyApplication extends Application {
     private static MyApplication instance;
 
+    /**
+     * Método llamado al iniciar la creación de la Activity.
+     * Se instancia la aplicación.
+     */
     @Override
     public void onCreate() {
         super.onCreate();
@@ -24,12 +31,17 @@ public class MyApplication extends Application {
         return instance;
     }
 
+    /**
+     * Método que llama a la instancia a comprobar el estado de la conexión.
+     * @return Boolean el estado de la conexión.
+     */
     public static boolean hasNetwork(){
         return instance.isNetworkConnected();
     }
 
-    /*
-     * Comprobando el estado de la red
+    /**
+     * Método que comprueba el estado de red y devuelve el resultado.
+     * @return Boolean estado de la conexión.
      */
     private Boolean isNetworkConnected() {
         ConnectivityManager connectivityManager = (ConnectivityManager) instance.getSystemService(Context.CONNECTIVITY_SERVICE);
