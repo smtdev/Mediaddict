@@ -17,7 +17,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.smt.mediaddict.R;
-import me.smt.mediaddict.common.utils.Constants;
+import me.smt.mediaddict.common.Constants;
 import me.smt.mediaddict.model.Movie;
 import me.smt.mediaddict.model.dataAccess.action.OnMoviesClickCallback;
 import me.smt.mediaddict.module.GlideApp;

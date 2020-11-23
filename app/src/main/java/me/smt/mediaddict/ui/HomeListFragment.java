@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.smt.mediaddict.R;
 import me.smt.mediaddict.model.data.TMDbRepositoryAPI;
-import me.smt.mediaddict.common.utils.Constants;
+import me.smt.mediaddict.common.Constants;
 import me.smt.mediaddict.adapter.MoviesAdapter;
 import me.smt.mediaddict.model.Movie;
 import me.smt.mediaddict.model.dataAccess.action.OnMoviesClickCallback;

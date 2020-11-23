@@ -1,4 +1,4 @@
-package me.smt.mediaddict.moviesModule;
+package me.smt.mediaddict.ui;
 
 
 import android.view.View;

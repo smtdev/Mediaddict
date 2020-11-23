@@ -20,7 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.smt.mediaddict.R;
-import me.smt.mediaddict.common.utils.Constants;
+import me.smt.mediaddict.common.Constants;
 
 /**
  * Clase que se encarga de gestionar el login del usuario

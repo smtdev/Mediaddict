@@ -22,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.smt.mediaddict.R;
 import me.smt.mediaddict.model.data.TMDbRepositoryAPI;
-import me.smt.mediaddict.common.utils.Constants;
+import me.smt.mediaddict.common.Constants;
 import me.smt.mediaddict.adapter.MoviesAdapter;
 import me.smt.mediaddict.model.Genre;
 import me.smt.mediaddict.model.Movie;

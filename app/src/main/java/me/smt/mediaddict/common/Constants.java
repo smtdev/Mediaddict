@@ -1,4 +1,4 @@
-package me.smt.mediaddict.common.utils;
+package me.smt.mediaddict.common;
 
 /**
  * Clase que contiene las constantes utilizadas a lo

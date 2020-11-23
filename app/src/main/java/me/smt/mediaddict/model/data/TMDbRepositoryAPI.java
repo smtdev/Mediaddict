@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import me.smt.mediaddict.BuildConfig;
 import me.smt.mediaddict.MyApplication;
-import me.smt.mediaddict.common.utils.Constants;
+import me.smt.mediaddict.common.Constants;
 import me.smt.mediaddict.api.GenresListResponse;
 import me.smt.mediaddict.api.MovieApiInterface;
 import me.smt.mediaddict.api.MoviesListResponse;
